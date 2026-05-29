@@ -88,15 +88,74 @@ function RegisterForm() {
             Join Faoo
           </h1>
           <p className="font-sans text-sm text-[#525252] mt-1">
-            Create an account or sign in with Shopify
+            Create your account
           </p>
         </div>
 
-        <div className="flex flex-col gap-4 mt-4">
-          <a href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/auth/shopify/authorize`}>
-            <Button type="button" variant="primary" fullWidth size="lg">Continue with Shopify</Button>
-          </a>
-        </div>
+        {step === 'register' ? (
+          <form onSubmit={handleSubmit(onRegister)} className="flex flex-col gap-4 mt-4">
+            <Input
+              label="Full Name"
+              placeholder="John Doe"
+              error={errors.fullName?.message}
+              {...register('fullName')}
+            />
+            <Input
+              label="Email"
+              type="email"
+              placeholder="your@email.com"
+              error={errors.email?.message}
+              {...register('email')}
+            />
+            <Input
+              label="Phone"
+              type="tel"
+              placeholder="9876543210"
+              error={errors.phone?.message}
+              {...register('phone')}
+            />
+            <Input
+              label="Password"
+              type="password"
+              placeholder="••••••••"
+              error={errors.password?.message}
+              {...register('password')}
+            />
+            <Input
+              label="Confirm Password"
+              type="password"
+              placeholder="••••••••"
+              error={errors.confirmPassword?.message}
+              {...register('confirmPassword')}
+            />
+            <Button type="submit" variant="primary" fullWidth size="lg" loading={loading}>
+              Create Account
+            </Button>
+          </form>
+        ) : (
+          <form onSubmit={submitOTP(onVerifyOTP)} className="flex flex-col gap-4 mt-4">
+            <Input
+              label="Enter OTP"
+              type="text"
+              placeholder="123456"
+              maxLength={6}
+              error={otpErrors.otp?.message}
+              {...regOTP('otp')}
+            />
+            <Button type="submit" variant="primary" fullWidth size="lg" loading={loading}>
+              Verify OTP
+            </Button>
+            <Button
+              type="button"
+              variant="secondary"
+              fullWidth
+              size="lg"
+              onClick={() => setStep('register')}
+            >
+              Back
+            </Button>
+          </form>
+        )}
 
         <p className="text-center text-sm font-sans text-[#525252]">
           Already have an account?{' '}

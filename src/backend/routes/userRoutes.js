@@ -1,7 +1,7 @@
 const express = require('express');
 const router  = express.Router();
 const { getProfile, updateProfile, getAddresses, addAddress,
-        updateAddress, deleteAddress, setDefaultAddress } =
+        updateAddress, deleteAddress, setDefaultAddress, getShopifyOrders } =
   require('../controllers/userController');
 const authMiddleware = require('../middleware/authMiddleware');
 
@@ -20,5 +20,7 @@ router.route('/addresses/:addressId')
   .delete(deleteAddress);
 
 router.put('/addresses/:addressId/set-default', setDefaultAddress);
+
+router.get('/shopify-orders', getShopifyOrders);
 
 module.exports = router;

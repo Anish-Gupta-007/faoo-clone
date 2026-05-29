@@ -69,7 +69,8 @@ app.use('/api', rateLimit({
 const BASE = '/api/v1';
 
 app.use(`${BASE}/auth`, require('./routes/authRoutes'));
-app.use(`${BASE}/auth/shopify`, require('./routes/shopifyAuthRoutes'));
+// Shopify OAuth removed - using Admin API only for customer data sync
+// app.use(`${BASE}/auth/shopify`, require('./routes/shopifyAuthRoutes'));
 app.use(`${BASE}/user`, require('./routes/userRoutes'));
 app.use(`${BASE}/wishlist`, require('./routes/wishlistRoutes'));
 app.use(`${BASE}/reviews`, require('./routes/reviewRoutes'));

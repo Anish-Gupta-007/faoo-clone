@@ -61,14 +61,33 @@ function LoginForm() {
         <div className="text-center">
           <Link href="/" className="font-display text-3xl text-[#0A0A0A]">Faoo</Link>
           <h1 className="font-display text-2xl text-[#0A0A0A] mt-4">Welcome back</h1>
-          <p className="font-sans text-sm text-[#525252] mt-1">Sign in to your account via Shopify</p>
+          <p className="font-sans text-sm text-[#525252] mt-1">Sign in to your account</p>
         </div>
-        
-        <div className="flex flex-col gap-4 mt-4">
-          <a href={`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000'}/api/v1/auth/shopify/authorize`}>
-            <Button type="button" variant="primary" fullWidth size="lg">Sign In with Shopify</Button>
-          </a>
-        </div>
+
+        <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4 mt-4">
+          <Input
+            label="Email"
+            type="email"
+            placeholder="your@email.com"
+            error={errors.email?.message}
+            {...register('email')}
+          />
+          <Input
+            label="Password"
+            type="password"
+            placeholder="••••••••"
+            error={errors.password?.message}
+            {...register('password')}
+          />
+          <Button type="submit" variant="primary" fullWidth size="lg" loading={loading}>
+            Sign In
+          </Button>
+        </form>
+
+        <p className="text-center text-sm font-sans text-[#525252]">
+          Don't have an account?{' '}
+          <Link href={`/register${searchParams?.toString() ? `?${searchParams.toString()}` : ''}`} className="text-[#0A0A0A] font-medium hover:underline">Register</Link>
+        </p>
       </div>
     </div>
   );
