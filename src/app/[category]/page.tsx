@@ -69,16 +69,11 @@ function CategoryPLPContent() {
     }
   }, [debouncedSearch]);
 
-  const isHydratingFilters = restoredCategory !== categorySlug;
-
-  const { data, isLoading: queryLoading } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['products', filters],
     queryFn: () => productService.getProducts(filters as ProductFilters),
     staleTime: 5 * 60 * 1000,
-    enabled: !isHydratingFilters,
   });
-
-  const isLoading = queryLoading || isHydratingFilters;
 
   const updateFilter = (updates: Partial<ProductFilters & { search?: string }>) => {
     const newParams = new URLSearchParams(searchParams?.toString() || '');
