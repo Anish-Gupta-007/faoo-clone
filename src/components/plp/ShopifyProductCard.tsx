@@ -27,9 +27,6 @@ export function ShopifyProductCard({ product }: ShopifyProductCardProps) {
   const amount = product.priceRange?.minVariantPrice?.amount || '0';
   const formattedPrice = `₹${parseFloat(amount).toLocaleString('en-IN')}`;
 
-  // Debug log
-  console.log('ShopifyProductCard - Product:', product.title, 'Tags:', product.tags, 'Badges:', badges);
-
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}

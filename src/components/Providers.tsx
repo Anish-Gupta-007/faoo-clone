@@ -8,6 +8,7 @@ import { useAuthStore } from '@/store/authStore';
 import { useCartStore } from '@/store/cartStore';
 import { useWishlistStore } from '@/store/wishlistStore';
 import { useUIStore } from '@/store/uiStore';
+import { useCategoryStore } from '@/store/categoryStore';
 import { userService } from '@/services/userService';
 import { SmoothScroll } from '@/components/SmoothScroll';
 
@@ -18,8 +19,25 @@ function StoreHydrator() {
     hydrate();
     hydratePopupState();
 
-    // After hydration, check if authenticated and fetch user + cart + wishlist
+    // Pre-fetch categories immediately so homepage components don't block
+    useCategoryStore.getState().fetchCategories();
+
+    // Guest cart clearing: on every NEW browser session, clear guest cart
     const authState = useAuthStore.getState();
+    const SESSION_KEY = 'faoo-session-active';
+    if (typeof window !== 'undefined') {
+      const isExistingSession = sessionStorage.getItem(SESSION_KEY);
+      if (!isExistingSession) {
+        // New session detected
+        sessionStorage.setItem(SESSION_KEY, 'true');
+        if (!authState.isAuthenticated) {
+          // Guest user — clear persisted cart
+          useCartStore.getState().reset();
+        }
+      }
+    }
+
+    // After hydration, check if authenticated and fetch user + cart + wishlist
     if (authState.isAuthenticated) {
       // Fetch user profile if not loaded
       if (!authState.user) {

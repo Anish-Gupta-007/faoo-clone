@@ -17,7 +17,7 @@ async function getProducts(first = 20, searchQuery = '') {
                 currencyCode
               }
             }
-            images(first: 1) {
+            images(first: 5) {
               edges {
                 node {
                   url
@@ -87,7 +87,7 @@ async function getProductByHandle(handle) {
             currencyCode
           }
         }
-        images(first: 1) {
+        images(first: 20) {
           edges {
             node {
               url
@@ -182,7 +182,7 @@ async function getProductsByIds(ids) {
               currencyCode
             }
           }
-          images(first: 1) {
+          images(first: 5) {
             edges {
               node {
                 url

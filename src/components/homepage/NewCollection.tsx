@@ -44,12 +44,10 @@ export function NewCollection() {
   }, [fetchCategories]);
 
   useEffect(() => {
-    // Don't fetch until categories are loaded from the backend
-    if (categories.length === 0) return;
-
     const fetchAll = async () => {
       setLoading(true);
       try {
+        // Use category slugs if available, fallback to defaults if categories haven't loaded yet
         const menSlug = getCategorySlug('men');
         const womenSlug = getCategorySlug('women');
         const [menRes, womenRes] = await Promise.all([

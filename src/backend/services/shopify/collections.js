@@ -63,7 +63,7 @@ async function getCollectionByHandle(handle) {
                     currencyCode
                   }
                 }
-                images(first: 1) {
+                images(first: 5) {
                   edges {
                     node {
                       url

@@ -477,6 +477,7 @@ function PDPContent() {
                       key={color}
                       onClick={() => { setSelectedColor(color); setSelectedSize(null); setSelectedFitting(null); }}
                       aria-label={`Select color ${color}`}
+                      style={{ backgroundColor: hex }}
                       className={cn(
                         'w-8 h-8 rounded-full border-2 transition-all',
                         selectedColor === color ? 'border-[#0A0A0A] scale-110' : 'border-[#D4D4D4] hover:border-[#A3A3A3]'

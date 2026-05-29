@@ -194,6 +194,28 @@ export const productService = {
     const sp = res.data;
     if (!sp) throw new Error("Product not found");
 
+    // Infer category from product tags and title
+    const inferCategory = (tags: string[], title: string) => {
+      const tagsLower = (tags || []).map((t: string) => t.toLowerCase());
+      const titleLower = (title || '').toLowerCase();
+
+      if (tagsLower.includes('accessories') || tagsLower.includes('accessory') ||
+          titleLower.includes('bandana') || titleLower.includes('scarf') || titleLower.includes('sunglass')) {
+        return { _id: 'cat-accessories', name: 'Accessories', slug: 'accessories' };
+      }
+      if (tagsLower.includes('limited_edition') || tagsLower.includes('limited-edition')) {
+        return { _id: 'cat-limited', name: 'Limited Edition', slug: 'limited-edition' };
+      }
+      if (tagsLower.includes('women') || tagsLower.includes('womens') || tagsLower.includes('womens-clothing') ||
+          titleLower.includes('dress') || titleLower.includes('peplum') || titleLower.includes('skirt')) {
+        return { _id: 'cat-women', name: "Women's Clothing", slug: 'womens-clothing' };
+      }
+      // Default to men's — most products without explicit women/accessories tags are men's
+      return { _id: 'cat-men', name: "Men's Clothing", slug: 'mens-clothing' };
+    };
+
+    const inferredCategory = inferCategory(sp.tags, sp.title);
+
     const product: any = {
       _id: sp.id,
       name: sp.title,
@@ -201,7 +223,7 @@ export const productService = {
       description: sp.description || '',
       productNote: '',
       price: parseFloat(sp.priceRange?.minVariantPrice?.amount || '0'),
-      category: { _id: 'shopify-cat', name: 'Shopify Collection', slug: 'shopify-collection' },
+      category: inferredCategory,
       subCategory: { _id: 'shopify-sub', name: 'All', slug: 'all' },
       usps: Array.isArray(sp.usps) ? sp.usps.map((t: string) => ({ text: t })) : [],
       media: sp.images?.map((img: any, i: number) => ({
