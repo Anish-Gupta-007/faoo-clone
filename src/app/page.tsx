@@ -21,7 +21,7 @@ export default function HomePage() {
     <>
       <HeroBanner />
       <NewCollection />
-      <LimitedEdition />
+      {/* <LimitedEdition /> */}
 
       <StyleItWithFaoo />
       <WeCustomise />
