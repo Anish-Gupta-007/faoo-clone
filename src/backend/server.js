@@ -42,10 +42,13 @@ app.use(cors({
     if (!origin) {
       return callback(null, true);
     }
+    // Allow if origin is in list or wildcard is set
     if (allowedOrigins.indexOf(origin) !== -1 || allowedOrigins.includes('*')) {
       callback(null, true);
     } else {
+      // Log the blocked origin for debugging
       console.warn(`CORS blocked for origin: ${origin}`);
+      console.warn(`Allowed origins: ${allowedOrigins.join(', ')}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
