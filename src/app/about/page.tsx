@@ -1,7 +1,6 @@
 // src/app/about/page.tsx
 'use client';
 import { motion } from 'framer-motion';
-import { Metadata } from 'next';
 import { ABOUT_CONTENT } from '@/constants/staticContent';
 
 const fadeUp = {
