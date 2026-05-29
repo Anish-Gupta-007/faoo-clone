@@ -9,8 +9,8 @@ const SHOPIFY_CLIENT_ID = '8441b665-2ff0-4000-a4ed-4f3ab98d2198';
 const SHOPIFY_AUTH_URL = 'https://shopify.com/authentication/100271948085/oauth/authorize';
 const SHOPIFY_TOKEN_URL = 'https://shopify.com/authentication/100271948085/oauth/token';
 
-const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:3000';
-const BACKEND_URL = process.env.BACKEND_URL || 'http://localhost:5000';
+const FRONTEND_URL = (process.env.FRONTEND_URL || 'http://localhost:3000').replace(/\/$/, '');
+const BACKEND_URL = (process.env.BACKEND_URL || 'http://localhost:5000').replace(/\/$/, '');
 const REDIRECT_URI = `${BACKEND_URL}/api/v1/auth/shopify/callback`;
 
 function base64URLEncode(str) {
