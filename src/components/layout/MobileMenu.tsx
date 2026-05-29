@@ -103,24 +103,8 @@ export function MobileMenu() {
             </div>
           ) : (
             <div className="flex flex-col gap-2">
-              <Link
-                href="https://shopify.com/100271948085/account"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={closeMobileMenu}
-                className="flex items-center justify-center gap-2 w-full h-11 bg-[#0A0A0A] text-white text-sm font-medium rounded tracking-widest uppercase"
-              >
-                <User size={16} /> Login
-              </Link>
-              <Link
-                href="https://shopify.com/100271948085/account"
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={closeMobileMenu}
-                className="flex items-center justify-center w-full h-11 border border-[#E5E5E5] text-sm text-[#525252] rounded"
-              >
-                Create Account
-              </Link>
+              <Link href="/login" onClick={closeMobileMenu} className="flex items-center justify-center gap-2 w-full h-11 bg-[#0A0A0A] text-white text-sm font-medium rounded tracking-widest uppercase"><User size={16} /> Login</Link>
+              <Link href="/register" onClick={closeMobileMenu} className="flex items-center justify-center w-full h-11 border border-[#E5E5E5] text-sm text-[#525252] rounded">Create Account</Link>
             </div>
           )}
         </div>

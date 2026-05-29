@@ -108,7 +108,9 @@ export function Navbar() {
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const dropdownTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   const { user, isAuthenticated, logout } = useAuthStore();
   const { itemCount } = useCartStore();
@@ -135,6 +137,17 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  // Close profile menu on outside click
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (profileRef.current && !profileRef.current.contains(e.target as Node)) {
+        setShowProfileMenu(false);
+      }
+    };
+    document.addEventListener('mousedown', handler);
+    return () => document.removeEventListener('mousedown', handler);
+  }, []);
+
   const handleDropdownEnter = (label: string) => {
     if (dropdownTimer.current) clearTimeout(dropdownTimer.current);
     setActiveDropdown(label);
@@ -146,6 +159,7 @@ export function Navbar() {
 
   const handleLogout = () => {
     logout();
+    setShowProfileMenu(false);
     router.push('/');
   };
 
@@ -305,21 +319,64 @@ export function Navbar() {
           </button>
 
           {/* Profile */}
-          <Link
-            href="https://shopify.com/100271948085/account"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden lg:flex p-2 hover:bg-white/10 rounded-full transition-colors items-center gap-2 text-white"
-            aria-label="Shopify Account"
-          >
-            {isAuthenticated ? (
-              <span className="w-6 h-6 rounded-full bg-white text-[#8b0026] text-[10px] font-bold flex items-center justify-center shadow-inner">
-                {initials}
-              </span>
-            ) : (
-              <User size={18} strokeWidth={1.5} />
-            )}
-          </Link>
+          <div ref={profileRef} className="hidden lg:block relative">
+            <button
+              onClick={() => setShowProfileMenu((v) => !v)}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors flex items-center gap-2 text-white"
+              aria-label="Account"
+            >
+              {isAuthenticated ? (
+                <span className="w-6 h-6 rounded-full bg-white text-[#8b0026] text-[10px] font-bold flex items-center justify-center shadow-inner">
+                  {initials}
+                </span>
+              ) : (
+                <User size={18} strokeWidth={1.5} />
+              )}
+            </button>
+
+            <AnimatePresence>
+              {showProfileMenu && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10, filter: 'blur(4px)' }}
+                  animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+                  exit={{ opacity: 0, y: 5, filter: 'blur(4px)' }}
+                  transition={{ duration: 0.2, ease: "easeOut" }}
+                  className="absolute right-0 top-[calc(100%+8px)] bg-white/95 backdrop-blur-xl border border-white/20 rounded-2xl shadow-[0_16px_40px_rgba(0,0,0,0.15)] py-3 min-w-[220px] overflow-hidden"
+                >
+                  {isAuthenticated ? (
+                    <>
+                      <div className="px-5 py-3 border-b border-[#151515]/5 mb-1">
+                        <p className="text-[12px] font-sans font-bold text-[#151515] tracking-wide truncate">{user?.fullName}</p>
+                        <p className="text-[10px] font-sans text-[#A3A3A3] truncate">{user?.email}</p>
+                      </div>
+                      <Link href="/account/orders" onClick={() => setShowProfileMenu(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-sans font-semibold tracking-[0.15em] uppercase text-[#151515]/70 hover:text-[#8b0026] hover:bg-[#F5F4F1] transition-all">
+                        <Package size={14} strokeWidth={2} /> My Orders
+                      </Link>
+                      <Link href="/account/wishlist" onClick={() => setShowProfileMenu(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-sans font-semibold tracking-[0.15em] uppercase text-[#151515]/70 hover:text-[#8b0026] hover:bg-[#F5F4F1] transition-all">
+                        <Heart size={14} strokeWidth={2} /> Wishlist
+                      </Link>
+                      <Link href="/account/addresses" onClick={() => setShowProfileMenu(false)} className="flex items-center gap-3 px-5 py-2.5 text-[11px] font-sans font-semibold tracking-[0.15em] uppercase text-[#151515]/70 hover:text-[#8b0026] hover:bg-[#F5F4F1] transition-all">
+                        <MapPin size={14} strokeWidth={2} /> Addresses
+                      </Link>
+                      <div className="h-[1px] bg-[#151515]/5 my-1" />
+                      <button onClick={handleLogout} className="flex items-center gap-3 w-full px-5 py-2.5 text-[11px] font-sans font-bold tracking-[0.15em] uppercase text-[#C0392B] hover:bg-[#C0392B]/5 transition-all">
+                        <LogOut size={14} strokeWidth={2} /> Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link href="/login" onClick={() => setShowProfileMenu(false)} className="block px-5 py-2.5 text-[11px] font-sans font-bold tracking-[0.15em] uppercase text-[#151515] hover:text-[#8b0026] hover:bg-[#F5F4F1] transition-all">
+                        Login
+                      </Link>
+                      <Link href="/register" onClick={() => setShowProfileMenu(false)} className="block px-5 py-2.5 text-[11px] font-sans font-semibold tracking-[0.15em] uppercase text-[#151515]/70 hover:text-[#8b0026] hover:bg-[#F5F4F1] transition-all">
+                        Create Account
+                      </Link>
+                    </>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
         </div>
       </div>
     </header>

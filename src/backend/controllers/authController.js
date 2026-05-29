@@ -5,7 +5,6 @@ const { generateAccessToken, generateRefreshToken } = require('../utils/generate
 const sendEmail   = require('../utils/sendEmail');
 const asyncHandler = require('../middleware/asyncHandler');
 const otpStore    = require('../utils/otpStore');
-const { syncCustomerWithShopify } = require('../services/shopify/customerService');
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -104,19 +103,6 @@ const verifyOtp = asyncHandler(async (req, res) => {
 
   otpStore.del(`otp:register:${email}`);
 
-  // Sync with Shopify Customer Account API
-  try {
-    const shopifyData = await syncCustomerWithShopify({
-      fullName: data.fullName,
-      email: data.email,
-      phone: data.phone,
-    });
-    user.shopifyCustomerId = shopifyData.shopifyCustomerId;
-    await user.save();
-  } catch (error) {
-    console.error('Shopify sync failed (non-blocking):', error.message);
-  }
-
   const accessToken  = generateAccessToken(user._id);
   const refreshToken = generateRefreshToken(user._id);
   user.refreshToken  = refreshToken;
@@ -165,21 +151,6 @@ const login = asyncHandler(async (req, res) => {
   if (!match) {
     res.status(401);
     throw new Error('Invalid email or password');
-  }
-
-  // Sync with Shopify if not already synced
-  if (!user.shopifyCustomerId) {
-    try {
-      const shopifyData = await syncCustomerWithShopify({
-        fullName: user.fullName,
-        email: user.email,
-        phone: user.phone,
-      });
-      user.shopifyCustomerId = shopifyData.shopifyCustomerId;
-      await user.save();
-    } catch (error) {
-      console.error('Shopify sync failed (non-blocking):', error.message);
-    }
   }
 
   const accessToken  = generateAccessToken(user._id);
