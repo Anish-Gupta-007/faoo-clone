@@ -31,7 +31,9 @@ function StoreHydrator() {
         // New session detected
         sessionStorage.setItem(SESSION_KEY, 'true');
         if (!authState.isAuthenticated) {
-          // Guest user — clear persisted cart
+          // Guest user — clear persisted cart from localStorage and store
+          localStorage.removeItem('faoo-cart-storage');
+          useCartStore.persist.rehydrate();
           useCartStore.getState().reset();
         }
       }
