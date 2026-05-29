@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { Instagram, Facebook, Linkedin } from 'lucide-react';
 import { useCategoryStore } from '@/store/categoryStore';
 import { cn } from '@/lib/cn';
+import { Bag3D } from '@/components/layout/Bag3D';
 
 
 const infoLinks = [
@@ -52,7 +53,7 @@ export function Footer() {
 
       <div className="container-page py-16">
         {/* Top grid */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-10 pb-12 border-b border-white/[0.06]">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-10 pb-12 border-b border-white/[0.06]">
           {/* Brand */}
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="logo-text font-display text-3xl text-white block mb-4 hover:opacity-70 transition-opacity duration-300">
@@ -157,6 +158,11 @@ export function Footer() {
                 </a>
               </li>
             </ul>
+          </div>
+
+          {/* 3-D Bag — 5th column, beside Contact */}
+          <div className="hidden md:flex items-center justify-center">
+            <Bag3D />
           </div>
         </div>
 
