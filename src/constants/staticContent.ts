@@ -8,7 +8,7 @@ export const HERO_BANNERS = [
     mobileVideoUrl: '/mobile_hero_video1.mp4',
     heading: 'Wear the Silence',
     subheading: 'Premium minimalist clothing crafted for those who let the fabric speak.',
-    ctaText: 'Shop Men',
+    ctaText: 'Shop Mens',
     ctaHref: '/men',
   },
   {
@@ -27,7 +27,7 @@ export const HERO_BANNERS = [
     heading: 'The New Collection',
     subheading: 'Form meets function. Refined for the modern wardrobe.',
     ctaText: 'Explore Now',
-    ctaHref: '/men',
+    ctaHref: '/collections',
   },
 ];
 
@@ -143,7 +143,7 @@ export const CHO_NOTE = {
   name: 'Leo',
   role: 'Chief Happiness Officer',
   note: `At Faoo, we believe clothing is more than just fabric stitched together. It\u2019s a feeling and a way of self expression. #FaooForAll is our initiative to bring you the clothes that are not defined for a certain someone, but everyone and every body. Now go be iconic\u2026 I\u2019ll be cheering for you between naps and snack breaks.`,
-  photoUrl: '/Cho copy.webp',
+  photoUrl: '/Cho.jpeg',
   signature: 'Leo',
 };
 
@@ -193,8 +193,8 @@ export const FAQ_ITEMS = [
     answer: 'Yes, COD is available on most orders. Select COD at checkout to confirm availability for your pincode.',
   },
   {
-    question: 'How do I use my FIRST10 coupon?',
-    answer: 'Apply code FIRST10 at checkout to receive 10% off your first order. Valid once per account.',
+    question: 'How do I use my FAOO10 coupon?',
+    answer: 'Apply code FAOO10 at checkout to receive 10% off your first order. Valid once per account.',
   },
   {
     question: 'Can I customise or place bulk orders?',
@@ -276,7 +276,7 @@ export const RETURNS_CONTENT = {
 };
 
 export const POPUP_CONTENT = {
-  couponCode: 'FIRST10',
+  couponCode: 'FAOO10',
   discountText: 'Get 10% off your first order',
   heading: 'Welcome to Faoo',
   subheading: 'Join us and unlock your first order discount.',

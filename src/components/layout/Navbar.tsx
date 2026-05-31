@@ -39,6 +39,11 @@ function AnnouncementBar() {
     ? apiAnnouncements.map(t => ({ text: t, code: null }))
     : ANNOUNCEMENTS;
 
+  // Reset index to 0 when items size changes to avoid out-of-bounds indices
+  useEffect(() => {
+    setCurrent(0);
+  }, [items.length]);
+
   useEffect(() => {
     if (items.length <= 1) return;
     const interval = setInterval(() => {
@@ -51,7 +56,7 @@ function AnnouncementBar() {
     return () => clearInterval(interval);
   }, [items.length]);
 
-  const item = items[current];
+  const item = items[current] || items[0] || { text: "", code: null };
 
   return (
     <div

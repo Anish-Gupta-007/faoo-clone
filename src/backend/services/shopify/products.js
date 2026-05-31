@@ -119,12 +119,24 @@ async function getProductByHandle(handle) {
           { namespace: "custom", key: "irl_images" },
           { namespace: "custom", key: "irl_handles" },
           { namespace: "custom", key: "fit_type" },
-          { namespace: "custom", key: "usp" }
+          { namespace: "custom", key: "usp" },
+          { namespace: "custom", key: "size_chart" },
+          { namespace: "custom", key: "supports_all_sizes" }
         ]) {
           namespace
           key
           value
           type
+          reference {
+            ... on MediaImage {
+              image {
+                url
+              }
+            }
+            ... on GenericFile {
+              url
+            }
+          }
           references(first: 10) {
             edges {
               node {

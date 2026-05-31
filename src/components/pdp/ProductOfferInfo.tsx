@@ -18,8 +18,8 @@ interface ProductOfferInfoProps {
 export const ProductOfferInfo: React.FC<ProductOfferInfoProps> = ({
   price = '699/-',
   firstOrderDiscount = '10% Off',
-  promoCode = 'FIRST10',
-  prepaidDiscount = 'Extra ₹150 Off',
+  promoCode = 'FAOO10',
+  prepaidDiscount = 'Extra ₹50 Off',
   rating = 5,
   reviewCount = 124,
   className,

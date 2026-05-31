@@ -42,7 +42,7 @@ export function ShopifyProductCard({ product }: ShopifyProductCardProps) {
             alt={product.images[0]?.altText || product.title}
             fill
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-            className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
+            className="object-contain transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.05]"
             priority={false}
           />
 

@@ -41,7 +41,7 @@ export function CartDrawer() {
           >
             <div className="relative rounded-lg overflow-hidden bg-gradient-to-r from-[#F9F8F6] to-[#F2EFEA] border border-[#EBE8E3] py-3 flex items-center justify-center">
               <span className="text-[9px] font-sans font-bold tracking-[0.25em] uppercase text-[#4A4A4A]">
-                10% OFF on Your First Order
+                Use Code FAOO10 · 10% Off First Order
               </span>
               <motion.div
                 className="absolute inset-0 bg-gradient-to-r from-transparent via-white/60 to-transparent"

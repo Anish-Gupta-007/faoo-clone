@@ -58,7 +58,7 @@ export function CHONote() {
             <p className="text-xs font-sans font-medium tracking-widest uppercase text-[#A3A3A3] mb-6">
               A Note From
             </p>
-            <blockquote className="font-display text-lg md:text-2xl text-[#0A0A0A] leading-relaxed mb-8">
+            <blockquote className="font-sans text-[15px] md:text-[20px] text-[#0A0A0A]/90 font-light leading-relaxed mb-8">
               &ldquo;{CHO_NOTE.note}&rdquo;
             </blockquote>
             <div>

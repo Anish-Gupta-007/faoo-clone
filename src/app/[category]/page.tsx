@@ -115,9 +115,7 @@ function CategoryPLPContent() {
             <h1 className="font-display text-5xl md:text-7xl lg:text-[80px] text-[#151515] leading-[0.9] tracking-tight mb-4 capitalize">
               {categoryName}
             </h1>
-            <p className="text-[10px] font-sans font-bold tracking-[0.25em] text-[#151515]/50 uppercase">
-              {total} Curated Pieces
-            </p>
+
           </motion.div>
 
           <motion.div

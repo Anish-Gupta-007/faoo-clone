@@ -14,13 +14,14 @@ import toast from 'react-hot-toast';
 import { productService } from '@/services/productService';
 import { getTagBadges } from '@/utils/shopifyTags';
 
-
 interface ProductCardProps {
   product: ProductType;
 }
 
 export function ProductCard({ product }: ProductCardProps) {
   const [loading, setLoading] = useState(false);
+  const [showSizeSelector, setShowSizeSelector] = useState(false);
+  
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useUIStore((state) => state.openCart);
 
@@ -33,45 +34,36 @@ export function ProductCard({ product }: ProductCardProps) {
   const badges = getTagBadges(derivedTags);
   const isSoldOut = product.isAvailable === false;
 
-  const handleQuickAdd = async (e: React.MouseEvent) => {
-    e.preventDefault();
+  const handleAddToCartWithSize = async (size: string) => {
     setLoading(true);
     try {
       // 1. Fetch full product to get variants
       const { product: fullProduct, variants } = await productService.getProductBySlug(product.slug);
 
-      // 2. Determine best size (Priority: Free Size > M > L > first available)
-      const availableVariants = variants.filter(v => v.isActive && v.stockQuantity > 0);
-
-      let targetVariant = availableVariants.find(v => v.size === 'Free Size') ||
-        availableVariants.find(v => v.size === 'M') ||
-        availableVariants.find(v => v.size === 'L') ||
-        availableVariants[0];
-
-      // 3. Fallback to Free Size if nothing in stock (using first variant as placeholder)
-      let sizeOverride = '';
-      if (!targetVariant && variants.length > 0) {
-        targetVariant = variants[0];
-        sizeOverride = 'Free Size';
-      }
+      // 2. Find variant matching selected size
+      const targetVariant = variants.find(v => v.isActive && v.stockQuantity > 0 && v.size === size) ||
+                            variants.find(v => v.isActive && v.size === size) ||
+                            variants.find(v => v.isActive && v.stockQuantity > 0) ||
+                            variants[0];
 
       if (!targetVariant) {
         toast.error('Product currently unavailable');
         return;
       }
 
-      // 4. Add to cart
+      // 3. Add to cart
       await addItem(
         targetVariant._id,
         fullProduct._id,
         1,
         fullProduct,
         targetVariant,
-        sizeOverride || targetVariant.size
+        size
       );
 
-      toast.success(`${product.name} added to cart`);
+      toast.success(`${product.name} (${size}) added to cart`);
       openCart();
+      setShowSizeSelector(false);
     } catch (err) {
       toast.error('Failed to add to cart');
     } finally {
@@ -115,7 +107,7 @@ export function ProductCard({ product }: ProductCardProps) {
           src={product.primaryImage || '/placeholder.jpg'}
           alt={product.name}
           fill
-          className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
+          className="object-contain transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-105"
           sizes="(max-width: 768px) 50vw, 33vw"
         />
 
@@ -132,16 +124,68 @@ export function ProductCard({ product }: ProductCardProps) {
           </div>
         </div>
 
-        {/* Sizes Overlay */}
-        {product.sizesAvailable && product.sizesAvailable.length > 0 && (
-          <div className="absolute bottom-3 left-3 right-3 bg-white/90 backdrop-blur-md py-2.5 rounded-xl flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-500 translate-y-3 group-hover:translate-y-0 pointer-events-none shadow-[0_4px_12px_rgba(0,0,0,0.05)] border border-[#151515]/5">
-            <span className="text-[8px] font-sans font-bold tracking-[0.2em] text-[#737373] uppercase mr-0.5">Sizes:</span>
-            {product.sizesAvailable.map((size) => (
-              <span key={size} className="text-[9px] font-sans font-bold text-[#151515]">
-                {size}
-              </span>
-            ))}
+        {/* Interactive Size Selector slide-up on click */}
+        {showSizeSelector && product.sizesAvailable && product.sizesAvailable.length > 0 && (
+          <div 
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+            }}
+            className="absolute bottom-3 left-3 right-3 bg-white/95 backdrop-blur-md p-3 rounded-2xl flex flex-col items-center justify-center gap-2.5 z-30 shadow-[0_8px_32px_rgba(0,0,0,0.15)] border border-[#151515]/5 transition-all duration-300 animate-slide-up"
+          >
+            <div className="flex items-center justify-between w-full px-1">
+              <span className="text-[8px] font-sans font-bold tracking-[0.2em] text-[#737373] uppercase">Select Size</span>
+              <button 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setShowSizeSelector(false);
+                }} 
+                className="text-[9px] font-sans font-semibold text-[#151515] underline hover:opacity-60 transition-opacity"
+              >
+                Cancel
+              </button>
+            </div>
+            <div className="flex flex-wrap items-center justify-center gap-1.5 w-full">
+              {product.sizesAvailable.map((size) => (
+                <button
+                  key={size}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    handleAddToCartWithSize(size);
+                  }}
+                  className="px-3 py-1.5 min-w-[36px] bg-white border border-[#D4D4D4] hover:bg-[#151515] hover:text-white hover:border-[#151515] text-[10px] font-sans font-bold text-[#151515] rounded-md transition-all duration-200"
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
           </div>
+        )}
+
+        {/* Hover "ADD TO CART" pill button */}
+        {!isSoldOut && !showSizeSelector && (
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              // If there are specific size options, show selector first
+              if (product.sizesAvailable && product.sizesAvailable.length > 0 && !product.sizesAvailable.includes('Free Size')) {
+                setShowSizeSelector(true);
+              } else {
+                handleAddToCartWithSize(product.sizesAvailable?.includes('Free Size') ? 'Free Size' : 'Free Size');
+              }
+            }}
+            disabled={loading}
+            className="absolute bottom-3 left-3 right-3 bg-[#151515] hover:bg-[#8b0026] text-white py-3 rounded-xl flex items-center justify-center gap-2 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-y-3 group-hover:translate-y-0 text-[10px] font-sans font-bold tracking-[0.2em] uppercase shadow-[0_4px_12px_rgba(0,0,0,0.15)] z-20"
+          >
+            {loading ? (
+              <Loader2 className="animate-spin" size={14} />
+            ) : (
+              'ADD TO CART'
+            )}
+          </button>
         )}
       </Link>
 
