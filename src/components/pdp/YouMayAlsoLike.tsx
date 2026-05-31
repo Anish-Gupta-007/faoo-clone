@@ -111,7 +111,7 @@ export function YouMayAlsoLike({ categorySlug, currentProductId }: YouMayAlsoLik
                 key={product._id}
                 className="w-[200px] md:w-[260px] flex-shrink-0 snap-start"
               >
-                <ProductCard product={product} />
+                <ProductCard product={product} disableAnimation={true} />
               </div>
             ))}
           </div>
