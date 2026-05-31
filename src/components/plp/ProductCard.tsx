@@ -16,9 +16,10 @@ import { getTagBadges } from '@/utils/shopifyTags';
 
 interface ProductCardProps {
   product: ProductType;
+  disableAnimation?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, disableAnimation = false }: ProductCardProps) {
   const [loading, setLoading] = useState(false);
   const [showSizeSelector, setShowSizeSelector] = useState(false);
   
@@ -73,10 +74,10 @@ export function ProductCard({ product }: ProductCardProps) {
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 15 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true }}
-      transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+      initial={disableAnimation ? { opacity: 1, y: 0 } : { opacity: 0, y: 15 }}
+      whileInView={disableAnimation ? undefined : { opacity: 1, y: 0 }}
+      viewport={disableAnimation ? undefined : { once: true }}
+      transition={disableAnimation ? { duration: 0 } : { duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className="group flex flex-col h-full bg-transparent"
     >
       <Link href={`/products/${product.slug}`} className="block relative aspect-[3/4] overflow-hidden bg-[#F5F4F1] mb-3.5 rounded-[20px] border border-[#151515]/5 shadow-[0_4px_20px_rgba(0,0,0,0.02)]">
