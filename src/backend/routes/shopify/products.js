@@ -43,11 +43,31 @@ function parseMetafields(product) {
   let irlHandles = [];
   let fitType = null;
   let usps = [];
+  let sizeChartUrl = null;
+  let supportsAllSizes = false;
 
   const metafields = product.metafields || [];
 
   for (const mf of metafields) {
     if (!mf) continue;
+
+    if (mf.key === 'supports_all_sizes') {
+      supportsAllSizes = mf.value === 'true';
+      continue;
+    }
+
+    if (mf.key === 'size_chart') {
+      let url = null;
+      if (mf.reference) {
+        url = (mf.reference.image && mf.reference.image.url) || mf.reference.url || null;
+      } else if (mf.references && mf.references.edges && mf.references.edges.length > 0) {
+        const edge = mf.references.edges[0];
+        const node = edge.node;
+        url = (node.image && node.image.url) || node.url || null;
+      }
+      if (url) sizeChartUrl = url;
+      continue;
+    }
 
     if (mf.key === 'focus_with_faoo' || mf.key === 'irl_images') {
       if (mf.references && mf.references.edges && mf.references.edges.length > 0) {
@@ -81,6 +101,8 @@ function parseMetafields(product) {
   product.irlHandles = irlHandles;
   if (fitType) product.fitType = fitType;
   product.usps = usps;
+  product.sizeChartUrl = sizeChartUrl;
+  product.supportsAllSizes = supportsAllSizes;
 
   return product;
 }

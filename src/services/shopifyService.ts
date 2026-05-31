@@ -12,6 +12,8 @@ export interface ShopifyProductWithMeta {
   irlImages: string[]
   irlHandles: string[]
   fitType?: string
+  sizeChartUrl?: string
+  supportsAllSizes?: boolean
   priceRange: {
     minVariantPrice: { amount: string; currencyCode: string }
   }

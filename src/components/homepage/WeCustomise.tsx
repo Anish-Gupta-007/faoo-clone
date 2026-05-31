@@ -110,6 +110,7 @@ export function WeCustomise() {
               <span className="text-[9px] font-sans font-bold tracking-[0.4em] uppercase text-[#1a1a1a]/60">
                 {WE_CUSTOMISE.subheading ?? 'Bespoke Service'}
               </span>
+              <div className="w-8 h-px bg-[#c9a84c]" />
             </motion.div>
 
             <div className="overflow-hidden w-full text-center lg:text-left">

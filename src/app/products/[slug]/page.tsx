@@ -20,6 +20,7 @@ import { SupportSection } from '@/components/pdp/SupportSection';
 import { FocusWithFaoo } from '@/components/pdp/FocusWithFaoo';
 import { IRLSection } from '@/components/pdp/IRLSection';
 import { ReviewsSection } from '@/components/pdp/ReviewsSection';
+import { YouMayAlsoLike } from '@/components/pdp/YouMayAlsoLike';
 import { useCartStore } from '@/store/cartStore';
 import { useUIStore } from '@/store/uiStore';
 import { useAuthStore } from '@/store/authStore';
@@ -434,10 +435,10 @@ function PDPContent() {
             <div className="flex flex-col gap-3">
               <div className="flex flex-wrap gap-2">
                 <span className="text-[10px] uppercase tracking-widest font-semibold px-2 py-1 bg-[#0A0A0A] text-white rounded-sm">
-                  10% Off · First Order · Code: FIRST10
+                  10% Off · First Order · Code: FAOO10
                 </span>
                 <span className="text-[10px] uppercase tracking-widest font-semibold px-2 py-1 bg-[#F5F5F5] text-[#737373] border border-[#E5E5E5] rounded-sm">
-                  Extra ₹150 Off · Prepaid Orders
+                  Extra ₹50 Off · Prepaid Orders
                 </span>
               </div>
 
@@ -466,27 +467,6 @@ function PDPContent() {
 
             <ProductUSPs usps={product.usps} className="mt-2" />
 
-            {Object.keys(colorGroups).length > 0 && (
-              <div className="pt-4">
-                <p className="text-xs font-sans font-medium tracking-widest uppercase text-[#A3A3A3] mb-3">
-                  Select a Color{selectedColor ? `: ${selectedColor}` : ''}
-                </p>
-                <div className="flex gap-3">
-                  {Object.values(colorGroups).map(({ color, hex }) => (
-                    <button
-                      key={color}
-                      onClick={() => { setSelectedColor(color); setSelectedSize(null); setSelectedFitting(null); }}
-                      aria-label={`Select color ${color}`}
-                      style={{ backgroundColor: hex }}
-                      className={cn(
-                        'w-8 h-8 rounded-full border-2 transition-all',
-                        selectedColor === color ? 'border-[#0A0A0A] scale-110' : 'border-[#D4D4D4] hover:border-[#A3A3A3]'
-                      )}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
 
             <div className="pt-2">
               {isOutOfStockOverall && (
@@ -654,11 +634,16 @@ function PDPContent() {
           </div>
         </div>
 
-        <SizeGuideModal isOpen={sizeGuideOpen} onClose={() => setSizeGuideOpen(false)} />
+        <SizeGuideModal
+          isOpen={sizeGuideOpen}
+          onClose={() => setSizeGuideOpen(false)}
+          sizeChartUrl={shopifyProduct?.sizeChartUrl}
+        />
       </div>
       {focusMedia.length > 0 && <FocusWithFaoo details={focusMedia} />}
       {irlMedia.length > 0 && <IRLSection images={irlMedia} />}
       <SupportSection />
+      <YouMayAlsoLike categorySlug={product.category?.slug || ''} currentProductId={product._id} />
       <ReviewsSection productId={slug} />
     </>
   );
