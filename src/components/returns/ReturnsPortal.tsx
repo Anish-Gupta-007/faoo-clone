@@ -250,7 +250,7 @@ export function ReturnsPortal() {
 
               <div className="pt-8 text-center">
                 <p className="font-sans text-[10px] text-[#737373] tracking-[0.1em] uppercase">
-                  Need help? Contact <a href="mailto:hello@faoo.in" className="text-[#0A0A0A] underline underline-offset-4">support@faoo.in</a>
+                  Need help? Contact <a href="mailto:hello@faooofficial.com" className="text-[#0A0A0A] underline underline-offset-4">hello@faooofficial.com</a>
                 </p>
               </div>
             </motion.div>
