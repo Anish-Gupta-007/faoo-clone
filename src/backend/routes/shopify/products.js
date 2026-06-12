@@ -45,11 +45,17 @@ function parseMetafields(product) {
   let usps = [];
   let sizeChartUrl = null;
   let supportsAllSizes = false;
+  let modelInfo = '';
 
   const metafields = product.metafields || [];
 
   for (const mf of metafields) {
     if (!mf) continue;
+
+    if (mf.key === 'model') {
+      modelInfo = mf.value || '';
+      continue;
+    }
 
     if (mf.key === 'supports_all_sizes') {
       supportsAllSizes = mf.value === 'true';
@@ -103,6 +109,7 @@ function parseMetafields(product) {
   product.usps = usps;
   product.sizeChartUrl = sizeChartUrl;
   product.supportsAllSizes = supportsAllSizes;
+  product.modelInfo = modelInfo;
 
   return product;
 }

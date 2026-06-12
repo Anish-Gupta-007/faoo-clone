@@ -234,7 +234,7 @@ export const productService = {
         displayOrder: i,
         isPrimary: i === 0,
       })) || [],
-      modelInfo: { modelName: '', sizeWearing: '', height: '' },
+      modelInfo: sp.modelInfo || '',
       isActive: true,
       isLimitedEdition: sp.tags?.includes('limited_edition') || sp.tags?.includes('limited-edition') || false,
       isNewCollection: sp.tags?.includes('new_collection') || sp.tags?.includes('new-collection') || false,

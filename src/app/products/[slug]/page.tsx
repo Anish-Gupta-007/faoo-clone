@@ -400,11 +400,10 @@ function PDPContent() {
             </div>
 
             {/* Model Info Bar Below Image */}
-            {(product.modelInfo?.modelName || product.modelInfo?.height || product.modelInfo?.sizeWearing) && (
-              <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 py-4 mt-2 bg-[#F5F4F1] text-[10px] font-sans text-[#151515]/60 uppercase tracking-[0.2em] border border-[#151515]/5">
-                {product.modelInfo.modelName && <span>Model: <span className="text-[#151515] font-semibold">{product.modelInfo.modelName}</span></span>}
-                {product.modelInfo.height && <span>Height: <span className="text-[#151515] font-semibold">{product.modelInfo.height}</span></span>}
-                {product.modelInfo.sizeWearing && <span>Wearing Size: <span className="text-[#151515] font-semibold">{product.modelInfo.sizeWearing}</span></span>}
+            {product.modelInfo && (
+              <div className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#FAF9F6] border border-[#151515]/5 rounded-sm text-[11px] sm:text-xs font-sans text-[#525252] mt-2 tracking-wide select-none">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#151515]/30 flex-shrink-0" />
+                <span className="font-medium text-[#151515]/80">{product.modelInfo}</span>
               </div>
             )}
           </div>
