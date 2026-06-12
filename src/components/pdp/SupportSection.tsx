@@ -10,10 +10,10 @@ export const SupportSection = ({ className }: { className?: string }) => {
         Have a specific question? Email us
       </p>
       <a 
-        href="mailto:support@faoo.in"
+        href="mailto:hello@faooofficial.com"
         className="text-[14px] font-display uppercase tracking-[0.2em] text-[#0A0A0A] border-b border-black/10 pb-0.5 hover:border-black/40 transition-all duration-300"
       >
-        support@faoo.in
+        hello@faooofficial.com
       </a>
     </div>
   );

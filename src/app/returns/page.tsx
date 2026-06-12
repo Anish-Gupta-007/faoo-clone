@@ -256,11 +256,11 @@ export default function ReturnsPage() {
 
               <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
                 <a
-                  href="mailto:hello@faoo.in"
+                  href="mailto:hello@faooofficial.com"
                   className="inline-flex items-center gap-3 bg-white text-[#0A0A0A] px-10 py-5 rounded-xl font-bold text-sm tracking-widest uppercase hover:bg-gray-100 transition-colors"
                 >
                   <Mail size={18} />
-                  hello@faoo.in
+                  hello@faooofficial.com
                   <ChevronRight size={18} />
                 </a>
                 <span className="text-gray-500 text-sm font-medium">Response under 24 hours</span>

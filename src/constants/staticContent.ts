@@ -76,7 +76,7 @@ export const WE_CUSTOMISE = {
   description:
     'Tailored to your vision, your fit, your size and your occasion. From a request in our existing styles to creating something uniquely yours, we\u2019re here to bring it to life.',
   ctaText: 'Write to Us',
-  emailHref: 'mailto:hello@faoo.in',
+  emailHref: 'mailto:hello@faooofficial.com',
   features: [
     { title: 'Your Vision', description: 'We start with what you imagine and build from there.' },
     { title: 'Your Fit', description: 'Custom sizing so every piece sits exactly right on you.' },
@@ -198,7 +198,7 @@ export const FAQ_ITEMS = [
   },
   {
     question: 'Can I customise or place bulk orders?',
-    answer: 'Absolutely. Write to us at hello@faoo.in with your requirements and we will get back within 24 hours.',
+    answer: 'Absolutely. Write to us at hello@faooofficial.com with your requirements and we will get back within 24 hours.',
   },
   {
     question: 'What sizes do you offer?',
@@ -209,7 +209,7 @@ export const FAQ_ITEMS = [
 export const CAREERS_CONTENT = {
   heading: 'Join the Faoo Team',
   description: "We are building more than just a brand; we are crafting a new language of silence and fabric. If you believe that design should be intentional, quality should be non-negotiable, and every stitch matters — we want to hear from you.",
-  email: 'careers@faoo.in',
+  email: 'hello@faooofficial.com',
   culture: [
     { title: 'Intentional Design', description: 'We don’t follow trends. We create timeless pieces that earn their place in the world.' },
     { title: 'Radical Quality', description: 'Every detail, from thread count to packaging, is scrutinized for perfection.' },
