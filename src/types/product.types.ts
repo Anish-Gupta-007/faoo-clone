@@ -54,7 +54,7 @@ export interface Product {
   subCategory: Category;
   usps: ProductUSP[];
   media: ProductMedia[];
-  modelInfo: ModelInfo;
+  modelInfo: string;
   isActive: boolean;
   isLimitedEdition: boolean;
   isNewCollection: boolean;

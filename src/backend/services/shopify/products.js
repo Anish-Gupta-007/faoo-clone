@@ -121,7 +121,8 @@ async function getProductByHandle(handle) {
           { namespace: "custom", key: "fit_type" },
           { namespace: "custom", key: "usp" },
           { namespace: "custom", key: "size_chart" },
-          { namespace: "custom", key: "supports_all_sizes" }
+          { namespace: "custom", key: "supports_all_sizes" },
+          { namespace: "custom", key: "model" }
         ]) {
           namespace
           key
