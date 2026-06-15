@@ -5,88 +5,19 @@ import { Instagram, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 
 const UGC_POSTS = [
-
-
-    {
-    id: 1,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/2.jpg',
-    type: 'portrait',
-    size: 'small'
-  },
-  {
-    id: 2,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/5.PNG',
-    type: 'portrait',
-    size: 'small'
-  },
-      {
-    id: 3,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/1.png',
-    type: 'portrait',
-    size: 'large'
-  },
-  {
-    id: 4,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/6.jpg',
-    type: 'portrait',
-    size: 'small'
-  },
-
-  {
-    id: 5,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/7.PNG',
-    type: 'portrait',
-    size: 'large'
-  },
-        {
-    id: 7,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/3.png',
-    type: 'portrait',
-    size: 'small'
-  },
-    {
-    id: 6,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/4.PNG',
-    type: 'portrait',
-    size: 'large'
-  },
-
-  {
-    id: 8,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/8.jpeg',
-    type: 'portrait',
-    size: 'small'
-  },
-    {
-    id: 9,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/11.PNG',
-    type: 'portrait',
-    size: 'small'
-  },
-  {
-    id: 10,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/9.jpeg',
-    type: 'portrait',
-    size: 'small'
-  },
-  {
-    id: 11,
-    username: '@faoo_official',
-    imageUrl: '/images/STWITHFAOO/10.jpeg',
-    type: 'portrait',
-    size: 'large'
-  },
-
+  { id: 1, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/1.jpg', type: 'portrait', size: 'small' },
+  { id: 2, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/2.jpg', type: 'portrait', size: 'small' },
+  { id: 3, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/3.jpg', type: 'portrait', size: 'large' },
+  { id: 4, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/1.1.jpg', type: 'portrait', size: 'small' },
+  { id: 5, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/4.jpg', type: 'portrait', size: 'large' },
+  { id: 6, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/5.jpg', type: 'portrait', size: 'small' },
+  { id: 7, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/6.jpg', type: 'portrait', size: 'large' },
+  { id: 8, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/1.2.jpg', type: 'portrait', size: 'small' },
+  { id: 9, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/7.jpg', type: 'portrait', size: 'small' },
+  { id: 10, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/8.jpg', type: 'portrait', size: 'large' },
+  { id: 11, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/9.jpg', type: 'portrait', size: 'small' },
+  { id: 12, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/1.3.jpg', type: 'portrait', size: 'large' },
+  { id: 13, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/1.4.jpg', type: 'portrait', size: 'small' },
 ];
 
 export function StyleItWithFaoo() {
