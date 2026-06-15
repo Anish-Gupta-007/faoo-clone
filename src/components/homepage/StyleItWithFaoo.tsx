@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { Instagram, ShoppingBag } from 'lucide-react';
 import Link from 'next/link';
 
+
 const UGC_POSTS = [
   { id: 1, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/1.jpg', type: 'portrait', size: 'small' },
   { id: 2, username: '@faoo_official', imageUrl: '/images/STWITHFAOO/2.jpg', type: 'portrait', size: 'small' },
