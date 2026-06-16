@@ -22,16 +22,16 @@ interface ProductCardProps {
 export function ProductCard({ product, disableAnimation = false }: ProductCardProps) {
   const [loading, setLoading] = useState(false);
   const [showSizeSelector, setShowSizeSelector] = useState(false);
-  
+
   const addItem = useCartStore((state) => state.addItem);
   const openCart = useUIStore((state) => state.openCart);
 
   const derivedTags = product.tags && product.tags.length > 0
     ? product.tags
     : [
-        ...(product.isNewCollection ? ['new_collection'] : []),
-        ...(product.isLimitedEdition ? ['limited_edition'] : []),
-      ];
+      ...(product.isNewCollection ? ['new_collection'] : []),
+      ...(product.isLimitedEdition ? ['limited_edition'] : []),
+    ];
   const badges = getTagBadges(derivedTags);
   const isSoldOut = product.isAvailable === false;
 
@@ -43,9 +43,9 @@ export function ProductCard({ product, disableAnimation = false }: ProductCardPr
 
       // 2. Find variant matching selected size
       const targetVariant = variants.find(v => v.isActive && v.stockQuantity > 0 && v.size === size) ||
-                            variants.find(v => v.isActive && v.size === size) ||
-                            variants.find(v => v.isActive && v.stockQuantity > 0) ||
-                            variants[0];
+        variants.find(v => v.isActive && v.size === size) ||
+        variants.find(v => v.isActive && v.stockQuantity > 0) ||
+        variants[0];
 
       if (!targetVariant) {
         toast.error('Product currently unavailable');
@@ -118,8 +118,8 @@ export function ProductCard({ product, disableAnimation = false }: ProductCardPr
         {/* Wishlist Button */}
         <div className="absolute top-3 right-3 z-10 opacity-0 group-hover:opacity-100 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] translate-y-1.5 group-hover:translate-y-0">
           <div className="w-8 h-8 bg-white/95 backdrop-blur-md rounded-full flex items-center justify-center shadow-[0_2px_8px_rgba(0,0,0,0.08)] hover:scale-105 transition-transform cursor-pointer border border-[#151515]/5">
-            <HeartButton 
-              productId={product._id} 
+            <HeartButton
+              productId={product._id}
               className="bg-transparent border-none text-black hover:bg-transparent shadow-none"
             />
           </div>
@@ -127,7 +127,7 @@ export function ProductCard({ product, disableAnimation = false }: ProductCardPr
 
         {/* Interactive Size Selector slide-up on click */}
         {showSizeSelector && product.sizesAvailable && product.sizesAvailable.length > 0 && (
-          <div 
+          <div
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -136,12 +136,12 @@ export function ProductCard({ product, disableAnimation = false }: ProductCardPr
           >
             <div className="flex items-center justify-between w-full px-1">
               <span className="text-[8px] font-sans font-bold tracking-[0.2em] text-[#737373] uppercase">Select Size</span>
-              <button 
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   setShowSizeSelector(false);
-                }} 
+                }}
                 className="text-[9px] font-sans font-semibold text-[#151515] underline hover:opacity-60 transition-opacity"
               >
                 Cancel

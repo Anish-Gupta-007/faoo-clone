@@ -649,7 +649,7 @@ function PDPContent() {
             ((product as any).tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory') ||
             (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory')
           )
-            ? 'accessories'
+            ? 'womens-clothing'
             : (
               product.name.toLowerCase().includes('dress') ||
               product.name.toLowerCase().includes('peplum') ||
