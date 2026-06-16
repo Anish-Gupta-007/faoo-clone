@@ -43,10 +43,10 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
 }) => {
   // Maps fitType to a percentage along the bar: 0% = Fitted, 50% = Regular, 100% = Oversized
   const fitPosition: Record<string, number> = {
-    fitted:   0,
-    regular:  50,
+    fitted: 0,
+    regular: 50,
     oversized: 100,
-    relaxed:  100,
+    relaxed: 100,
   };
 
   const position = fitPosition[fitType] ?? 50;
@@ -58,8 +58,8 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
 
   const fitLabel =
     fitType === 'fitted' ? 'Fitted Cut' :
-    fitType === 'oversized' ? 'Oversized Fit' :
-    'Fits True to Size';
+      fitType === 'oversized' ? 'Oversized Fit' :
+        'Fits True to Size';
 
   return (
     <div className="flex flex-col w-full gap-6 md:gap-8">
@@ -102,10 +102,10 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
                       ? 'bg-[#151515] text-white border-[#151515]'
                       : 'bg-white border-[#D4D4D4] text-[#151515] hover:border-[#151515]',
                     (isSoldOut || outOfStockSizes.includes('Free Size' as Size)) &&
-                      'opacity-40 cursor-not-allowed hover:border-[#D4D4D4]'
+                    'opacity-40 cursor-not-allowed hover:border-[#D4D4D4]'
                   )}
                 >
-                  <span className="relative z-10">FREE SIZE</span>
+                  <span className="relative z-10">ONE SIZE</span>
                   {(isSoldOut || outOfStockSizes.includes('Free Size' as Size)) && (
                     <div className="absolute inset-0 overflow-hidden pointer-events-none">
                       <div className="absolute top-1/2 left-1/2 w-[140%] h-[1px] bg-[#A3A3A3] -translate-x-1/2 -translate-y-1/2 -rotate-45" />
@@ -130,7 +130,7 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
                       isOOS && 'opacity-40 cursor-not-allowed hover:border-[#D4D4D4]'
                     )}
                   >
-                    <span className="relative z-10">{size}</span>
+                    <span className="relative z-10">{size === 'Free Size' ? 'ONE SIZE' : size}</span>
                     {isOOS && (
                       <div className="absolute inset-0 overflow-hidden pointer-events-none">
                         <div className="absolute top-1/2 left-1/2 w-[140%] h-[1px] bg-[#A3A3A3] -translate-x-1/2 -translate-y-1/2 -rotate-45" />
@@ -146,37 +146,37 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
 
       {/* ── Fit Scale (hidden for Free Size products) ── */}
       {!isFreeSize && (
-      <div className="flex flex-col gap-3">
-        {/* Track */}
-        <div className="relative h-[2px] bg-[#E5E5E5] rounded-full mx-0">
-          {/* Filled portion */}
-          <motion.div
-            className="absolute left-0 top-0 h-full bg-[#151515] rounded-full"
-            initial={{ width: '50%' }}
-            animate={{ width: `${position}%` }}
-            transition={{ type: 'spring', stiffness: 120, damping: 22 }}
-          />
-          {/* Dot */}
-          <motion.div
-            className="absolute top-1/2 w-3 h-3 rounded-full bg-[#151515] border-2 border-white shadow-[0_0_0_1px_#151515] -translate-y-1/2 -translate-x-1/2"
-            initial={{ left: '50%' }}
-            animate={{ left: `${position}%` }}
-            transition={{ type: 'spring', stiffness: 120, damping: 22 }}
-          />
-        </div>
+        <div className="flex flex-col gap-3">
+          {/* Track */}
+          <div className="relative h-[2px] bg-[#E5E5E5] rounded-full mx-0">
+            {/* Filled portion */}
+            <motion.div
+              className="absolute left-0 top-0 h-full bg-[#151515] rounded-full"
+              initial={{ width: '50%' }}
+              animate={{ width: `${position}%` }}
+              transition={{ type: 'spring', stiffness: 120, damping: 22 }}
+            />
+            {/* Dot */}
+            <motion.div
+              className="absolute top-1/2 w-3 h-3 rounded-full bg-[#151515] border-2 border-white shadow-[0_0_0_1px_#151515] -translate-y-1/2 -translate-x-1/2"
+              initial={{ left: '50%' }}
+              animate={{ left: `${position}%` }}
+              transition={{ type: 'spring', stiffness: 120, damping: 22 }}
+            />
+          </div>
 
-        {/* Labels — 3-col grid so each label aligns exactly with its endpoint */}
-        <div className="grid grid-cols-3 text-[10px] font-sans font-medium text-[#A3A3A3] tracking-[0.12em] uppercase">
-          <span className="text-left"  style={{ color: fitType === 'fitted'    ? '#151515' : undefined }}>Fitted</span>
-          <span className="text-center" style={{ color: fitType === 'regular'   ? '#151515' : undefined }}>Regular</span>
-          <span className="text-right" style={{ color: fitType === 'oversized'  ? '#151515' : undefined }}>Oversized</span>
-        </div>
+          {/* Labels — 3-col grid so each label aligns exactly with its endpoint */}
+          <div className="grid grid-cols-3 text-[10px] font-sans font-medium text-[#A3A3A3] tracking-[0.12em] uppercase">
+            <span className="text-left" style={{ color: fitType === 'fitted' ? '#151515' : undefined }}>Fitted</span>
+            <span className="text-center" style={{ color: fitType === 'regular' ? '#151515' : undefined }}>Regular</span>
+            <span className="text-right" style={{ color: fitType === 'oversized' ? '#151515' : undefined }}>Oversized</span>
+          </div>
 
-        {/* Active label */}
-        <p className="text-[11px] font-sans font-semibold text-[#151515] tracking-[0.08em] uppercase">
-          {fitLabel}
-        </p>
-      </div>
+          {/* Active label */}
+          <p className="text-[11px] font-sans font-semibold text-[#151515] tracking-[0.08em] uppercase">
+            {fitLabel}
+          </p>
+        </div>
       )}
 
       {/* ── Buttons ── */}

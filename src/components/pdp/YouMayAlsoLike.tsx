@@ -10,22 +10,23 @@ import { motion } from 'framer-motion';
 interface YouMayAlsoLikeProps {
   categorySlug: string;
   currentProductId: string;
+  limit?: number;
 }
 
-export function YouMayAlsoLike({ categorySlug, currentProductId }: YouMayAlsoLikeProps) {
+export function YouMayAlsoLike({ categorySlug, currentProductId, limit = 8 }: YouMayAlsoLikeProps) {
   const carouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
 
   const { data: productsRes, isLoading } = useQuery({
-    queryKey: ['related-products', categorySlug, currentProductId],
+    queryKey: ['related-products', categorySlug, currentProductId, limit],
     queryFn: () => productService.getProducts({ category: categorySlug, limit: 12 }),
     enabled: !!categorySlug,
   });
 
   const products = (productsRes?.data || [])
     .filter((p: any) => p._id !== currentProductId)
-    .slice(0, 8);
+    .slice(0, limit);
 
   const checkScroll = () => {
     if (carouselRef.current) {

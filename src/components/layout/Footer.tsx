@@ -19,75 +19,7 @@ const socialLinks = [
   { label: 'WhatsApp', href: 'https://wa.me/918510099666', icon: null, color: '#25D366' },
 ];
 
-// ─── Payment method SVG icons — clean, professional, on-brand ─────────────────
-
-/** VISA — geometric letterforms, gold underline */
-function VisaSVG() {
-  return (
-    <svg viewBox="0 0 80 26" xmlns="http://www.w3.org/2000/svg" className="h-[17px] w-auto">
-      {/* V */}
-      <polygon points="0,1 8,1 14,19 20,1 28,1 19,25 9,25" fill="white" opacity="0.88" />
-      {/* I */}
-      <rect x="30" y="1" width="6" height="24" fill="white" opacity="0.88" />
-      {/* S */}
-      <path d="M40,1 h16c3,0 5,2 5,4s-2,4-5,4h-10c-1.5,0-2.5,1-2.5,2.5s1,2.5,2.5,2.5h11v4h-11c-4,0-7-3-7-7s3-7,7-7h10c.8,0,1.5-.6,1.5-1.5S57.8,2,57,2h-17Z" fill="white" opacity="0.88" />
-      {/* A */}
-      <path d="M64,1 l12,24h-7l-2-5h-9l-2,5h-7L61,1h3Z M65,16l-2.5-7.5L60,16Z" fill="white" opacity="0.88" />
-      {/* Gold accent line */}
-      <rect x="0" y="24.5" width="80" height="1.5" rx="0.75" fill="#F7A600" opacity="0.45" />
-    </svg>
-  );
-}
-
-/** Mastercard — iconic two-circle lockup */
-function MastercardSVG() {
-  return (
-    <svg viewBox="0 0 54 34" xmlns="http://www.w3.org/2000/svg" className="h-[22px] w-auto">
-      <circle cx="19" cy="17" r="15" fill="#EB001B" opacity="0.9" />
-      <circle cx="35" cy="17" r="15" fill="#F79E1B" opacity="0.9" />
-      {/* Overlap zone — FF5F00 blend */}
-      <path d="M27 4.5a15 15 0 0 1 0 25 15 15 0 0 1 0-25Z" fill="#FF5F00" opacity="0.9" />
-    </svg>
-  );
-}
-
-/** UPI — proper diagonal-arrow mark (orange up-left + teal down-right) + wordmark */
-function UpiSVG() {
-  return (
-    <svg viewBox="0 0 70 28" xmlns="http://www.w3.org/2000/svg" className="h-[20px] w-auto">
-      {/* Orange arrow — slanted up-left chevron */}
-      <path
-        d="M2,24 L10,4 L15,4 L11,14 L20,14 L12,28 L7,28 L10.5,20 Z"
-        fill="#F47920" opacity="0.95"
-      />
-      {/* Teal arrow — slanted down-right chevron */}
-      <path
-        d="M17,0 L22,0 L14,12 L23,12 L15,28 L20,28 L28,8 L23,8 Z"
-        fill="#009CDE" opacity="0.95"
-      />
-      {/* UPI wordmark */}
-      <text
-        x="37" y="21"
-        fontFamily="Arial, sans-serif" fontWeight="900" fontSize="15"
-        fill="white" opacity="0.88" letterSpacing="1.5"
-      >UPI</text>
-    </svg>
-  );
-}
-
-/** RuPay — bold wordmark + red base stripe */
-function RupayLogoSVG() {
-  return (
-    <svg viewBox="0 0 68 26" xmlns="http://www.w3.org/2000/svg" className="h-[20px] w-auto">
-      {/* "R" mark simplified */}
-      <path d="M2,2 L2,24 L8,24 L8,16 L14,24 L21,24 L13,14 c4-1 6-4 6-8 0-5-4-4-4-4 Z M8,6 h4c2,0 3,1 3,3s-1,3-3,3 H8 Z" fill="#E63329" opacity="0.9" />
-      {/* Wordmark */}
-      <text x="25" y="19" fontFamily="Arial, sans-serif" fontWeight="800" fontSize="12.5" fill="white" opacity="0.88" letterSpacing="0.4">RuPay</text>
-      {/* Bottom stripe */}
-      <rect x="25" y="22" width="42" height="1.5" rx="0.75" fill="#E63329" opacity="0.5" />
-    </svg>
-  );
-}
+// ─── Payment method logos ───────────────────────────────────────────────────
 
 /** Razorpay — blue lightning-bolt mark + lowercase wordmark */
 function RazorpaySVG() {
@@ -119,30 +51,13 @@ function NetBankingSVG() {
   );
 }
 
-/** GPay — Google G logo + Pay wordmark */
-function GPaySVG() {
-  return (
-    <svg viewBox="0 0 62 26" xmlns="http://www.w3.org/2000/svg" className="h-[20px] w-auto">
-      {/* Google "G" */}
-      <g transform="translate(8, -4.2) scale(1.35)">
-        <path d="M12.1 10.8h-5.8v2.7h3.3c-.2 1.3-1.3 2.5-3.3 2.5-2 0-3.7-1.7-3.7-3.7s1.7-3.7 3.7-3.7c1 0 1.8.4 2.5 1l2-2C9.7 6.4 8.2 5.8 6.3 5.8 2.8 5.8 0 8.6 0 12.1s2.8 6.3 6.3 6.3c3.6 0 6-2.5 6-6.1 0-.6-.1-1-.2-1.5z" fill="#4285F4"/>
-        <path d="M6.3 18.4c1.6 0 3-.6 4-1.5l-2.4-1.9c-.5.4-1.1.6-1.6.6-1.7 0-3.1-1.1-3.6-2.6H.2v2C1.6 17 3.8 18.4 6.3 18.4z" fill="#34A853"/>
-        <path d="M2.7 13c-.1-.4-.2-.9-.2-1.4s.1-1 .2-1.4v-2H.2C0 9.2 0 10.4 0 11.6s.2 2.4.6 3.5l2.1-2.1z" fill="#FBBC05"/>
-        <path d="M6.3 8.3c1 0 1.8.3 2.5 1l1.8-1.8C9.4 6.4 8 5.8 6.3 5.8 3.8 5.8 1.6 7.2.2 9.2l2.5 2c.5-1.6 1.9-2.9 3.6-2.9z" fill="#EA4335"/>
-      </g>
-      {/* "Pay" wordmark */}
-      <text x="28" y="17.5" fontFamily="Arial, sans-serif" fontWeight="600" fontSize="13" fill="white" opacity="0.88">Pay</text>
-    </svg>
-  );
-}
-
 const PAYMENT_METHODS = [
-  { id: 'visa', label: 'Visa', Icon: VisaSVG },
-  { id: 'mastercard', label: 'Mastercard', Icon: MastercardSVG },
-  { id: 'upi', label: 'UPI', Icon: UpiSVG },
-  { id: 'gpay', label: 'Google Pay', Icon: GPaySVG },
-  { id: 'rupay', label: 'RuPay', Icon: RupayLogoSVG },
-  { id: 'razorpay', label: 'Razorpay', Icon: RazorpaySVG },
+  { id: 'visa', label: 'Visa', src: '/footer_logo/visa.png', heightClass: 'h-[40px]' },
+  { id: 'mastercard', label: 'Mastercard', src: '/footer_logo/mastercard.png', heightClass: 'h-[24px]' },
+  { id: 'upi', label: 'UPI', src: '/footer_logo/upi.png', heightClass: 'h-[24px]' },
+  { id: 'gpay', label: 'Google Pay', src: '/footer_logo/gpay.png', heightClass: 'h-[24px]' },
+  { id: 'rupay', label: 'RuPay', src: '/footer_logo/rupay.png', heightClass: 'h-[40px]' },
+  { id: 'razorpay', label: 'Razorpay', src: '/footer_logo/razorpay.png', heightClass: 'h-[40px]' },
   { id: 'netbanking', label: 'Net Banking', Icon: NetBankingSVG },
 ];
 
@@ -153,13 +68,17 @@ function PaymentSection() {
         We Accept
       </p>
       <div className="flex flex-wrap items-center gap-2.5">
-        {PAYMENT_METHODS.map(({ id, label, Icon }) => (
+        {PAYMENT_METHODS.map(({ id, label, src, heightClass, Icon }) => (
           <div
             key={id}
             title={label}
-            className="h-10 px-4 rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:border-white/[0.18] hover:bg-white/[0.09] transition-all duration-200 cursor-default"
+            className="w-[80px] h-[40px] rounded-lg bg-white/[0.05] border border-white/[0.08] flex items-center justify-center hover:border-white/[0.18] hover:bg-white/[0.09] transition-all duration-200 cursor-default"
           >
-            <Icon />
+            {Icon ? (
+              <Icon />
+            ) : (
+              <img src={src} alt={label} className={cn(heightClass, "max-w-[150%] w-auto object-contain shrink-0")} />
+            )}
           </div>
         ))}
       </div>

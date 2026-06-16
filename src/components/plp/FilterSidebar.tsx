@@ -33,12 +33,12 @@ export function FilterSidebar({ filters, onChange, onReset, onClose }: FilterSid
         "bg-[#FCFBF9]/95 backdrop-blur-xl border border-[#151515]/5 transition-all duration-500",
         onClose ? "h-full overflow-y-auto pb-20" : "sticky top-28 rounded-3xl shadow-[0_8px_30px_rgb(0,0,0,0.04)] overflow-hidden"
       )}>
-        
+
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-3 border-b border-[#151515]/5 bg-white/50">
           <div className="flex items-center gap-2">
             {onClose && (
-              <button 
+              <button
                 onClick={onClose}
                 className="lg:hidden p-1 -ml-1 text-[#151515]/40 hover:text-[#151515] transition-colors"
               >
@@ -47,8 +47,8 @@ export function FilterSidebar({ filters, onChange, onReset, onClose }: FilterSid
             )}
             <h3 className="font-display text-[12px] font-bold text-[#151515] tracking-[0.15em] uppercase">Refine By</h3>
           </div>
-          <button 
-            onClick={onReset} 
+          <button
+            onClick={onReset}
             className="group flex items-center gap-1.5 text-[10px] font-sans font-semibold text-[#8b0026] hover:text-[#6a001d] transition-colors uppercase tracking-widest"
           >
             <span>Reset</span>
@@ -78,7 +78,7 @@ export function FilterSidebar({ filters, onChange, onReset, onClose }: FilterSid
                       : 'bg-white border-[#151515]/10 text-[#525252] hover:border-[#151515]/30 hover:shadow-sm hover:text-[#151515]'
                   )}
                 >
-                  {size}
+                  {size === 'Free Size' ? 'ONE SIZE' : size}
                 </button>
               ))}
             </div>
@@ -94,8 +94,8 @@ export function FilterSidebar({ filters, onChange, onReset, onClose }: FilterSid
                 <p className="text-[11px] font-sans font-bold text-[#151515] tracking-[0.1em] uppercase">Fitting</p>
               </div>
               {filters.fittingType && (
-                <button 
-                  onClick={() => onChange({ fittingType: undefined })} 
+                <button
+                  onClick={() => onChange({ fittingType: undefined })}
                   className="text-[10px] font-medium text-[#A3A3A3] hover:text-[#151515] uppercase tracking-wider transition-colors duration-300"
                 >
                   Clear
@@ -139,13 +139,13 @@ export function FilterSidebar({ filters, onChange, onReset, onClose }: FilterSid
               </div>
               <p className="text-[11px] font-sans font-bold text-[#151515] tracking-[0.1em] uppercase">Price Range</p>
             </div>
-            
+
             <div className="bg-white rounded-xl p-3 border border-[#151515]/5 shadow-[0_2px_10px_rgb(0,0,0,0.02)]">
               <div className="flex justify-between items-baseline mb-3">
                 <span className="text-[10px] font-sans font-medium text-[#737373] tracking-wide">Max Price</span>
                 <span className="text-sm font-sans font-bold text-[#151515] tracking-tight">₹{filters.maxPrice ?? PRICE_RANGE.max}</span>
               </div>
-              
+
               <div className="relative py-2">
                 <input
                   type="range"
@@ -159,7 +159,7 @@ export function FilterSidebar({ filters, onChange, onReset, onClose }: FilterSid
                   aria-label="Maximum price"
                 />
               </div>
-              
+
               <div className="flex justify-between mt-4 text-[10px] font-sans font-semibold text-[#A3A3A3] tracking-wider">
                 <span>₹{PRICE_RANGE.min}</span>
                 <span>₹{PRICE_RANGE.max}</span>
