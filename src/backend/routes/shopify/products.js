@@ -44,6 +44,7 @@ function parseMetafields(product) {
   let fitType = null;
   let usps = [];
   let sizeChartUrl = null;
+  let sizeChart2Url = null;
   let supportsAllSizes = false;
   let modelInfo = '';
 
@@ -62,7 +63,7 @@ function parseMetafields(product) {
       continue;
     }
 
-    if (mf.key === 'size_chart') {
+    if (mf.key === 'size_chart' || mf.key === 'size_chart2') {
       let url = null;
       if (mf.reference) {
         url = (mf.reference.image && mf.reference.image.url) || mf.reference.url || null;
@@ -71,7 +72,10 @@ function parseMetafields(product) {
         const node = edge.node;
         url = (node.image && node.image.url) || node.url || null;
       }
-      if (url) sizeChartUrl = url;
+      if (url) {
+        if (mf.key === 'size_chart') sizeChartUrl = url;
+        if (mf.key === 'size_chart2') sizeChart2Url = url;
+      }
       continue;
     }
 
@@ -108,6 +112,7 @@ function parseMetafields(product) {
   if (fitType) product.fitType = fitType;
   product.usps = usps;
   product.sizeChartUrl = sizeChartUrl;
+  product.sizeChart2Url = sizeChart2Url;
   product.supportsAllSizes = supportsAllSizes;
   product.modelInfo = modelInfo;
 

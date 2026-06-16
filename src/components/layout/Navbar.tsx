@@ -271,7 +271,7 @@ export function Navbar() {
 
         {/* Logo (Center) */}
         <div className="flex-shrink-0 flex justify-center lg:flex-none lg:absolute lg:left-1/2 lg:-translate-x-1/2">
-          <Link href="/" className="block">
+          <Link href="/" className="block" title="Fashion apparel for men and women">
             <img
               src="/faoo_logo_1.webp"
               alt="Faoo"
@@ -288,6 +288,14 @@ export function Navbar() {
         {/* Right icons (Right) */}
         <div className="flex items-center justify-end gap-3 lg:gap-6 flex-1">
 
+          {/* Search */}
+          <button
+            onClick={openSearch}
+            className="relative p-2 hover:bg-white/10 rounded-full transition-colors text-white"
+            aria-label="Search"
+          >
+            <Search size={18} strokeWidth={1.5} />
+          </button>
 
           {/* Wishlist (visible on all screens) */}
           <Link

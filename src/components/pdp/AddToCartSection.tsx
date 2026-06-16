@@ -144,7 +144,8 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
         </div>
       </div>
 
-      {/* ── Fit Scale ── */}
+      {/* ── Fit Scale (hidden for Free Size products) ── */}
+      {!isFreeSize && (
       <div className="flex flex-col gap-3">
         {/* Track */}
         <div className="relative h-[2px] bg-[#E5E5E5] rounded-full mx-0">
@@ -176,6 +177,7 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
           {fitLabel}
         </p>
       </div>
+      )}
 
       {/* ── Buttons ── */}
       <div className="flex flex-col gap-2 md:gap-3">

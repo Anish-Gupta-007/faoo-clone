@@ -199,9 +199,7 @@ export function ProductCard({ product, disableAnimation = false }: ProductCardPr
             {formatPrice(product.price)}
           </span>
         </div>
-        <p className="text-[10px] text-[#A3A3A3] font-sans tracking-[0.15em] uppercase mt-0.5">
-          {product.category?.name || 'Collection'}
-        </p>
+
       </div>
     </motion.div>
   );

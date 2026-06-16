@@ -11,7 +11,7 @@ import { InstagramSection } from '@/components/homepage/InstagramSection';
 import { ScrollTransitionWrapper } from '@/components/homepage/ScrollTransitionWrapper';
 
 export const metadata: Metadata = {
-  title: 'Faoo — Premium Minimalist Clothing',
+  title: 'Faoo — Fashion Apparel for Men and Women',
   description:
     'Shop premium minimalist clothing for men and women. T-Shirts, Hoodies, Tanks, Joggers and Accessories. Free shipping on select orders.',
 };

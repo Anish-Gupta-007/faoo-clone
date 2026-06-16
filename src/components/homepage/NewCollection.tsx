@@ -17,8 +17,7 @@ import { getTagBadge } from '@/utils/shopifyTags';
 
 export function NewCollection() {
   const { categories, fetchCategories } = useCategoryStore();
-  const [menProducts, setMenProducts] = useState<ProductType[]>([]);
-  const [womenProducts, setWomenProducts] = useState<ProductType[]>([]);
+  const [displayItems, setDisplayItems] = useState<{ product: ProductType; gender: 'men' | 'women' }[]>([]);
   const [loading, setLoading] = useState(true);
   const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0);
   const mobileCarouselRef = useRef<HTMLDivElement>(null);
@@ -51,14 +50,63 @@ export function NewCollection() {
         const menSlug = getCategorySlug('men');
         const womenSlug = getCategorySlug('women');
         const [menRes, womenRes] = await Promise.all([
-          productService.getProducts({ category: menSlug, isNewCollection: true, limit: 8 }),
-          productService.getProducts({ category: womenSlug, isNewCollection: true, limit: 8 }),
+          productService.getProducts({ category: menSlug, isNewCollection: true, limit: 50 }),
+          productService.getProducts({ category: womenSlug, isNewCollection: true, limit: 50 }),
         ]);
-        setMenProducts(menRes.data.slice(0, 4));
-        setWomenProducts(womenRes.data.slice(0, 4));
+
+        const allMen = menRes.data.map((p: any) => ({ product: p, gender: 'men' as const }));
+        const allWomen = womenRes.data.map((p: any) => ({ product: p, gender: 'women' as const }));
+
+        // Desired items by exact substring match
+        const desiredNames = [
+          "effortless abstract",
+          "victoria tie",
+          "denim look super soft",
+          "aura blue",
+          "ur full"
+        ];
+
+        const selectedItems: { product: ProductType; gender: 'men' | 'women' }[] = [];
+
+        // Find desired ones first
+        desiredNames.forEach(nameSub => {
+          // Search in men
+          let idx = allMen.findIndex((item: { product: ProductType; gender: 'men' | 'women' }) => (item.product?.name || '').toLowerCase().includes(nameSub.toLowerCase()));
+          if (idx !== -1) {
+            selectedItems.push(allMen[idx]);
+            allMen.splice(idx, 1);
+            return;
+          }
+          // Search in women
+          idx = allWomen.findIndex((item: { product: ProductType; gender: 'men' | 'women' }) => (item.product?.name || '').toLowerCase().includes(nameSub.toLowerCase()));
+          if (idx !== -1) {
+            selectedItems.push(allWomen[idx]);
+            allWomen.splice(idx, 1);
+          }
+        });
+
+        // Fill remaining up to 8 spots, alternating men and women
+        let toggle = true; // true = men, false = women
+        while (selectedItems.length < 8 && (allMen.length > 0 || allWomen.length > 0)) {
+          if (toggle) {
+            if (allMen.length > 0) {
+              selectedItems.push(allMen.shift()!);
+            } else if (allWomen.length > 0) {
+              selectedItems.push(allWomen.shift()!);
+            }
+          } else {
+            if (allWomen.length > 0) {
+              selectedItems.push(allWomen.shift()!);
+            } else if (allMen.length > 0) {
+              selectedItems.push(allMen.shift()!);
+            }
+          }
+          toggle = !toggle;
+        }
+
+        setDisplayItems(selectedItems.slice(0, 8));
       } catch {
-        setMenProducts([]);
-        setWomenProducts([]);
+        setDisplayItems([]);
       } finally {
         setLoading(false);
       }
@@ -67,18 +115,14 @@ export function NewCollection() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [categories]);
 
-  // Interleave: men[0], women[0], men[1], women[1], men[2], women[2], men[3], women[3]
-  const interleaved = Array.from({ length: 4 }, (_, i) => [
-    { product: menProducts[i], gender: 'men' as const },
-    { product: womenProducts[i], gender: 'women' as const },
-  ]).flat().filter((item) => item.product);
+
 
   const scrollMobileCarousel = (direction: 'left' | 'right') => {
     if (mobileCarouselRef.current) {
       const cardWidth = 280 + 24; // Card width + gap
       const newIndex = direction === 'left'
         ? Math.max(0, mobileCarouselIndex - 1)
-        : Math.min(interleaved.length - 1, mobileCarouselIndex + 1);
+        : Math.min(displayItems.length - 1, mobileCarouselIndex + 1);
 
       setMobileCarouselIndex(newIndex);
       mobileCarouselRef.current.scrollTo({
@@ -138,7 +182,7 @@ export function NewCollection() {
                     className="flex gap-6 overflow-x-auto scroll-smooth pb-4 px-4 -mx-4 snap-x snap-mandatory"
                     style={{ scrollBehavior: 'smooth', scrollSnapType: 'x mandatory' }}
                   >
-                    {interleaved.map((item, idx) => (
+                    {displayItems.map((item, idx) => (
                       <div
                         key={`${item.product._id}-${idx}`}
                         className="relative w-[280px] flex-shrink-0 snap-start"
@@ -161,7 +205,7 @@ export function NewCollection() {
                   {/* Right Arrow Button */}
                   <button
                     onClick={() => scrollMobileCarousel('right')}
-                    disabled={mobileCarouselIndex === interleaved.length - 1}
+                    disabled={mobileCarouselIndex === displayItems.length - 1}
                     className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-20 w-10 h-10 rounded-full bg-[#151515] text-white flex items-center justify-center hover:bg-[#8b0026] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#151515]"
                     aria-label="Next"
                   >
@@ -173,7 +217,7 @@ export function NewCollection() {
               {/* Desktop Grid (2 rows × 4 columns) */}
               <div className="hidden md:block mt-8">
                 <div className="grid grid-cols-4 gap-6 lg:gap-8">
-                  {interleaved.map((item, idx) => (
+                  {displayItems.map((item, idx) => (
                     <motion.div
                       key={`${item.product._id}-${idx}`}
                       initial={{ opacity: 0, y: 20 }}
@@ -208,9 +252,9 @@ function MinimalProductCard({ product, index, gender }: { product: ProductType; 
 
       // 2. Find variant matching selected size
       const targetVariant = variants.find(v => v.isActive && v.stockQuantity > 0 && v.size === size) ||
-                            variants.find(v => v.isActive && v.size === size) ||
-                            variants.find(v => v.isActive && v.stockQuantity > 0) ||
-                            variants[0];
+        variants.find(v => v.isActive && v.size === size) ||
+        variants.find(v => v.isActive && v.stockQuantity > 0) ||
+        variants[0];
 
       if (!targetVariant) {
         toast.error('Product currently unavailable');
@@ -292,7 +336,7 @@ function MinimalProductCard({ product, index, gender }: { product: ProductType; 
 
         {/* Interactive Size Selector slide-up on click */}
         {showSizeSelector && product.sizesAvailable && product.sizesAvailable.length > 0 && (
-          <div 
+          <div
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
@@ -301,12 +345,12 @@ function MinimalProductCard({ product, index, gender }: { product: ProductType; 
           >
             <div className="flex items-center justify-between w-full px-1">
               <span className="text-[8px] font-sans font-bold tracking-[0.2em] text-[#737373] uppercase">Select Size</span>
-              <button 
+              <button
                 onClick={(e) => {
                   e.preventDefault();
                   e.stopPropagation();
                   setShowSizeSelector(false);
-                }} 
+                }}
                 className="text-[9px] font-sans font-semibold text-[#151515] underline hover:opacity-60 transition-opacity"
               >
                 Cancel

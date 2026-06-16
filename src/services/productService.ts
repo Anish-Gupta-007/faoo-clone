@@ -14,56 +14,73 @@ function getUniqueSizes(variants: any[]): any[] {
 
 const filterProductsByCategory = (products: any[], category: string): any[] => {
   const catLower = category.toLowerCase();
-  
+
   if (catLower === 'men' || catLower === 'mens' || catLower === 'mens-clothing') {
     return products.filter((p: any) => {
       const titleLower = p.title.toLowerCase();
       const tagsLower = (p.tags || []).map((t: string) => t.toLowerCase());
-      
+
       // Exclude exclusively female items
-      const isFemaleItem = titleLower.includes('dress') || 
-                           titleLower.includes('peplum') || 
-                           titleLower.includes('skirt') ||
-                           titleLower.includes('women') ||
-                           titleLower.includes('lavender dress') ||
-                           titleLower.includes('tie-up top') ||
-                           titleLower.includes('peplum top');
-                           
+      const isFemaleItem = titleLower.includes('dress') ||
+        titleLower.includes('peplum') ||
+        titleLower.includes('skirt') ||
+        titleLower.includes('women') ||
+        titleLower.includes('lavender dress') ||
+        titleLower.includes('tie-up') ||
+        titleLower.includes('top') ||
+        titleLower.includes('resort set') ||
+        titleLower.includes('aura') ||
+        titleLower.includes('ur full') ||
+        titleLower.includes('pant') && !titleLower.includes('men') ||
+        tagsLower.some((t: string) => t.includes('women') || t.includes('female') || t.includes('girl'));
+
       const isUnisex = titleLower.includes('unisex') || tagsLower.includes('unisex');
-      
+
       if (isFemaleItem && !isUnisex) return false;
       return true; // Keep shirts, overshirts, pants, unisex items by default
     });
   }
-  
+
   if (catLower === 'women' || catLower === 'womens' || catLower === 'womens-clothing') {
     return products.filter((p: any) => {
       const titleLower = p.title.toLowerCase();
       const tagsLower = (p.tags || []).map((t: string) => t.toLowerCase());
-      
-      // Exclude exclusively male items
-      const isMaleOnly = titleLower.includes('men') && !titleLower.includes('unisex');
-      if (isMaleOnly) return false;
-      
+
+      const isFemaleItem = titleLower.includes('dress') ||
+        titleLower.includes('peplum') ||
+        titleLower.includes('skirt') ||
+        titleLower.includes('women') ||
+        titleLower.includes('lavender dress') ||
+        titleLower.includes('tie-up') ||
+        titleLower.includes('top') ||
+        titleLower.includes('resort set') ||
+        titleLower.includes('aura') ||
+        titleLower.includes('ur full') ||
+        titleLower.includes('pant') && !titleLower.includes('men') || // If it's a pant and not explicitly men's, we can include it or rely on tags
+        tagsLower.some((t: string) => t.includes('women') || t.includes('female') || t.includes('girl'));
+
+      const isUnisex = titleLower.includes('unisex') || tagsLower.includes('unisex');
+
       // Exclude accessories from clothing
       if (tagsLower.includes('accessories') || titleLower.includes('bandana') || titleLower.includes('scarf')) return false;
-      
-      return true;
+
+      // If it is explicitly female or unisex, keep it. Otherwise, exclude it (since default is men's).
+      return isFemaleItem || isUnisex;
     });
   }
-  
+
   if (catLower === 'accessories') {
     return products.filter((p: any) => {
       const titleLower = p.title.toLowerCase();
       const tagsLower = (p.tags || []).map((t: string) => t.toLowerCase());
-      
-      return tagsLower.includes('accessories') || 
-             titleLower.includes('bandana') || 
-             titleLower.includes('scarf') || 
-             titleLower.includes('sunglasses');
+
+      return tagsLower.includes('accessories') ||
+        titleLower.includes('bandana') ||
+        titleLower.includes('scarf') ||
+        titleLower.includes('sunglasses');
     });
   }
-  
+
   return products;
 };
 
@@ -92,7 +109,7 @@ export const productService = {
       } else if (categoryHandle && categoryHandle !== 'all-collection') {
         const res = await shopifyService.getCollectionByHandle(categoryHandle);
         data = res.data?.products || [];
-        
+
         // Fallback: if collection has 0 products, fetch all products and filter them dynamically
         if (data.length === 0) {
           const allRes = await shopifyService.getProducts(100);
@@ -103,17 +120,17 @@ export const productService = {
         const res = await shopifyService.getProducts(filters.limit || 20);
         data = res.data || [];
       }
-      
+
       let mappedProducts = data.map((sp: any) => {
         const titleLower = sp.title.toLowerCase();
         const handleLower = sp.handle.toLowerCase();
         let fittingType: 'Fitted' | 'Regular' | 'Oversized' = 'Regular';
-        
+
         if (titleLower.includes('oversize') || titleLower.includes('loose') || titleLower.includes('baggy') || titleLower.includes('boxy') ||
-            handleLower.includes('oversize') || handleLower.includes('loose') || handleLower.includes('baggy') || handleLower.includes('boxy')) {
+          handleLower.includes('oversize') || handleLower.includes('loose') || handleLower.includes('baggy') || handleLower.includes('boxy')) {
           fittingType = 'Oversized';
         } else if (titleLower.includes('fitted') || titleLower.includes('slim') || titleLower.includes('tight') || titleLower.includes('crop') ||
-                   handleLower.includes('fitted') || handleLower.includes('slim') || handleLower.includes('tight') || handleLower.includes('crop')) {
+          handleLower.includes('fitted') || handleLower.includes('slim') || handleLower.includes('tight') || handleLower.includes('crop')) {
           fittingType = 'Fitted';
         }
 
@@ -127,7 +144,7 @@ export const productService = {
           tags: sp.tags || [],
           primaryImage: sp.images?.[0]?.url || '',
           isAvailable: sp.isAvailable,
-          category: { _id: 'shopify-cat', name: 'Shopify Collection', slug: 'shopify-collection' },
+          category: { _id: 'shopify-cat', name: 'Collection', slug: 'collection' },
           sizesAvailable: getUniqueSizes(sp.variants) as any,
           isFreeShipping: true,
           isCODAvailable: false,
@@ -149,7 +166,7 @@ export const productService = {
       if (filters.size) {
         const selectedSizes = filters.size.split(',').filter(Boolean);
         if (selectedSizes.length > 0) {
-          mappedProducts = mappedProducts.filter((p: any) => 
+          mappedProducts = mappedProducts.filter((p: any) =>
             p.sizesAvailable?.some((s: string) => selectedSizes.includes(s))
           );
         }
@@ -200,14 +217,14 @@ export const productService = {
       const titleLower = (title || '').toLowerCase();
 
       if (tagsLower.includes('accessories') || tagsLower.includes('accessory') ||
-          titleLower.includes('bandana') || titleLower.includes('scarf') || titleLower.includes('sunglass')) {
+        titleLower.includes('bandana') || titleLower.includes('scarf') || titleLower.includes('sunglass')) {
         return { _id: 'cat-accessories', name: 'Accessories', slug: 'accessories' };
       }
       if (tagsLower.includes('limited_edition') || tagsLower.includes('limited-edition')) {
         return { _id: 'cat-limited', name: 'Limited Edition', slug: 'limited-edition' };
       }
       if (tagsLower.includes('women') || tagsLower.includes('womens') || tagsLower.includes('womens-clothing') ||
-          titleLower.includes('dress') || titleLower.includes('peplum') || titleLower.includes('skirt')) {
+        titleLower.includes('dress') || titleLower.includes('peplum') || titleLower.includes('skirt')) {
         return { _id: 'cat-women', name: "Women's Clothing", slug: 'womens-clothing' };
       }
       // Default to men's — most products without explicit women/accessories tags are men's
@@ -251,7 +268,7 @@ export const productService = {
     const variants: any[] = sp.variants?.map((v: any) => {
       const sizeOpt = v.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'size')?.value;
       const colorOpt = v.selectedOptions?.find((o: any) => o.name.toLowerCase() === 'color')?.value;
-      
+
       return {
         _id: v.id,
         productId: sp.id,

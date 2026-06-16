@@ -280,7 +280,7 @@ function PDPContent() {
 
   return (
     <>
-      <div className="container-page pt-8 md:pt-12 pb-0">
+      <div className="container-page pt-8 md:pt-12 pb-20 md:pb-28">
         <Breadcrumb
           items={[
             { label: 'Home', href: '/' },
@@ -290,96 +290,95 @@ function PDPContent() {
         />
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12 lg:gap-16 mt-6 md:mt-8">
-          {/* Left Column: Gallery & Model Info */}
-          <div className="flex flex-col gap-3 md:gap-4">
-            <div className="flex flex-col md:flex-row gap-3 lg:gap-4">
-              {/* Vertical Thumbnails (Desktop Only) */}
+          {/* Left Column: Catalogue Strip + 2 Big Hero Images */}
+          <div className="flex flex-col gap-3">
+
+            {/* ── Desktop: catalogue strip on the left, two hero images on the right ── */}
+            <div className="hidden md:flex flex-row gap-4">
+
+              {/* Catalogue thumbnail strip */}
+              {displayImages.length > 2 && (
+                <div
+                  ref={thumbStripRef}
+                  className="flex flex-col gap-2 w-[72px] lg:w-[84px] overflow-y-auto select-none [&::-webkit-scrollbar]:hidden flex-shrink-0"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+                >
+                  {displayImages.slice(2).map((url, idx) => (
+                    <div
+                      key={idx}
+                      className="relative flex-shrink-0 w-full overflow-hidden bg-[#F5F5F5] border border-[#151515]/10 cursor-pointer group"
+                      style={{ aspectRatio: '1/1' }}
+                    >
+                      <img
+                        src={url}
+                        alt={`${product.name} - catalogue ${idx + 3}`}
+                        className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                      />
+                    </div>
+                  ))}
+                </div>
+              )}
+
+              {/* Two stacked hero images */}
+              <div className="flex-1 flex flex-col gap-6 min-w-0">
+                {/* Hero Image 1 */}
+                <div className="relative w-full overflow-hidden bg-[#FAFAFA] border border-[#151515]/5" style={{ aspectRatio: '4/5' }}>
+                  {displayImages[0] ? (
+                    <img
+                      src={displayImages[0]}
+                      alt={`${product.name} - 1`}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full flex items-center justify-center">
+                      <span className="font-display text-6xl text-[#151515]/10">F</span>
+                    </div>
+                  )}
+                  {product.isNewCollection && (
+                    <div className="absolute top-4 left-4 z-10"><Badge variant="new">New</Badge></div>
+                  )}
+                  {product.isLimitedEdition && (
+                    <div className="absolute top-4 left-4 z-10"><Badge variant="limited">Limited</Badge></div>
+                  )}
+                </div>
+
+                {/* Hero Image 2 */}
+                {displayImages[1] && (
+                  <div className="relative w-full overflow-hidden bg-[#FAFAFA] border border-[#151515]/5" style={{ aspectRatio: '4/5' }}>
+                    <img
+                      src={displayImages[1]}
+                      alt={`${product.name} - 2`}
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* ── Mobile: swipeable carousel ── */}
+            <div className="block md:hidden w-full h-[500px] relative bg-[#FAFAFA] border border-[#151515]/5 overflow-hidden">
               <div
-                ref={thumbStripRef}
-                className="hidden md:flex flex-col gap-2.5 w-[72px] lg:w-[84px] max-h-[500px] overflow-y-auto select-none [&::-webkit-scrollbar]:hidden"
+                ref={mobileScrollRef}
+                onScroll={handleScroll}
+                className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
                 style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
               >
                 {displayImages.map((url, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => setActiveImage(idx)}
-                    className={cn(
-                      "relative flex-shrink-0 w-full aspect-square overflow-hidden bg-[#F5F5F5] transition-all duration-300 ease-out cursor-pointer focus:outline-none border",
-                      activeImage === idx
-                        ? "opacity-100 border-[#151515]"
-                        : "opacity-60 hover:opacity-100 border-transparent"
-                    )}
-                  >
+                  <div key={idx} className="w-full h-full flex-shrink-0 snap-start flex items-center justify-center bg-[#FAFAFA]">
                     <img
                       src={url}
-                      alt={`View ${idx + 1}`}
-                      className={cn(
-                        "w-full h-full transition-transform duration-700 ease-out",
-                        activeImage === idx ? "scale-105" : "scale-100",
-                        (product.name.toLowerCase().includes('sunglass') || product.name.toLowerCase().includes('watch') || product.name.toLowerCase().includes('goggle'))
-                          ? "object-contain p-1.5"
-                          : "object-cover"
-                      )}
+                      alt={`${product.name} - view ${idx + 1}`}
+                      className="max-w-full max-h-full w-auto h-auto object-contain p-4"
                     />
-                  </button>
+                  </div>
                 ))}
               </div>
-
-              {/* Main Image Container */}
-              <div className="flex-1 relative w-full min-h-[500px] md:min-h-auto md:max-h-[600px] lg:max-h-[700px] overflow-hidden bg-[#FAFAFA] border border-[#151515]/5 flex items-center justify-center">
-                {/* Desktop View: Single Main Image with Fade Transition */}
-                <div className="hidden md:flex w-full h-full relative items-center justify-center">
-                  <AnimatePresence mode="wait">
-                    {displayImages[activeImage] ? (
-                      <motion.img
-                        key={activeImage}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-                        src={displayImages[activeImage]}
-                        alt={`${product.name} - view ${activeImage + 1}`}
-                        className="max-w-full max-h-full w-auto h-auto object-contain p-4 md:p-6 lg:p-8"
-                      />
-                    ) : (
-                      <motion.div
-                        key="empty"
-                        className="w-full h-full flex items-center justify-center"
-                      >
-                        <span className="font-display text-6xl text-[#151515]/10">F</span>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-
-                {/* Mobile View: Swipeable Carousel */}
-                <div className="block md:hidden w-full h-full relative">
-                  <div
-                    ref={mobileScrollRef}
-                    onScroll={handleScroll}
-                    className="flex w-full h-full overflow-x-auto snap-x snap-mandatory scroll-smooth [&::-webkit-scrollbar]:hidden"
-                    style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-                  >
-                    {displayImages.map((url, idx) => (
-                      <div key={idx} className="w-full h-full flex-shrink-0 snap-start relative bg-[#FAFAFA] flex items-center justify-center">
-                        <img
-                          src={url}
-                          alt={`${product.name} - view ${idx + 1}`}
-                          className="max-w-full max-h-full w-auto h-auto object-contain p-4"
-                        />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Status Badges */}
-                {product.isNewCollection && (
-                  <div className="absolute top-4 left-4 z-10"><Badge variant="new">New</Badge></div>
-                )}
-                {product.isLimitedEdition && (
-                  <div className="absolute top-4 left-4 z-10"><Badge variant="limited">Limited</Badge></div>
-                )}
-              </div>
+              {product.isNewCollection && (
+                <div className="absolute top-4 left-4 z-10"><Badge variant="new">New</Badge></div>
+              )}
+              {product.isLimitedEdition && (
+                <div className="absolute top-4 left-4 z-10"><Badge variant="limited">Limited</Badge></div>
+              )}
             </div>
 
             {/* Mobile Pagination Dots */}
@@ -399,9 +398,9 @@ function PDPContent() {
               ))}
             </div>
 
-            {/* Model Info Bar Below Image */}
+            {/* Model Info Bar */}
             {product.modelInfo && (
-              <div className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#FAF9F6] border border-[#151515]/5 rounded-sm text-[11px] sm:text-xs font-sans text-[#525252] mt-2 tracking-wide select-none">
+              <div className="flex items-center justify-center gap-2 py-2.5 px-4 bg-[#FAF9F6] border border-[#151515]/5 rounded-sm text-[11px] sm:text-xs font-sans text-[#525252] mt-1 tracking-wide select-none">
                 <span className="w-1.5 h-1.5 rounded-full bg-[#151515]/30 flex-shrink-0" />
                 <span className="font-medium text-[#151515]/80">{product.modelInfo}</span>
               </div>
@@ -587,11 +586,11 @@ function PDPContent() {
                             (product as any).tags?.some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory') ||
                             shopifyProduct?.tags?.some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory')
                           )
-                            ? ['Accessories are non-refundable.'] : []
+                            ? ['Accessories are non-refundable and non exchanable'] : []
                         ),
                       ].map((item, i) => (
-                        <li key={i} className="flex items-start gap-2 text-xs font-sans text-[#737373] leading-relaxed">
-                          <span className="mt-[5px] w-1 h-1 rounded-full bg-[#A3A3A3] flex-shrink-0" />
+                        <li key={i} className="flex items-center gap-2 text-xs font-sans text-[#737373] leading-relaxed">
+                          <span className="w-1 h-1 rounded-full bg-[#A3A3A3] flex-shrink-0" />
                           {item}
                         </li>
                       ))}
@@ -620,7 +619,7 @@ function PDPContent() {
                   >
                     <ul className="flex flex-col gap-2 pb-4">
                       {['Dry Clean only', 'Steam Iron'].map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs font-sans text-[#737373]">
+                        <li key={i} className="flex items-center gap-2 text-xs font-sans text-[#737373] leading-relaxed">
                           <span className="w-1 h-1 rounded-full bg-[#A3A3A3] flex-shrink-0" />
                           {item}
                         </li>
@@ -637,12 +636,39 @@ function PDPContent() {
           isOpen={sizeGuideOpen}
           onClose={() => setSizeGuideOpen(false)}
           sizeChartUrl={shopifyProduct?.sizeChartUrl}
+          sizeChart2Url={shopifyProduct?.sizeChart2Url}
         />
       </div>
       {focusMedia.length > 0 && <FocusWithFaoo details={focusMedia} />}
       {irlMedia.length > 0 && <IRLSection images={irlMedia} />}
       <SupportSection />
-      <YouMayAlsoLike categorySlug={product.category?.slug || ''} currentProductId={product._id} />
+      <YouMayAlsoLike
+        categorySlug={
+          (
+            product.category?.slug === 'accessories' ||
+            ((product as any).tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory') ||
+            (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory')
+          )
+            ? 'accessories'
+            : (
+              product.name.toLowerCase().includes('dress') ||
+              product.name.toLowerCase().includes('peplum') ||
+              product.name.toLowerCase().includes('skirt') ||
+              product.name.toLowerCase().includes('women') ||
+              product.name.toLowerCase().includes('tie-up') ||
+              product.name.toLowerCase().includes('top') ||
+              product.name.toLowerCase().includes('resort set') ||
+              product.name.toLowerCase().includes('aura') ||
+              product.name.toLowerCase().includes('ur full') ||
+              (product.name.toLowerCase().includes('pant') && !product.name.toLowerCase().includes('men')) ||
+              ((product as any).tags || []).some((t: string) => t.toLowerCase().includes('women') || t.toLowerCase().includes('female') || t.toLowerCase().includes('girl')) ||
+              (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('women') || t.toLowerCase().includes('female') || t.toLowerCase().includes('girl'))
+            )
+              ? 'womens-clothing'
+              : 'mens-clothing'
+        }
+        currentProductId={product._id}
+      />
       <ReviewsSection productId={slug} />
     </>
   );
