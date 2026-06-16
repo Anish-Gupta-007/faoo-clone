@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     locale: 'en_IN',
     url: 'https://www.faoo.in',
     siteName: 'Faoo',
-    title: 'Faoo — Premium Minimalist Clothing',
+    title: 'Faoo — Fashion Apparel for Men and Women',
     description: 'Premium D2C clothing. Crafted for those who let the fabric speak.',
   },
   robots: { index: true, follow: true },

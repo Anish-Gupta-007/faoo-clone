@@ -50,7 +50,7 @@ async function getProducts(first = 20, searchQuery = '') {
   `;
 
   const { data, errors } = await getStorefrontClient().request(query, {
-    variables: { 
+    variables: {
       first: parseInt(first, 10) || 20,
       query: searchQuery || null
     }
@@ -121,6 +121,7 @@ async function getProductByHandle(handle) {
           { namespace: "custom", key: "fit_type" },
           { namespace: "custom", key: "usp" },
           { namespace: "custom", key: "size_chart" },
+          { namespace: "custom", key: "size_chart2" },
           { namespace: "custom", key: "supports_all_sizes" },
           { namespace: "custom", key: "model" }
         ]) {
@@ -167,7 +168,7 @@ async function getProductByHandle(handle) {
 
   const node = data.product;
   if (!node) return null;
-  
+
   if (node.images) {
     node.images = node.images.edges.map(imgEdge => imgEdge.node);
   }
@@ -179,7 +180,7 @@ async function getProductByHandle(handle) {
 
 async function getProductsByIds(ids) {
   if (!ids || !ids.length) return [];
-  
+
   const query = `
     query getProductsByIds($ids: [ID!]!) {
       nodes(ids: $ids) {
