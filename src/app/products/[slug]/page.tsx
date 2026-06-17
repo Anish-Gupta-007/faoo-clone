@@ -618,7 +618,12 @@ function PDPContent() {
                     className="overflow-hidden"
                   >
                     <ul className="flex flex-col gap-2 pb-4">
-                      {['Dry Clean only', 'Steam Iron'].map((item, i) => (
+                      {[
+                        'Wash in cold water',
+                        'Do not bleach',
+                        'Dry flat',
+                        'Steam iron preferred',
+                      ].map((item, i) => (
                         <li key={i} className="flex items-center gap-2 text-xs font-sans text-[#737373] leading-relaxed">
                           <span className="w-1 h-1 rounded-full bg-[#A3A3A3] flex-shrink-0" />
                           {item}
