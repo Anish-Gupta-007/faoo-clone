@@ -297,21 +297,25 @@ function PDPContent() {
             <div className="hidden md:flex flex-row gap-4">
 
               {/* Catalogue thumbnail strip */}
-              {displayImages.length > 2 && (
+              {displayImages.length > 1 && (
                 <div
                   ref={thumbStripRef}
                   className="flex flex-col gap-2 w-[72px] lg:w-[84px] overflow-y-auto select-none [&::-webkit-scrollbar]:hidden flex-shrink-0"
                   style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                  {displayImages.slice(2).map((url, idx) => (
+                  {displayImages.map((url, idx) => (
                     <div
                       key={idx}
-                      className="relative flex-shrink-0 w-full overflow-hidden bg-[#F5F5F5] border border-[#151515]/10 cursor-pointer group"
+                      onClick={() => setActiveImage(idx)}
+                      className={cn(
+                        "relative flex-shrink-0 w-full overflow-hidden bg-[#F5F5F5] border border-[#151515]/10 cursor-pointer group transition-opacity duration-300",
+                        activeImage === idx ? "opacity-100" : "opacity-50 hover:opacity-100"
+                      )}
                       style={{ aspectRatio: '1/1' }}
                     >
                       <img
                         src={url}
-                        alt={`${product.name} - catalogue ${idx + 3}`}
+                        alt={`${product.name} - catalogue ${idx + 1}`}
                         className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                       />
                     </div>
@@ -319,14 +323,13 @@ function PDPContent() {
                 </div>
               )}
 
-              {/* Two stacked hero images */}
+              {/* Main Image */}
               <div className="flex-1 flex flex-col gap-6 min-w-0">
-                {/* Hero Image 1 */}
                 <div className="relative w-full overflow-hidden bg-[#FAFAFA] border border-[#151515]/5" style={{ aspectRatio: '4/5' }}>
-                  {displayImages[0] ? (
+                  {displayImages[activeImage] ? (
                     <img
-                      src={displayImages[0]}
-                      alt={`${product.name} - 1`}
+                      src={displayImages[activeImage]}
+                      alt={`${product.name} - ${activeImage + 1}`}
                       className="w-full h-full object-cover"
                     />
                   ) : (
@@ -341,17 +344,6 @@ function PDPContent() {
                     <div className="absolute top-4 left-4 z-10"><Badge variant="limited">Limited</Badge></div>
                   )}
                 </div>
-
-                {/* Hero Image 2 */}
-                {displayImages[1] && (
-                  <div className="relative w-full overflow-hidden bg-[#FAFAFA] border border-[#151515]/5" style={{ aspectRatio: '4/5' }}>
-                    <img
-                      src={displayImages[1]}
-                      alt={`${product.name} - 2`}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                )}
               </div>
             </div>
 
