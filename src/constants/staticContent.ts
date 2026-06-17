@@ -217,22 +217,28 @@ export const CAREERS_CONTENT = {
   ],
   openRoles: [
     { 
-      title: 'Social Media Manager', 
-      type: 'Full-time', 
-      location: 'Remote', 
-      description: 'Shape our narrative across digital channels. We are looking for an editorial-eye and a community-first mindset.'
+      title: 'Human Resources Intern', 
+      type: 'Internship', 
+      location: 'Remote / Bangalore', 
+      description: 'Help us find and nurture the best talent while building a culture of radical quality and intentional design.'
     },
     { 
-      title: 'Graphic Designer', 
-      type: 'Full-time', 
-      location: 'Bangalore / Remote', 
-      description: 'From lookbooks to interface design, you will be the guardian of our visual language.'
+      title: 'Graphic Design Intern', 
+      type: 'Internship', 
+      location: 'Remote / Bangalore', 
+      description: 'Assist in creating compelling visuals, from lookbooks to digital assets, that define our visual language.'
     },
     { 
-      title: 'Customer Delight Executive', 
-      type: 'Full-time', 
-      location: 'Bangalore', 
-      description: 'Be the voice of Faoo. We don’t just solve problems; we create memorable experiences.'
+      title: 'Customer Relationship Management Intern', 
+      type: 'Internship', 
+      location: 'Remote / Bangalore', 
+      description: 'Engage with our community, ensuring every interaction is memorable and aligns with our core values.'
+    },
+    { 
+      title: 'Social Media Marketing Intern', 
+      type: 'Internship', 
+      location: 'Remote / Bangalore', 
+      description: 'Support our digital narrative. Bring your editorial eye and community-first mindset to our social channels.'
     },
   ],
 };
