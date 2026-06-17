@@ -213,31 +213,31 @@ export const CAREERS_CONTENT = {
   culture: [
     { title: 'Intentional Design', description: 'We don’t follow trends. We create timeless pieces that earn their place in the world.' },
     { title: 'Radical Quality', description: 'Every detail, from thread count to packaging, is scrutinized for perfection.' },
-    { title: 'Global Vision', description: 'Based in Bangalore, thinking for the world. We are a diverse, remote-friendly collective.' }
+    { title: 'Global Vision', description: 'Based out of Delhi, thinking for the world. We are a diverse, remote-friendly collective.' }
   ],
   openRoles: [
-    { 
-      title: 'Human Resources Intern', 
-      type: 'Internship', 
-      location: 'Remote / Bangalore', 
+    {
+      title: 'Human Resources Intern',
+      type: 'Internship',
+      location: 'Remote / Bangalore',
       description: 'Help us find and nurture the best talent while building a culture of radical quality and intentional design.'
     },
-    { 
-      title: 'Graphic Design Intern', 
-      type: 'Internship', 
-      location: 'Remote / Bangalore', 
+    {
+      title: 'Graphic Design Intern',
+      type: 'Internship',
+      location: 'Remote / Bangalore',
       description: 'Assist in creating compelling visuals, from lookbooks to digital assets, that define our visual language.'
     },
-    { 
-      title: 'Customer Relationship Management Intern', 
-      type: 'Internship', 
-      location: 'Remote / Bangalore', 
+    {
+      title: 'Customer Relationship Management Intern',
+      type: 'Internship',
+      location: 'Remote / Bangalore',
       description: 'Engage with our community, ensuring every interaction is memorable and aligns with our core values.'
     },
-    { 
-      title: 'Social Media Marketing Intern', 
-      type: 'Internship', 
-      location: 'Remote / Bangalore', 
+    {
+      title: 'Social Media Marketing Intern',
+      type: 'Internship',
+      location: 'Remote / Bangalore',
       description: 'Support our digital narrative. Bring your editorial eye and community-first mindset to our social channels.'
     },
   ],
