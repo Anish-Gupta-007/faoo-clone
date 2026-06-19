@@ -8,7 +8,11 @@ import { ArrowRight } from 'lucide-react';
 import { HERO_BANNERS } from '@/constants/staticContent';
 import { useCategoryStore } from '@/store/categoryStore';
 
-export function HeroBanner() {
+interface HeroBannerProps {
+  banners?: typeof HERO_BANNERS;
+}
+
+export function HeroBanner({ banners = HERO_BANNERS }: HeroBannerProps) {
   const [current, setCurrent] = useState(0);
   const { categories, fetchCategories } = useCategoryStore();
 
@@ -37,8 +41,8 @@ export function HeroBanner() {
   const mobileRefs  = useRef<(HTMLVideoElement | null)[]>([]);
 
   const next = useCallback(() => {
-    setCurrent((c) => (c + 1) % HERO_BANNERS.length);
-  }, []);
+    setCurrent((c) => (c + 1) % banners.length);
+  }, [banners.length]);
 
   useEffect(() => {
     const interval = setInterval(next, 5000);
@@ -60,7 +64,7 @@ export function HeroBanner() {
     });
   }, [current]);
 
-  const banner = HERO_BANNERS[current];
+  const banner = banners[current];
 
   return (
     <section
@@ -69,7 +73,7 @@ export function HeroBanner() {
       aria-label="Hero banner"
     >
       {/* Media layers — all mounted, only active one visible */}
-      {HERO_BANNERS.map((b, idx) => (
+      {banners.map((b, idx) => (
         <div
           key={b.id}
           className="absolute inset-0 transition-opacity duration-1000 ease-in-out"
@@ -167,7 +171,7 @@ export function HeroBanner() {
 
       {/* Dot indicators */}
       <div className="absolute bottom-6 left-1/2 -translate-x-1/2 flex items-center gap-2 z-10">
-        {HERO_BANNERS.map((_, i) => (
+        {banners.map((_, i) => (
           <button
             key={i}
             onClick={() => setCurrent(i)}

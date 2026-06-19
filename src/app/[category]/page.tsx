@@ -10,6 +10,8 @@ import { SortDropdown } from '@/components/plp/SortDropdown';
 import { PaginationBar } from '@/components/plp/PaginationBar';
 import { EmptyState } from '@/components/plp/EmptyState';
 import { Breadcrumb } from '@/components/shared/Breadcrumb';
+import { HeroBanner } from '@/components/homepage/HeroBanner';
+import { HERO_BANNERS_WOMENS, HERO_BANNERS_MENS } from '@/constants/staticContent';
 import { ProductCard, ProductFilters } from '@/types/product.types';
 import { Filter, Search } from 'lucide-react';
 import { useCategoryStore } from '@/store/categoryStore';
@@ -97,6 +99,8 @@ function CategoryPLPContent() {
 
   return (
     <div className="min-h-screen bg-[#F5F4F1] pb-20">
+      {categorySlug === 'womens-clothing' && <HeroBanner banners={HERO_BANNERS_WOMENS} />}
+      {categorySlug === 'mens-clothing' && <HeroBanner banners={HERO_BANNERS_MENS} />}
       <div className="container-page pt-10">
         <Breadcrumb items={[{ label: 'Home', href: '/' }, { label: categoryName }]} />
 
