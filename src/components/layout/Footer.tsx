@@ -244,7 +244,7 @@ export function Footer() {
           </div>
 
           {/* 3-D Coin */}
-          <div className="hidden md:flex items-center justify-center">
+          <div className="flex items-center justify-center">
             <Coin3D />
           </div>
         </div>

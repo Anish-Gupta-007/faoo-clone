@@ -19,14 +19,10 @@ export function Coin3D() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  const size = 120; // 120px fits the grid column perfectly without overflowing or causing layout shifts
-
   return (
     <div
-      className="relative flex items-center justify-center select-none"
+      className="relative flex items-center justify-center select-none w-[100px] h-[100px] md:w-[120px] md:h-[120px]"
       style={{
-        width: size,
-        height: size,
         perspective: 800,
       }}
     >
