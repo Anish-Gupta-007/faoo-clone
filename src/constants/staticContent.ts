@@ -58,6 +58,57 @@ export const HERO_BANNERS = [
   },
 ];
 
+export const HERO_BANNERS_WOMENS = [
+  {
+    id: 1,
+    imageUrl: '/hero04.png',
+    mobileImageUrl: '/mobile_hero04.png',
+    heading: 'Womens Collection',
+    subheading: 'Effortless styles for everyday elegance.',
+    ctaText: 'Shop Collection',
+    ctaHref: '/womens-clothing',
+  },
+  {
+    id: 2,
+    imageUrl: '/hero03.png',
+    mobileImageUrl: '/mobile_hero03.png',
+    heading: 'Signature Series',
+    subheading: 'Iconic pieces that define the Faoo aesthetic.',
+    ctaText: 'Explore Now',
+    ctaHref: '/womens-clothing',
+  },
+  {
+    id: 3,
+    imageUrl: '/hero02.png',
+    mobileImageUrl: '/mobile_hero02.png',
+    heading: 'New Arrivals',
+    subheading: 'Discover the latest additions to our collection.',
+    ctaText: 'Shop Now',
+    ctaHref: '/womens-clothing',
+  },
+];
+
+export const HERO_BANNERS_MENS = [
+  {
+    id: 1,
+    videoUrl: '/hero_video.mp4',
+    mobileVideoUrl: '/mobile_hero_video1.mp4',
+    heading: 'Mens Collection',
+    subheading: 'Premium minimalist clothing crafted for those who let the fabric speak.',
+    ctaText: 'Shop Collection',
+    ctaHref: '/mens-clothing',
+  },
+  {
+    id: 2,
+    imageUrl: '/hero01.png',
+    mobileImageUrl: '/mobile_hero01.png',
+    heading: 'Essential Layering',
+    subheading: 'Build your wardrobe with versatile essentials.',
+    ctaText: 'Explore Now',
+    ctaHref: '/mens-clothing',
+  },
+];
+
 export const NEW_COLLECTION = {
   heading: 'The New Collection',
   subheading: 'Refined silhouettes. Breathable fabrics. Made to move with you.',
