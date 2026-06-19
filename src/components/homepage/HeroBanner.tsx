@@ -68,7 +68,7 @@ export function HeroBanner() {
       style={{ height: 'calc(100vh - var(--navbar-height))' }}
       aria-label="Hero banner"
     >
-      {/* Video layers — all mounted, only active one visible */}
+      {/* Media layers — all mounted, only active one visible */}
       {HERO_BANNERS.map((b, idx) => (
         <div
           key={b.id}
@@ -76,28 +76,51 @@ export function HeroBanner() {
           style={{ opacity: idx === current ? 1 : 0, zIndex: idx === current ? 1 : 0 }}
           aria-hidden={idx !== current}
         >
-          {/* Desktop video — hidden on mobile */}
-          <video
-            ref={(el) => { desktopRefs.current[idx] = el; }}
-            src={b.videoUrl}
-            autoPlay={idx === 0}
-            muted
-            loop
-            playsInline
-            preload={idx === 0 ? 'auto' : 'metadata'}
-            className="absolute inset-0 w-full h-full object-cover hidden md:block"
-          />
-          {/* Mobile video — hidden on desktop */}
-          <video
-            ref={(el) => { mobileRefs.current[idx] = el; }}
-            src={b.mobileVideoUrl}
-            autoPlay={idx === 0}
-            muted
-            loop
-            playsInline
-            preload={idx === 0 ? 'auto' : 'metadata'}
-            className="absolute inset-0 w-full h-full object-cover block md:hidden"
-          />
+          {b.videoUrl ? (
+            <>
+              {/* Desktop video — hidden on mobile */}
+              <video
+                ref={(el) => { desktopRefs.current[idx] = el; }}
+                src={b.videoUrl}
+                autoPlay={idx === 0}
+                muted
+                loop
+                playsInline
+                preload={idx === 0 ? 'auto' : 'metadata'}
+                className="absolute inset-0 w-full h-full object-cover hidden md:block"
+              />
+              {/* Mobile video — hidden on desktop */}
+              <video
+                ref={(el) => { mobileRefs.current[idx] = el; }}
+                src={b.mobileVideoUrl}
+                autoPlay={idx === 0}
+                muted
+                loop
+                playsInline
+                preload={idx === 0 ? 'auto' : 'metadata'}
+                className="absolute inset-0 w-full h-full object-cover block md:hidden"
+              />
+            </>
+          ) : (
+            <>
+              {/* Desktop image — hidden on mobile */}
+              {b.imageUrl && (
+                <img
+                  src={b.imageUrl}
+                  alt={b.heading || 'Hero Banner'}
+                  className="absolute inset-0 w-full h-full object-cover hidden md:block"
+                />
+              )}
+              {/* Mobile image — hidden on desktop */}
+              {b.mobileImageUrl && (
+                <img
+                  src={b.mobileImageUrl}
+                  alt={b.heading || 'Hero Banner'}
+                  className="absolute inset-0 w-full h-full object-cover block md:hidden"
+                />
+              )}
+            </>
+          )}
           {/* Subtle bottom gradient for button legibility */}
           <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-black/50" />
         </div>
