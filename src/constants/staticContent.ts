@@ -17,7 +17,7 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero02.png',
     heading: 'New Arrivals',
     subheading: 'Discover the latest additions to our collection.',
-    ctaText: 'Shop Women',
+    ctaText: 'Shop Womens',
     ctaHref: '/women',
   },
   {
@@ -26,7 +26,7 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero04.png',
     heading: 'Essential Layering',
     subheading: 'Build your wardrobe with versatile essentials.',
-    ctaText: 'Shop Women',
+    ctaText: 'Shop Womens',
     ctaHref: '/women',
   },
   {
