@@ -8,8 +8,8 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero01.png',
     heading: 'Effortless Everyday',
     subheading: 'Elevated basics for a life lived with intention.',
-    ctaText: 'Shop Women',
-    ctaHref: '/women',
+    ctaText: 'Shop Mens',
+    ctaHref: '/men',
   },
   {
     id: 2,
@@ -17,8 +17,8 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero02.png',
     heading: 'New Arrivals',
     subheading: 'Discover the latest additions to our collection.',
-    ctaText: 'Shop Mens',
-    ctaHref: '/men',
+    ctaText: 'Shop Women',
+    ctaHref: '/women',
   },
   {
     id: 3,
