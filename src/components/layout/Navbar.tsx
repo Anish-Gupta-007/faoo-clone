@@ -13,13 +13,6 @@ import { useCategoryStore } from '@/store/categoryStore';
 import { cn } from '@/lib/cn';
 import { shopifyService, ShopifyAnnouncement } from '@/services/shopifyService';
 
-const ANNOUNCEMENTS = [
-  { text: "10% OFF your first order", code: "FIRST10" },
-  { text: "Free shipping on selected orders", code: null },
-  { text: "Limited Edition drops — live now", code: null },
-  { text: "Exclusive collections. Only for a few.", code: null },
-];
-
 function AnnouncementBar() {
   const [apiAnnouncements, setApiAnnouncements] = useState<string[]>([]);
   const [current, setCurrent] = useState(0);
@@ -32,29 +25,32 @@ function AnnouncementBar() {
           setApiAnnouncements(res.data.map((a: ShopifyAnnouncement) => a.text));
         }
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
-
-  const items = apiAnnouncements.length > 0
-    ? apiAnnouncements.map(t => ({ text: t, code: null }))
-    : ANNOUNCEMENTS;
 
   // Reset index to 0 when items size changes to avoid out-of-bounds indices
   useEffect(() => {
     setCurrent(0);
-  }, [items.length]);
+  }, [apiAnnouncements.length]);
 
   useEffect(() => {
-    if (items.length <= 1) return;
+    if (apiAnnouncements.length <= 1) return;
     const interval = setInterval(() => {
       setVisible(false);
       setTimeout(() => {
-        setCurrent(prev => (prev + 1) % items.length);
+        setCurrent(prev => (prev + 1) % apiAnnouncements.length);
         setVisible(true);
       }, 400);
     }, 4000);
     return () => clearInterval(interval);
-  }, [items.length]);
+  }, [apiAnnouncements.length]);
+
+  const items = apiAnnouncements.map(t => ({ text: t, code: null }));
+
+  // Don't render if there are no announcements
+  if (items.length === 0) {
+    return null;
+  }
 
   const item = items[current] || items[0] || { text: "", code: null };
 

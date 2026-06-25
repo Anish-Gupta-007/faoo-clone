@@ -1,5 +1,6 @@
 'use client';
 // src/components/layout/Footer.tsx
+import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Instagram, Linkedin } from 'lucide-react';
@@ -7,9 +8,14 @@ import { useCategoryStore } from '@/store/categoryStore';
 import { cn } from '@/lib/cn';
 import { Coin3D } from '@/components/layout/Coin3D';
 
-const infoLinks = [
+type InfoLink =
+  | { label: string; href: string }
+  | { label: string; action: 'openReturnsInfo' };
+
+const infoLinks: InfoLink[] = [
   { label: 'About', href: '/about' },
   { label: 'FAQ', href: '/faq' },
+  { label: 'Return & Exchange', action: 'openReturnsInfo' },
   { label: 'Careers', href: '/careers' },
 ];
 
@@ -112,6 +118,7 @@ export function Footer() {
     href: `/${cat.slug}`,
   }));
 
+  const [showReturnsInfo, setShowReturnsInfo] = useState(false);
   const isHome = pathname === '/';
 
   return (
@@ -206,13 +213,23 @@ export function Footer() {
             </h3>
             <ul className="flex flex-col gap-3">
               {infoLinks.map((link) => (
-                <li key={link.href}>
-                  <Link
-                    href={link.href}
-                    className="text-sm font-sans text-white/55 hover:text-white transition-colors duration-300"
-                  >
-                    {link.label}
-                  </Link>
+                <li key={link.label}>
+                  {'href' in link ? (
+                    <Link
+                      href={link.href}
+                      className="text-sm font-sans text-white/55 hover:text-white transition-colors duration-300"
+                    >
+                      {link.label}
+                    </Link>
+                  ) : (
+                    <button
+                      type="button"
+                      onClick={() => setShowReturnsInfo(true)}
+                      className="text-sm font-sans text-white/55 hover:text-white transition-colors duration-300 text-left"
+                    >
+                      {link.label}
+                    </button>
+                  )}
                 </li>
               ))}
             </ul>
@@ -248,6 +265,48 @@ export function Footer() {
             <Coin3D />
           </div>
         </div>
+
+        {/* Return & Exchange modal */}
+        {showReturnsInfo && (
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+            <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
+            <div className="relative z-10 w-full max-w-3xl overflow-hidden rounded-[2rem] border border-slate-200 bg-white p-8 shadow-2xl shadow-slate-900/15 text-slate-900">
+
+              <div className="space-y-6">
+                <h2 className="font-display text-3xl tracking-tight text-slate-950">
+                  Return & Exchange
+                </h2>
+                <div className="space-y-4 text-sm leading-7 text-slate-700">
+                  <p>
+                    We accept returns and exchanges within 7 days of delivery for all non-personalised items. Accessories are non-returnable and non-exchangeable.
+                  </p>
+                  <p>
+                    To initiate any return/exchange request, write to us on{' '}
+                    <a href="mailto:hello@faooofficial.com" className="underline text-[#8b0026] hover:text-[#a30034]">
+                      hello@faooofficial.com
+                    </a>{' '}
+                    with your Order ID, Name, Contact number, order details and reason for request.
+                  </p>
+                </div>
+                <div className="flex flex-col gap-3 sm:flex-row sm:justify-end">
+                  <a
+                    href="mailto:hello@faooofficial.com"
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-slate-950 px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-white transition hover:bg-slate-800"
+                  >
+                    Email us now
+                  </a>
+                  <button
+                    type="button"
+                    onClick={() => setShowReturnsInfo(false)}
+                    className="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white px-6 py-3 text-xs font-semibold uppercase tracking-[0.3em] text-slate-950 transition hover:bg-slate-50"
+                  >
+                    Close
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Payment Methods */}
         <PaymentSection />
