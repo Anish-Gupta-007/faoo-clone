@@ -213,8 +213,8 @@ export function Navbar() {
                   'text-white/80 hover:text-white transition-colors duration-300'
                 )}
               >
-                {cat.name.toLowerCase().startsWith('men') ? 'Mens' :
-                  cat.name.toLowerCase().startsWith('women') ? 'Womens' :
+                {cat.name.toLowerCase().startsWith('men') ? 'Men\'s' :
+                  cat.name.toLowerCase().startsWith('women') ? 'Women\'s' :
                     cat.name.toLowerCase().startsWith('accessories') ? 'Accessories' :
                       cat.name}
                 <ChevronDown

@@ -8,7 +8,7 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero01.png',
     heading: 'Effortless Everyday',
     subheading: 'Elevated basics for a life lived with intention.',
-    ctaText: 'Shop Mens',
+    ctaText: 'Shop Men\'s',
     ctaHref: '/men',
   },
   {
@@ -17,7 +17,7 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero02.png',
     heading: 'New Arrivals',
     subheading: 'Discover the latest additions to our collection.',
-    ctaText: 'Shop Womens',
+    ctaText: 'Shop Women\'s',
     ctaHref: '/women',
   },
   {
@@ -26,7 +26,7 @@ export const HERO_BANNERS = [
     mobileImageUrl: '/mobile_hero04.png',
     heading: 'Essential Layering',
     subheading: 'Build your wardrobe with versatile essentials.',
-    ctaText: 'Shop Womens',
+    ctaText: 'Shop Women\'s',
     ctaHref: '/women',
   },
   {
@@ -44,7 +44,7 @@ export const HERO_BANNERS = [
     mobileVideoUrl: '/mobile_hero_video1.mp4',
     heading: 'Wear the Silence',
     subheading: 'Premium minimalist clothing crafted for those who let the fabric speak.',
-    ctaText: 'Shop Mens',
+    ctaText: 'Shop Men\'s',
     ctaHref: '/men',
   },
   {
@@ -63,7 +63,7 @@ export const HERO_BANNERS_WOMENS = [
     id: 1,
     imageUrl: '/hero04.png',
     mobileImageUrl: '/mobile_hero04.png',
-    heading: 'Womens Collection',
+    heading: 'Women\'s Collection',
     subheading: 'Effortless styles for everyday elegance.',
     ctaText: 'Shop Collection',
     ctaHref: '/womens-clothing',
@@ -93,7 +93,7 @@ export const HERO_BANNERS_MENS = [
     id: 1,
     videoUrl: '/hero_video.mp4',
     mobileVideoUrl: '/mobile_hero_video1.mp4',
-    heading: 'Mens Collection',
+    heading: 'Men\'s Collection',
     subheading: 'Premium minimalist clothing crafted for those who let the fabric speak.',
     ctaText: 'Shop Collection',
     ctaHref: '/mens-clothing',

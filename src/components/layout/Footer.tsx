@@ -109,12 +109,10 @@ export function Footer() {
   const shopLinks = categories.map((cat) => ({
     label:
       cat.name.toLowerCase().startsWith('men') && !cat.name.toLowerCase().startsWith('women')
-        ? 'Mens'
+        ? 'Men\'s'
         : cat.name.toLowerCase().startsWith('women')
-          ? 'Womens'
-          : cat.name.toLowerCase().startsWith('accessories')
-            ? 'Accessories'
-            : cat.name,
+          ? 'Women\'s'
+          : cat.name,
     href: `/${cat.slug}`,
   }));
 

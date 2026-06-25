@@ -73,15 +73,15 @@ function CollectionsContent() {
       p.delete('page');
       router.push(`/collections?${p.toString()}`);
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [debouncedSearch]);
 
   // Shared filter state from URL (no category key — we handle it ourselves)
-  const sort     = (searchParams?.get('sort') as ProductFilters['sort']) || 'newest';
-  const sizeF    = searchParams?.get('size') || undefined;
+  const sort = (searchParams?.get('sort') as ProductFilters['sort']) || 'newest';
+  const sizeF = searchParams?.get('size') || undefined;
   const fittingF = (searchParams?.get('fitting') as ProductFilters['fittingType']) || undefined;
   const maxPriceF = Number(searchParams?.get('maxPrice')) || undefined;
-  const searchF  = searchParams?.get('search') || undefined;
+  const searchF = searchParams?.get('search') || undefined;
 
   const sharedFilters: ProductFilters = {
     sort, size: sizeF, fittingType: fittingF, maxPrice: maxPriceF, limit: 100,
@@ -113,9 +113,9 @@ function CollectionsContent() {
 
   // Build interleaved list, then apply search filter client-side
   const interleaved = useMemo(() => {
-    const men   = (menData?.data   ?? []) as unknown as ProductCard[];
+    const men = (menData?.data ?? []) as unknown as ProductCard[];
     const women = (womenData?.data ?? []) as unknown as ProductCard[];
-    const acc   = (accData?.data   ?? []) as unknown as ProductCard[];
+    const acc = (accData?.data ?? []) as unknown as ProductCard[];
     let mixed = interleave(men, women, acc);
 
     if (searchF) {
@@ -159,7 +159,7 @@ function CollectionsContent() {
             transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
           >
             <p className="text-[10px] font-sans font-bold tracking-[0.2em] uppercase text-[#8b0026] mb-3 flex items-center gap-2">
-              <span className="w-4 h-[1px] bg-[#8b0026]" /> Mens · Womens · Accessories
+              <span className="w-4 h-[1px] bg-[#8b0026]" /> Men&apos;s · Women&apos;s · Accessories
             </p>
             <h1 className="font-display text-5xl md:text-7xl lg:text-[80px] text-[#151515] leading-[0.9] tracking-tight mb-4">
               All Collections
