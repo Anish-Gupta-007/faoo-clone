@@ -25,9 +25,9 @@ export const storage = {
   },
   isPopupSeen: (): boolean => {
     if (typeof window === 'undefined') return false;
-    return localStorage.getItem(POPUP_SEEN_KEY) === 'true';
+    return sessionStorage.getItem(POPUP_SEEN_KEY) === 'true';
   },
   markPopupSeen: (): void => {
-    localStorage.setItem(POPUP_SEEN_KEY, 'true');
+    sessionStorage.setItem(POPUP_SEEN_KEY, 'true');
   },
 };

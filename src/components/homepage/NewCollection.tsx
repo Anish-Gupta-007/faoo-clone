@@ -154,13 +154,13 @@ export function NewCollection() {
               href={getCategoryPath('men')}
               className="px-6 py-2.5 rounded-full text-[10px] font-sans font-bold tracking-[0.2em] uppercase border border-black/10 text-black hover:bg-black hover:text-white transition-all duration-300 whitespace-nowrap"
             >
-              Shop Mens
+              Shop Men&apos;s
             </Link>
             <Link
               href={getCategoryPath('women')}
               className="px-6 py-2.5 rounded-full text-[10px] font-sans font-bold tracking-[0.2em] uppercase border border-[#8b0026]/30 text-black hover:bg-[#8b0026] hover:text-white transition-all duration-300 whitespace-nowrap"
             >
-              Shop Womens
+              Shop Women&apos;s
             </Link>
           </div>
         </div>
@@ -305,7 +305,7 @@ function MinimalProductCard({ product, index, gender }: { product: ProductType; 
         {/* Gender & Tag Badges Stack */}
         <div className="absolute top-3 left-3 z-10 pointer-events-none flex flex-col gap-1.5">
           <span className="px-2.5 py-0.5 rounded-full bg-white/95 text-[#151515] text-[8px] font-sans font-bold tracking-[0.15em] uppercase shadow-sm border border-[#151515]/5">
-            {gender === 'men' ? "Mens" : "Womens"}
+            {gender === 'men' ? "Men's" : "Women's"}
           </span>
           {(() => {
             const derivedTags = product.tags && product.tags.length > 0
@@ -408,7 +408,7 @@ function MinimalProductCard({ product, index, gender }: { product: ProductType; 
           </span>
         </div>
         <p className="text-[10px] text-[#A3A3A3] font-sans tracking-[0.15em] uppercase mt-0.5">
-          {gender === 'men' ? 'Mens' : 'Womens'} Collection
+          {gender === 'men' ? 'Men\'s' : 'Women\'s'} Collection
         </p>
       </div>
     </div>

@@ -38,8 +38,8 @@ export function MobileMenu() {
                     onClick={() => setOpenSection(openSection === cat.name ? null : cat.name)}
                     className="flex items-center justify-between w-full px-6 py-4 text-xl font-display font-light text-[#0A0A0A] hover:bg-gray-50"
                   >
-                    {cat.name.toLowerCase().startsWith('men') ? 'Mens' :
-                      cat.name.toLowerCase().startsWith('women') ? 'Women' :
+                    {cat.name.toLowerCase().startsWith('men') ? 'Men\'s' :
+                      cat.name.toLowerCase().startsWith('women') ? 'Women\'s' :
                         cat.name.toLowerCase().startsWith('accessories') ? 'Accessories' :
                           cat.name}
                     <ChevronDown size={16} className={cn('transition-transform text-[#A3A3A3]', openSection === cat.name && 'rotate-180')} />
@@ -74,8 +74,8 @@ export function MobileMenu() {
                   }}
                   className="flex items-center w-full px-6 py-4 text-xl font-display font-light text-[#0A0A0A] hover:bg-gray-50"
                 >
-                  {cat.name.toLowerCase().startsWith('men') ? 'Mens' :
-                    cat.name.toLowerCase().startsWith('women') ? 'Women' :
+                  {cat.name.toLowerCase().startsWith('men') ? 'Men\'s' :
+                    cat.name.toLowerCase().startsWith('women') ? 'Women\'s' :
                       cat.name.toLowerCase().startsWith('accessories') ? 'Accessories' :
                         cat.name}
                 </Link>
