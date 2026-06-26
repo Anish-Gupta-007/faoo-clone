@@ -501,7 +501,7 @@ function PDPContent() {
             <div className="flex flex-col gap-2 py-3 border-t border-[#EFEFEF]">
               <div className="flex items-center gap-2.5 text-sm font-sans text-[#525252]">
                 <Truck size={15} className="text-[#A3A3A3]" />
-                Delivery in 7–10 business days
+                Delivery in 7–5 business days
               </div>
               <div className="flex items-center gap-2.5 text-sm font-sans text-[#525252]">
                 <CreditCard size={15} className="text-[#A3A3A3]" />
