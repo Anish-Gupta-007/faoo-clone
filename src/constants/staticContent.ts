@@ -345,7 +345,7 @@ export const RETURNS_CONTENT = {
       },
       {
         title: 'Fast Refunds',
-        description: 'We’ll process refunds within 7-5 business days after receiving the product.',
+        description: 'We’ll process refunds within 7-10 business days after receiving the product.',
       },
     ],
   },

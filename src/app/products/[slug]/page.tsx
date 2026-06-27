@@ -427,9 +427,6 @@ function PDPContent() {
                 <span className="text-[10px] uppercase tracking-widest font-semibold px-2 py-1 bg-[#0A0A0A] text-white rounded-sm">
                   10% Off · First Order · Code: FAOO10
                 </span>
-                <span className="text-[10px] uppercase tracking-widest font-semibold px-2 py-1 bg-[#F5F5F5] text-[#737373] border border-[#E5E5E5] rounded-sm">
-                  Extra ₹50 Off · Prepaid Orders
-                </span>
               </div>
 
               {/* Rating Section
