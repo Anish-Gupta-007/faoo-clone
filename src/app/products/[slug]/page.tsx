@@ -578,7 +578,7 @@ function PDPContent() {
                             ? ['Accessories are non-refundable and non exchanable'] : []
                         ),
                       ].map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs font-sans text-[#737373] leading-relaxed">
+                        <li key={i} className="flex items-center gap-2 text-sm font-sans text-[#525252] leading-relaxed">
                           <span className="w-1 h-1 rounded-full bg-[#A3A3A3] flex-shrink-0" />
                           {item}
                         </li>
@@ -613,7 +613,7 @@ function PDPContent() {
                         'Dry flat',
                         'Steam iron preferred',
                       ].map((item, i) => (
-                        <li key={i} className="flex items-center gap-2 text-xs font-sans text-[#737373] leading-relaxed">
+                        <li key={i} className="flex items-center gap-2 text-sm font-sans text-[#525252] leading-relaxed">
                           <span className="w-1 h-1 rounded-full bg-[#A3A3A3] flex-shrink-0" />
                           {item}
                         </li>
