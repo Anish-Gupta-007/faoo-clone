@@ -113,6 +113,15 @@ async function getProductByHandle(handle) {
             }
           }
         }
+        collections(first: 10) {
+          edges {
+            node {
+              id
+              title
+              handle
+            }
+          }
+        }
         metafields(identifiers: [
           { namespace: "custom", key: "focus_with_faoo" },
           { namespace: "custom", key: "focus_titles" },
@@ -174,6 +183,9 @@ async function getProductByHandle(handle) {
   }
   if (node.variants) {
     node.variants = node.variants.edges.map(varEdge => varEdge.node);
+  }
+  if (node.collections) {
+    node.collections = node.collections.edges.map(collEdge => collEdge.node);
   }
   return node;
 }

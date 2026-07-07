@@ -211,27 +211,34 @@ export const productService = {
     const sp = res.data;
     if (!sp) throw new Error("Product not found");
 
-    // Infer category from product tags and title
-    const inferCategory = (tags: string[], title: string) => {
+    // Infer category from product tags, title, and collections
+    const inferCategory = (tags: string[], title: string, collections: any[] = []) => {
       const tagsLower = (tags || []).map((t: string) => t.toLowerCase());
       const titleLower = (title || '').toLowerCase();
+      const collectionHandles = (collections || []).map((c: any) => c.handle?.toLowerCase());
 
       if (tagsLower.includes('accessories') || tagsLower.includes('accessory') ||
-        titleLower.includes('bandana') || titleLower.includes('scarf') || titleLower.includes('sunglass')) {
+        titleLower.includes('bandana') || titleLower.includes('scarf') || titleLower.includes('sunglass') ||
+        collectionHandles.includes('accessories')) {
         return { _id: 'cat-accessories', name: 'Accessories', slug: 'accessories' };
       }
-      if (tagsLower.includes('limited_edition') || tagsLower.includes('limited-edition')) {
+      if (tagsLower.includes('limited_edition') || tagsLower.includes('limited-edition') ||
+        collectionHandles.includes('limited-edition')) {
         return { _id: 'cat-limited', name: 'Limited Edition', slug: 'limited-edition' };
       }
       if (tagsLower.includes('women') || tagsLower.includes('womens') || tagsLower.includes('womens-clothing') ||
-        titleLower.includes('dress') || titleLower.includes('peplum') || titleLower.includes('skirt')) {
+        titleLower.includes('dress') || titleLower.includes('peplum') || titleLower.includes('skirt') ||
+        collectionHandles.includes('womens-clothing') || collectionHandles.includes('womens') || collectionHandles.includes('women')) {
         return { _id: 'cat-women', name: "Women's Clothing", slug: 'womens-clothing' };
+      }
+      if (collectionHandles.includes('mens-clothing') || collectionHandles.includes('mens') || collectionHandles.includes('men')) {
+        return { _id: 'cat-men', name: "Men's Clothing", slug: 'mens-clothing' };
       }
       // Default to men's — most products without explicit women/accessories tags are men's
       return { _id: 'cat-men', name: "Men's Clothing", slug: 'mens-clothing' };
     };
 
-    const inferredCategory = inferCategory(sp.tags, sp.title);
+    const inferredCategory = inferCategory(sp.tags, sp.title, sp.collections);
 
     const product: any = {
       _id: sp.id,

@@ -32,13 +32,6 @@ const STATIC_REVIEWS: Record<string, StaticReview> = {
     rating: 5,
     text: 'The Summer Icon Satin Shirt fits and looks so good. I like the quality and look. Worth the money.',
     date: 'July 2026'
-  },
-  'chocolate-brown-super-soft-shirt': {
-    name: 'Kunaal',
-    image: '/youndfaoo/Kunaal.jpg',
-    rating: 5,
-    text: "I'm a tall guy, 6'4\" and it's very difficult for me to find clothes that fit me but Faoo customised them so well that I literally wear Faoo throughout the week now. They got me sorted. 100% recommend their product, fit and price point.",
-    date: 'July 2026'
   }
 };
 

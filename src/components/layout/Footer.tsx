@@ -140,9 +140,13 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link
               href="/"
-              className="logo-text font-display text-3xl text-white block mb-4 hover:opacity-70 transition-opacity duration-300"
+              className="block mb-4 hover:opacity-70 transition-opacity duration-300"
             >
-              Faoo
+              <img
+                src="/faoo_logo_1.webp"
+                alt="Faoo"
+                className="h-10 w-auto object-contain -ml-[80px]"
+              />
             </Link>
             <p className="text-sm text-white/40 leading-relaxed max-w-xs font-light">
               You are fashion.
