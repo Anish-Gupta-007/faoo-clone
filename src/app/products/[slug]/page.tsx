@@ -636,15 +636,18 @@ function PDPContent() {
       {focusMedia.length > 0 && <FocusWithFaoo details={focusMedia} />}
       {irlMedia.length > 0 && <IRLSection images={irlMedia} />}
       <SupportSection />
+      <ReviewsSection productId={slug} />
       <YouMayAlsoLike
         categorySlug={
           (
             product.category?.slug === 'accessories' ||
             ((product as any).tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory') ||
-            (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory')
+            (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('accessories') || t.toLowerCase() === 'accessory') ||
+            (shopifyProduct as any)?.collections?.some((c: any) => c.handle === 'accessories')
           )
             ? 'womens-clothing'
             : (
+              product.category?.slug === 'womens-clothing' ||
               product.name.toLowerCase().includes('dress') ||
               product.name.toLowerCase().includes('peplum') ||
               product.name.toLowerCase().includes('skirt') ||
@@ -656,14 +659,14 @@ function PDPContent() {
               product.name.toLowerCase().includes('ur full') ||
               (product.name.toLowerCase().includes('pant') && !product.name.toLowerCase().includes('men')) ||
               ((product as any).tags || []).some((t: string) => t.toLowerCase().includes('women') || t.toLowerCase().includes('female') || t.toLowerCase().includes('girl')) ||
-              (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('women') || t.toLowerCase().includes('female') || t.toLowerCase().includes('girl'))
+              (shopifyProduct?.tags || []).some((t: string) => t.toLowerCase().includes('women') || t.toLowerCase().includes('female') || t.toLowerCase().includes('girl')) ||
+              (shopifyProduct as any)?.collections?.some((c: any) => c.handle === 'womens-clothing' || c.handle === 'womens')
             )
               ? 'womens-clothing'
               : 'mens-clothing'
         }
         currentProductId={product._id}
       />
-      <ReviewsSection productId={slug} />
     </>
   );
 }
