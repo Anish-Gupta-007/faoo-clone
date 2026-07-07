@@ -5,6 +5,7 @@ import { NewCollection } from '@/components/homepage/NewCollection';
 import { LimitedEdition } from '@/components/homepage/LimitedEdition';
 
 import { StyleItWithFaoo } from '@/components/homepage/StyleItWithFaoo';
+import { YouInFaoo } from '@/components/homepage/YouInFaoo';
 import { WeCustomise } from '@/components/homepage/WeCustomise';
 // import { LayeringTips } from '@/components/homepage/LayeringTips';
 import { InstagramSection } from '@/components/homepage/InstagramSection';
@@ -24,6 +25,7 @@ export default function HomePage() {
       {/* <LimitedEdition /> */}
 
       <StyleItWithFaoo />
+      <YouInFaoo />
       <WeCustomise />
       {/* <LayeringTips /> */}
       <InstagramSection />

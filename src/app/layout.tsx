@@ -34,9 +34,9 @@ export const metadata: Metadata = {
     'Faoo is a premium D2C clothing brand offering refined minimalist essentials for men and women. Shop T-Shirts, Hoodies, Tanks, and Accessories.',
   keywords: ['faoo', 'premium clothing', 'minimalist fashion', 'D2C brand India'],
   icons: {
-    icon: '/fav.webp',
-    shortcut: '/fav.webp',
-    apple: '/fav.webp',
+    icon: '/fav.png',
+    shortcut: '/favicon.ico',
+    apple: '/fav.png',
   },
   openGraph: {
     type: 'website',
