@@ -299,3 +299,12 @@ main {
 .no-scroll {
   overflow: hidden;
 }
+
+/* ── Custom Cursor ──────────────────────────────────────────────────────── */
+html, body {
+  cursor: url('/cursor/cursor.png?v=5') 0 0, auto;
+}
+
+a, button, [role="button"], input[type="submit"], input[type="button"], select, select *, label, input[type="checkbox"], input[type="radio"], .cursor-pointer {
+  cursor: url('/cursor/cursor.png?v=5') 0 0, pointer;
+}

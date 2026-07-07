@@ -19,8 +19,9 @@ export function NewCollection() {
   const { categories, fetchCategories } = useCategoryStore();
   const [displayItems, setDisplayItems] = useState<{ product: ProductType; gender: 'men' | 'women' }[]>([]);
   const [loading, setLoading] = useState(true);
-  const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0);
-  const mobileCarouselRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const getCategoryPath = (key: 'men' | 'women') => {
     const match = categories.find((c) =>
@@ -57,54 +58,19 @@ export function NewCollection() {
         const allMen = menRes.data.map((p: any) => ({ product: p, gender: 'men' as const }));
         const allWomen = womenRes.data.map((p: any) => ({ product: p, gender: 'women' as const }));
 
-        // Desired items by exact substring match
-        const desiredNames = [
-          "effortless abstract",
-          "victoria tie",
-          "denim look super soft",
-          "aura blue",
-          "ur full"
-        ];
-
+        // Combine all items, alternating men and women
         const selectedItems: { product: ProductType; gender: 'men' | 'women' }[] = [];
-
-        // Find desired ones first
-        desiredNames.forEach(nameSub => {
-          // Search in men
-          let idx = allMen.findIndex((item: { product: ProductType; gender: 'men' | 'women' }) => (item.product?.name || '').toLowerCase().includes(nameSub.toLowerCase()));
-          if (idx !== -1) {
-            selectedItems.push(allMen[idx]);
-            allMen.splice(idx, 1);
-            return;
+        const maxLength = Math.max(allMen.length, allWomen.length);
+        for (let i = 0; i < maxLength; i++) {
+          if (i < allMen.length) {
+            selectedItems.push(allMen[i]);
           }
-          // Search in women
-          idx = allWomen.findIndex((item: { product: ProductType; gender: 'men' | 'women' }) => (item.product?.name || '').toLowerCase().includes(nameSub.toLowerCase()));
-          if (idx !== -1) {
-            selectedItems.push(allWomen[idx]);
-            allWomen.splice(idx, 1);
+          if (i < allWomen.length) {
+            selectedItems.push(allWomen[i]);
           }
-        });
-
-        // Fill remaining up to 8 spots, alternating men and women
-        let toggle = true; // true = men, false = women
-        while (selectedItems.length < 8 && (allMen.length > 0 || allWomen.length > 0)) {
-          if (toggle) {
-            if (allMen.length > 0) {
-              selectedItems.push(allMen.shift()!);
-            } else if (allWomen.length > 0) {
-              selectedItems.push(allWomen.shift()!);
-            }
-          } else {
-            if (allWomen.length > 0) {
-              selectedItems.push(allWomen.shift()!);
-            } else if (allMen.length > 0) {
-              selectedItems.push(allMen.shift()!);
-            }
-          }
-          toggle = !toggle;
         }
 
-        setDisplayItems(selectedItems.slice(0, 8));
+        setDisplayItems(selectedItems);
       } catch {
         setDisplayItems([]);
       } finally {
@@ -117,20 +83,50 @@ export function NewCollection() {
 
 
 
-  const scrollMobileCarousel = (direction: 'left' | 'right') => {
-    if (mobileCarouselRef.current) {
-      const cardWidth = 280 + 24; // Card width + gap
-      const newIndex = direction === 'left'
-        ? Math.max(0, mobileCarouselIndex - 1)
-        : Math.min(displayItems.length - 1, mobileCarouselIndex + 1);
+  const scrollCarousel = (direction: 'left' | 'right') => {
+    if (carouselRef.current) {
+      const container = carouselRef.current;
+      const firstChild = container.firstElementChild as HTMLElement;
+      if (firstChild) {
+        const cardWidth = firstChild.getBoundingClientRect().width;
+        let gap = 24; // fallback gap
+        const secondChild = firstChild.nextElementSibling as HTMLElement;
+        if (secondChild) {
+          gap = secondChild.getBoundingClientRect().left - firstChild.getBoundingClientRect().right;
+        }
+        const scrollAmount = cardWidth + gap;
+        const targetScroll = direction === 'left'
+          ? container.scrollLeft - scrollAmount
+          : container.scrollLeft + scrollAmount;
 
-      setMobileCarouselIndex(newIndex);
-      mobileCarouselRef.current.scrollTo({
-        left: newIndex * cardWidth,
-        behavior: 'smooth',
-      });
+        container.scrollTo({
+          left: targetScroll,
+          behavior: 'smooth',
+        });
+      }
     }
   };
+
+  const updateScrollButtons = () => {
+    if (carouselRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = carouselRef.current;
+      setCanScrollLeft(scrollLeft > 5);
+      setCanScrollRight(scrollLeft + clientWidth < scrollWidth - 5);
+    }
+  };
+
+  useEffect(() => {
+    const el = carouselRef.current;
+    if (el) {
+      el.addEventListener('scroll', updateScrollButtons);
+      updateScrollButtons();
+      const timer = setTimeout(updateScrollButtons, 100);
+      return () => {
+        el.removeEventListener('scroll', updateScrollButtons);
+        clearTimeout(timer);
+      };
+    }
+  }, [displayItems, loading]);
 
   return (
     <section className="bg-white pt-12 pb-24 md:pt-20 md:pb-36 overflow-hidden">
@@ -149,90 +145,71 @@ export function NewCollection() {
             <span className="h-[1px] w-8 md:w-16 bg-black/10"></span>
           </motion.h2>
 
-          <div className="flex gap-3 justify-center md:justify-end items-center">
-            <Link
-              href={getCategoryPath('men')}
-              className="px-6 py-2.5 rounded-full text-[10px] font-sans font-bold tracking-[0.2em] uppercase border border-black/10 text-black hover:bg-black hover:text-white transition-all duration-300 whitespace-nowrap"
-            >
-              Shop Men&apos;s
-            </Link>
-            <Link
-              href={getCategoryPath('women')}
-              className="px-6 py-2.5 rounded-full text-[10px] font-sans font-bold tracking-[0.2em] uppercase border border-[#8b0026]/30 text-black hover:bg-[#8b0026] hover:text-white transition-all duration-300 whitespace-nowrap"
-            >
-              Shop Women&apos;s
-            </Link>
+          <div className="flex flex-col items-center md:items-end gap-3.5">
+            <div className="flex gap-3 justify-center md:justify-end items-center">
+              <Link
+                href={getCategoryPath('men')}
+                className="px-6 py-2.5 rounded-full text-[10px] font-sans font-bold tracking-[0.2em] uppercase border border-black/10 text-black hover:bg-black hover:text-white transition-all duration-300 whitespace-nowrap"
+              >
+                Shop Men&apos;s
+              </Link>
+              <Link
+                href={getCategoryPath('women')}
+                className="px-6 py-2.5 rounded-full text-[10px] font-sans font-bold tracking-[0.2em] uppercase border border-[#8b0026]/30 text-black hover:bg-[#8b0026] hover:text-white transition-all duration-300 whitespace-nowrap"
+              >
+                Shop Women&apos;s
+              </Link>
+            </div>
+
+            {/* Left and Right navigation buttons */}
+            <div className="hidden md:flex gap-2.5 mt-1.5 md:mr-1">
+              <button
+                onClick={() => scrollCarousel('left')}
+                disabled={!canScrollLeft}
+                className="w-10 h-10 border border-[#E5E5E5] flex items-center justify-center text-[#151515] hover:border-[#151515] hover:bg-neutral-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Previous products"
+              >
+                <ChevronLeft size={16} strokeWidth={2} />
+              </button>
+              <button
+                onClick={() => scrollCarousel('right')}
+                disabled={!canScrollRight}
+                className="w-10 h-10 border border-[#E5E5E5] flex items-center justify-center text-[#151515] hover:border-[#151515] hover:bg-neutral-50 transition-colors disabled:opacity-30 disabled:cursor-not-allowed"
+                aria-label="Next products"
+              >
+                <ChevronRight size={16} strokeWidth={2} />
+              </button>
+            </div>
           </div>
         </div>
 
-        {/* Product Carousel / Grid */}
+        {/* Product Carousel */}
         {loading ? (
           <div className="min-h-[600px] flex items-center justify-center">
             <Loader2 className="animate-spin text-[#8b0026]" size={32} />
           </div>
-        ) : (() => {
-          return (
-            <>
-              {/* Mobile Carousel (md breakpoint and below) */}
-              <div className="md:hidden mt-8">
-                <div className="relative">
-                  {/* Carousel Container */}
-                  <div
-                    ref={mobileCarouselRef}
-                    className="flex gap-6 overflow-x-auto scroll-smooth pb-4 px-4 -mx-4 snap-x snap-mandatory"
-                    style={{ scrollBehavior: 'smooth', scrollSnapType: 'x mandatory' }}
-                  >
-                    {displayItems.map((item, idx) => (
-                      <div
-                        key={`${item.product._id}-${idx}`}
-                        className="relative w-[280px] flex-shrink-0 snap-start"
-                      >
-                        <MinimalProductCard product={item.product} index={idx} gender={item.gender} />
-                      </div>
-                    ))}
-                  </div>
-
-                  {/* Left Arrow Button */}
-                  <button
-                    onClick={() => scrollMobileCarousel('left')}
-                    disabled={mobileCarouselIndex === 0}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-20 w-10 h-10 rounded-full bg-[#151515] text-white flex items-center justify-center hover:bg-[#8b0026] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#151515]"
-                    aria-label="Previous"
-                  >
-                    <ChevronLeft size={20} />
-                  </button>
-
-                  {/* Right Arrow Button */}
-                  <button
-                    onClick={() => scrollMobileCarousel('right')}
-                    disabled={mobileCarouselIndex === displayItems.length - 1}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-20 w-10 h-10 rounded-full bg-[#151515] text-white flex items-center justify-center hover:bg-[#8b0026] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#151515]"
-                    aria-label="Next"
-                  >
-                    <ChevronRight size={20} />
-                  </button>
-                </div>
-              </div>
-
-              {/* Desktop Grid (2 rows × 4 columns) */}
-              <div className="hidden md:block mt-8">
-                <div className="grid grid-cols-4 gap-6 lg:gap-8">
-                  {displayItems.map((item, idx) => (
-                    <motion.div
-                      key={`${item.product._id}-${idx}`}
-                      initial={{ opacity: 0, y: 20 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: idx * 0.1, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                    >
-                      <MinimalProductCard product={item.product} index={idx} gender={item.gender} />
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-            </>
-          );
-        })()}
+        ) : (
+          <div className="relative mt-8">
+            <div
+              ref={carouselRef}
+              className="flex gap-6 lg:gap-8 overflow-x-auto scroll-smooth pb-4 px-4 -mx-4 [&::-webkit-scrollbar]:hidden snap-x snap-mandatory"
+              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+            >
+              {displayItems.map((item, idx) => (
+                <motion.div
+                  key={`${item.product._id}-${idx}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.05, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                  className="w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-24px)] flex-shrink-0 snap-start"
+                >
+                  <MinimalProductCard product={item.product} index={idx} gender={item.gender} />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
