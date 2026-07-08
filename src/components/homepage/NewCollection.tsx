@@ -19,6 +19,8 @@ export function NewCollection() {
   const { categories, fetchCategories } = useCategoryStore();
   const [displayItems, setDisplayItems] = useState<{ product: ProductType; gender: 'men' | 'women' }[]>([]);
   const [loading, setLoading] = useState(true);
+  const [mobileCarouselIndex, setMobileCarouselIndex] = useState(0);
+  const mobileCarouselRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -58,16 +60,51 @@ export function NewCollection() {
         const allMen = menRes.data.map((p: any) => ({ product: p, gender: 'men' as const }));
         const allWomen = womenRes.data.map((p: any) => ({ product: p, gender: 'women' as const }));
 
-        // Combine all items, alternating men and women
+        // Desired items by exact substring match
+        const desiredNames = [
+          "effortless abstract",
+          "victoria tie",
+          "denim look super soft",
+          "aura blue",
+          "ur full"
+        ];
+
         const selectedItems: { product: ProductType; gender: 'men' | 'women' }[] = [];
-        const maxLength = Math.max(allMen.length, allWomen.length);
-        for (let i = 0; i < maxLength; i++) {
-          if (i < allMen.length) {
-            selectedItems.push(allMen[i]);
+
+        // Find desired ones first
+        desiredNames.forEach(nameSub => {
+          // Search in men
+          let idx = allMen.findIndex((item: { product: ProductType; gender: 'men' | 'women' }) => (item.product?.name || '').toLowerCase().includes(nameSub.toLowerCase()));
+          if (idx !== -1) {
+            selectedItems.push(allMen[idx]);
+            allMen.splice(idx, 1);
+            return;
           }
-          if (i < allWomen.length) {
-            selectedItems.push(allWomen[i]);
+          // Search in women
+          idx = allWomen.findIndex((item: { product: ProductType; gender: 'men' | 'women' }) => (item.product?.name || '').toLowerCase().includes(nameSub.toLowerCase()));
+          if (idx !== -1) {
+            selectedItems.push(allWomen[idx]);
+            allWomen.splice(idx, 1);
           }
+        });
+
+        // Fill remaining spots, alternating men and women
+        let toggle = true; // true = men, false = women
+        while (allMen.length > 0 || allWomen.length > 0) {
+          if (toggle) {
+            if (allMen.length > 0) {
+              selectedItems.push(allMen.shift()!);
+            } else if (allWomen.length > 0) {
+              selectedItems.push(allWomen.shift()!);
+            }
+          } else {
+            if (allWomen.length > 0) {
+              selectedItems.push(allWomen.shift()!);
+            } else if (allMen.length > 0) {
+              selectedItems.push(allMen.shift()!);
+            }
+          }
+          toggle = !toggle;
         }
 
         setDisplayItems(selectedItems);
@@ -128,6 +165,21 @@ export function NewCollection() {
     }
   }, [displayItems, loading]);
 
+  const scrollMobileCarousel = (direction: 'left' | 'right') => {
+    if (mobileCarouselRef.current) {
+      const cardWidth = 280 + 24; // Card width + gap
+      const newIndex = direction === 'left'
+        ? Math.max(0, mobileCarouselIndex - 1)
+        : Math.min(displayItems.length - 1, mobileCarouselIndex + 1);
+
+      setMobileCarouselIndex(newIndex);
+      mobileCarouselRef.current.scrollTo({
+        left: newIndex * cardWidth,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <section className="bg-white pt-12 pb-24 md:pt-20 md:pb-36 overflow-hidden">
       <div className="container-page px-4 md:px-6">
@@ -183,33 +235,79 @@ export function NewCollection() {
           </div>
         </div>
 
-        {/* Product Carousel */}
+        {/* Product Carousel / Grid */}
         {loading ? (
           <div className="min-h-[600px] flex items-center justify-center">
             <Loader2 className="animate-spin text-[#8b0026]" size={32} />
           </div>
-        ) : (
-          <div className="relative mt-8">
-            <div
-              ref={carouselRef}
-              className="flex gap-6 lg:gap-8 overflow-x-auto scroll-smooth pb-4 px-4 -mx-4 [&::-webkit-scrollbar]:hidden snap-x snap-mandatory"
-              style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-            >
-              {displayItems.map((item, idx) => (
-                <motion.div
-                  key={`${item.product._id}-${idx}`}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.05, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                  className="w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-24px)] flex-shrink-0 snap-start"
+        ) : (() => {
+          return (
+            <>
+              {/* Mobile Carousel (md breakpoint and below) */}
+              <div className="md:hidden mt-8">
+                <div className="relative">
+                  {/* Carousel Container */}
+                  <div
+                    ref={mobileCarouselRef}
+                    className="flex gap-6 overflow-x-auto scroll-smooth pb-4 px-4 -mx-4 snap-x snap-mandatory"
+                    style={{ scrollBehavior: 'smooth', scrollSnapType: 'x mandatory' }}
+                  >
+                    {displayItems.map((item, idx) => (
+                      <div
+                        key={`${item.product._id}-${idx}`}
+                        className="relative w-[280px] flex-shrink-0 snap-start"
+                      >
+                        <MinimalProductCard product={item.product} index={idx} gender={item.gender} />
+                      </div>
+                    ))}
+                  </div>
+
+                  {/* Left Arrow Button */}
+                  <button
+                    onClick={() => scrollMobileCarousel('left')}
+                    disabled={mobileCarouselIndex === 0}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-12 z-20 w-10 h-10 rounded-full bg-[#151515] text-white flex items-center justify-center hover:bg-[#8b0026] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#151515]"
+                    aria-label="Previous"
+                  >
+                    <ChevronLeft size={20} />
+                  </button>
+
+                  {/* Right Arrow Button */}
+                  <button
+                    onClick={() => scrollMobileCarousel('right')}
+                    disabled={mobileCarouselIndex === displayItems.length - 1}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-12 z-20 w-10 h-10 rounded-full bg-[#151515] text-white flex items-center justify-center hover:bg-[#8b0026] transition-colors disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#151515]"
+                    aria-label="Next"
+                  >
+                    <ChevronRight size={20} />
+                  </button>
+                </div>
+              </div>
+
+              {/* Desktop Carousel (md breakpoint and above) */}
+              <div className="hidden md:block mt-8 relative">
+                <div
+                  ref={carouselRef}
+                  className="flex gap-6 lg:gap-8 overflow-x-auto scroll-smooth pb-4 px-4 -mx-4 [&::-webkit-scrollbar]:hidden snap-x snap-mandatory"
+                  style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
                 >
-                  <MinimalProductCard product={item.product} index={idx} gender={item.gender} />
-                </motion.div>
-              ))}
-            </div>
-          </div>
-        )}
+                  {displayItems.map((item, idx) => (
+                    <motion.div
+                      key={`${item.product._id}-${idx}`}
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: idx * 0.05, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+                      className="w-[280px] md:w-[calc(33.333%-16px)] lg:w-[calc(25%-24px)] flex-shrink-0 snap-start"
+                    >
+                      <MinimalProductCard product={item.product} index={idx} gender={item.gender} />
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+            </>
+          );
+        })()}
       </div>
     </section>
   );
