@@ -1,0 +1,12 @@
+User-agent: *
+
+Allow: /
+
+# Block account pages
+Disallow: /account/
+
+# Block parameter URLs
+Disallow: /*?*
+Disallow: /*&*
+
+Sitemap: https://www.shopfaoo.com/sitemap.xml

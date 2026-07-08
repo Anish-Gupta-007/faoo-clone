@@ -2,6 +2,7 @@
 import type { Metadata } from 'next';
 import { Cormorant_Garamond, DM_Sans } from 'next/font/google';
 import './globals.css';
+import Script from 'next/script';
 import { Providers } from '@/components/Providers';
 import { Navbar } from '@/components/layout/Navbar';
 import { Footer } from '@/components/layout/Footer';
@@ -9,6 +10,7 @@ import { CartDrawer } from '@/components/layout/CartDrawer';
 import { MobileMenu } from '@/components/layout/MobileMenu';
 import { SearchDrawer } from '@/components/layout/SearchDrawer';
 import { FirstUserPopup } from '@/components/popup/FirstUserPopup';
+import CanonicalLink from '@/components/CanonicalLink';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -48,11 +50,33 @@ export const metadata: Metadata = {
   },
   robots: { index: true, follow: true },
   metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'https://www.faoo.in'),
+  verification: {
+    google: '4JO6eBQqEUItrqUc3EVVMCyHpvYp27YAF9IDsdgUhPE',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
+      <head>
+        <CanonicalLink />
+        <Script
+          strategy="afterInteractive"
+          src="https://www.googletagmanager.com/gtag/js?id=G-0DTWGFPYQB"
+        />
+        <Script
+          id="google-analytics"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-0DTWGFPYQB');
+            `,
+          }}
+        />
+      </head>
       <body className="font-sans bg-white text-[#0A0A0A] antialiased">
         <Providers>
           <Navbar />
