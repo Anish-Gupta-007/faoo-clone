@@ -24,7 +24,9 @@ export function MobileMenu() {
     const idx = CATEGORY_ORDER.findIndex((o) => nameStr.startsWith(o) || slugStr.startsWith(o));
     return idx === -1 ? 99 : idx;
   };
-  const categories = [...rawCategories].sort((a, b) => getCatOrder(a) - getCatOrder(b));
+  const categories = [...rawCategories]
+    .filter((cat) => !cat.name?.toLowerCase().includes('5%'))
+    .sort((a, b) => getCatOrder(a) - getCatOrder(b));
 
   return (
     <Drawer isOpen={isMobileMenuOpen} onClose={closeMobileMenu} title="Menu" side="left" width="min(80vw, 300px)">
