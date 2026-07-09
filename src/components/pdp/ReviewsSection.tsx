@@ -19,6 +19,13 @@ const STATIC_REVIEWS: Record<string, StaticReview> = {
     text: 'I got this Aura Blue Top and Pants for my vacation and now I have been wearing it everywhere I go. From vacation, to office, to brunch plans—it’s my favourite. Love the fabric and fit.',
     date: 'July 2026'
   },
+  'aura-blue-half-sleeves-set': {
+    name: 'Aastha',
+    image: '/youndfaoo/Aastha.jpg',
+    rating: 5,
+    text: 'I got this Aura Blue Top and Pants for my vacation and now I have been wearing it everywhere I go. From vacation, to office, to brunch plans—it’s my favourite. Love the fabric and fit.',
+    date: 'July 2026'
+  },
   'aura-blue-full-sleeves-top': {
     name: 'Aastha',
     image: '/youndfaoo/Aastha.jpg',
@@ -86,7 +93,7 @@ export function ReviewsSection({ productId }: { productId: string }) {
           {/* Review Details */}
           <div className="flex flex-col items-start">
             <StarRow rating={review.rating} size={16} className="mb-4" />
-            
+
             <p className="font-display text-xl md:text-2xl lg:text-3xl text-[#151515] italic mb-6 text-balance font-light leading-relaxed">
               &ldquo;{review.text}&rdquo;
             </p>

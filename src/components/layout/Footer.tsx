@@ -104,7 +104,9 @@ export function Footer() {
     return idx === -1 ? 99 : idx;
   };
 
-  const categories = [...rawCategories].sort((a, b) => getCatOrder(a) - getCatOrder(b));
+  const categories = [...rawCategories]
+    .filter((cat) => !cat.name?.toLowerCase().includes('5%'))
+    .sort((a, b) => getCatOrder(a) - getCatOrder(b));
 
   const shopLinks = categories.map((cat) => ({
     label:
