@@ -27,7 +27,7 @@ import { useAuthStore } from '@/store/authStore';
 import { ProductVariant, SizeOption, FittingType } from '@/types/product.types';
 import { formatPrice } from '@/utils/formatPrice';
 import { cn } from '@/lib/cn';
-import { Truck, CreditCard, Package, ChevronDown, ChevronUp } from 'lucide-react';
+import { Truck, CreditCard, Package, ChevronDown, ChevronUp, Maximize, X } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -50,6 +50,19 @@ function PDPContent() {
   const [sizeGuideOpen, setSizeGuideOpen] = useState(false);
   const [addingToCart, setAddingToCart] = useState(false);
   const [activeImage, setActiveImage] = useState(0);
+  const [showMiniVideo, setShowMiniVideo] = useState(true);
+  const desktopVideoRef = useRef<HTMLVideoElement>(null);
+  const mobileVideoRef = useRef<HTMLVideoElement>(null);
+
+  const handleFullscreen = (ref: React.RefObject<HTMLVideoElement>) => {
+    if (ref.current) {
+      if (ref.current.requestFullscreen) {
+        ref.current.requestFullscreen();
+      } else if ((ref.current as any).webkitRequestFullscreen) {
+        (ref.current as any).webkitRequestFullscreen();
+      }
+    }
+  };
   const thumbStripRef = useRef<HTMLDivElement>(null);
   const mobileScrollRef = useRef<HTMLDivElement>(null);
 
@@ -348,7 +361,7 @@ function PDPContent() {
             </div>
 
             {/* ── Mobile: swipeable carousel ── */}
-            <div className="block md:hidden w-full h-[500px] relative bg-[#FAFAFA] border border-[#151515]/5 overflow-hidden">
+            <div className="block md:hidden w-full h-[500px] relative bg-[#FAFAFA] border border-[#151515]/5 overflow-visible">
               <div
                 ref={mobileScrollRef}
                 onScroll={handleScroll}
@@ -371,6 +384,7 @@ function PDPContent() {
               {product.isLimitedEdition && (
                 <div className="absolute top-4 left-4 z-10"><Badge variant="limited">Limited</Badge></div>
               )}
+
             </div>
 
             {/* Mobile Pagination Dots */}
@@ -667,6 +681,28 @@ function PDPContent() {
         }
         currentProductId={product._id}
       />
+      {/* Sticky Floating Video */}
+      {shopifyProduct?.productVideo && showMiniVideo && (
+        <div className="fixed bottom-8 right-4 md:right-8 z-[100] w-20 md:w-36 lg:w-40 rounded-lg overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.2)] border-[3px] border-white/90 bg-black/5 group">
+          <video
+            ref={desktopVideoRef}
+            src={shopifyProduct.productVideo}
+            autoPlay
+            muted
+            loop
+            playsInline
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute top-1.5 right-1.5 flex gap-1 opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity">
+            <button onClick={() => handleFullscreen(desktopVideoRef)} className="p-1.5 rounded-md bg-black/50 text-white hover:bg-black/70 transition-colors backdrop-blur-sm" aria-label="Fullscreen">
+              <Maximize size={12} strokeWidth={2.5} />
+            </button>
+            <button onClick={() => setShowMiniVideo(false)} className="p-1.5 rounded-md bg-black/50 text-white hover:bg-black/70 transition-colors backdrop-blur-sm" aria-label="Close video">
+              <X size={12} strokeWidth={2.5} />
+            </button>
+          </div>
+        </div>
+      )}
     </>
   );
 }

@@ -17,6 +17,7 @@ const infoLinks: InfoLink[] = [
   { label: 'FAQ', href: '/faq' },
   { label: 'Return & Exchange', action: 'openReturnsInfo' },
   { label: 'Careers', href: '/careers' },
+  { label: 'Blogs', href: '/blogs' },
 ];
 
 const socialLinks = [

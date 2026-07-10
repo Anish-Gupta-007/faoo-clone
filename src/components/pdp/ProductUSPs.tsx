@@ -26,37 +26,37 @@ import { cn } from '@/lib/cn';
 // Keys are lowercase substrings that appear in USP text.
 // Order matters: more specific patterns first.
 const USP_ICON_MAP: [string, React.ElementType][] = [
-  ['super soft',       Feather],
-  ['soft',             Feather],
-  ['breathable',       Wind],
-  ['airy',             Wind],
-  ['premium fabric',   Gem],
-  ['premium',          Gem],
-  ['inner lining',     Layers],
-  ['lining',           Layers],
-  ['elastic fit',      Zap],
-  ['elasticated',      CircleDot],
-  ['elastic waist',    Waves],
-  ['elastic',          Zap],
-  ['bead',             Sparkles],
-  ['embroid',          Sparkles],
-  ['handwork',         Sparkles],
-  ['shape retention',  Maximize2],
-  ['shape',            Maximize2],
+  ['super soft', Feather],
+  ['soft', Feather],
+  ['breathable', Wind],
+  ['airy', Wind],
+  ['premium fabric', Gem],
+  ['premium', Gem],
+  ['inner lining', Layers],
+  ['lining', Layers],
+  ['elastic fit', Zap],
+  ['elasticated', CircleDot],
+  ['elastic waist', Waves],
+  ['elastic', Zap],
+  ['bead', Sparkles],
+  ['embroid', Sparkles],
+  ['handwork', Sparkles],
+  ['shape retention', Maximize2],
+  ['shape', Maximize2],
   ['no colour fading', ShieldCheck],
-  ['no color fading',  ShieldCheck],
-  ['colour fading',    ShieldCheck],
-  ['color fading',     ShieldCheck],
-  ['clean fit',        Shirt],
-  ['structured',       Scissors],
-  ['lightweight',      Minimize2],
-  ['light weight',     Minimize2],
-  ['side zip',         Lock],
-  ['zip',              Lock],
-  ['semi-sheer',       Disc],
-  ['sheer',            Disc],
-  ['pre-washed',       RefreshCw],
-  ['washed',           RefreshCw],
+  ['no color fading', ShieldCheck],
+  ['colour fading', ShieldCheck],
+  ['color fading', ShieldCheck],
+  ['clean fit', Shirt],
+  ['structured', Scissors],
+  ['lightweight', Minimize2],
+  ['light weight', Minimize2],
+  ['side zip', Lock],
+  ['zip', Lock],
+  ['semi-sheer', Disc],
+  ['sheer', Disc],
+  ['pre-washed', RefreshCw],
+  ['washed', RefreshCw],
 ];
 
 function getIcon(label: string): React.ElementType {
@@ -82,7 +82,7 @@ export const ProductUSPs: React.FC<ProductUSPsProps> = ({ usps, className }) => 
         return (
           <div
             key={i}
-            className="flex items-center gap-2.5 px-3 py-2.5 bg-[#F7F7F7] border border-[#EFEFEF] rounded-lg"
+            className="flex items-center gap-2.5 py-1.5"
           >
             {/* Fixed-size icon container — same for every card */}
             <div className="flex-shrink-0 w-7 h-7 rounded-full bg-[#151515] flex items-center justify-center">

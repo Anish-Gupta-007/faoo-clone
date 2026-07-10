@@ -47,6 +47,7 @@ function parseMetafields(product) {
   let sizeChart2Url = null;
   let supportsAllSizes = false;
   let modelInfo = '';
+  let productVideo = null;
 
   const metafields = product.metafields || [];
 
@@ -55,6 +56,20 @@ function parseMetafields(product) {
 
     if (mf.key === 'model') {
       modelInfo = mf.value || '';
+      continue;
+    }
+
+    if (mf.key === 'product_video') {
+      if (mf.reference) {
+        if (mf.reference.sources && mf.reference.sources.length > 0) {
+          const mp4Source = mf.reference.sources.find(s => s.url.includes('.mp4'));
+          productVideo = mp4Source ? mp4Source.url : mf.reference.sources[0].url;
+        } else {
+          productVideo = mf.reference.url || null;
+        }
+      } else if (mf.value) {
+        productVideo = mf.value;
+      }
       continue;
     }
 
@@ -115,6 +130,7 @@ function parseMetafields(product) {
   product.sizeChart2Url = sizeChart2Url;
   product.supportsAllSizes = supportsAllSizes;
   product.modelInfo = modelInfo;
+  product.productVideo = productVideo;
 
   return product;
 }
