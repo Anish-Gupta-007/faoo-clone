@@ -132,7 +132,8 @@ async function getProductByHandle(handle) {
           { namespace: "custom", key: "size_chart" },
           { namespace: "custom", key: "size_chart2" },
           { namespace: "custom", key: "supports_all_sizes" },
-          { namespace: "custom", key: "model" }
+          { namespace: "custom", key: "model" },
+          { namespace: "custom", key: "product_video" }
         ]) {
           namespace
           key
@@ -146,6 +147,11 @@ async function getProductByHandle(handle) {
             }
             ... on GenericFile {
               url
+            }
+            ... on Video {
+              sources {
+                url
+              }
             }
           }
           references(first: 10) {

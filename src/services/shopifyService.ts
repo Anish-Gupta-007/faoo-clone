@@ -15,6 +15,7 @@ export interface ShopifyProductWithMeta {
   sizeChartUrl?: string
   sizeChart2Url?: string
   supportsAllSizes?: boolean
+  productVideo?: string
   priceRange: {
     minVariantPrice: { amount: string; currencyCode: string }
   }
