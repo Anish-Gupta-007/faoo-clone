@@ -42,6 +42,12 @@ export interface ShopifyAnnouncement {
   active: boolean
 }
 
+export interface ShopifyBlog {
+  handle: string
+  type: string
+  [key: string]: any // For dynamic metafield keys like title, content, image, etc.
+}
+
 export const shopifyService = {
   // --- COLLECTIONS ---
   getCollections: async (limit: number = 50) => {
@@ -62,6 +68,17 @@ export const shopifyService = {
 
   getProductByHandle: async (handle: string) => {
     const res = await api.get(`/shop/products/${handle}`);
+    return res.data;
+  },
+
+  // --- BLOGS ---
+  getBlogs: async (limit: number = 20) => {
+    const res = await api.get(`/shop/blogs?limit=${limit}`);
+    return res.data;
+  },
+
+  getBlogByHandle: async (handle: string) => {
+    const res = await api.get(`/shop/blogs/${handle}`);
     return res.data;
   },
 

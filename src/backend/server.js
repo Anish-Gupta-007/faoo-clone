@@ -89,6 +89,7 @@ app.use(`${BASE}/shop/orders`, require('./routes/shopify/orders'));
 app.use(`${BASE}/shop/returns`, require('./routes/shopify/returns'));
 app.use(`${BASE}/shop/announcements`, require('./routes/shopify/announcements'));
 app.use(`${BASE}/shop/collections`, require('./routes/shopify/collections'));
+app.use(`${BASE}/shop/blogs`, require('./routes/shopify/blogs'));
 
 // ── Health check (under BASE so it's reachable via Next.js catch-all) ─────────
 app.get(`${BASE}/health`, (req, res) =>
