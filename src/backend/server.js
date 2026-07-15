@@ -88,6 +88,7 @@ app.use(`${BASE}/shop/cart`, require('./routes/shopify/cart'));
 app.use(`${BASE}/shop/orders`, require('./routes/shopify/orders'));
 app.use(`${BASE}/shop/returns`, require('./routes/shopify/returns'));
 app.use(`${BASE}/shop/announcements`, require('./routes/shopify/announcements'));
+app.use(`${BASE}/shop/homepage-videos`, require('./routes/shopify/homepageVideos'));
 app.use(`${BASE}/shop/collections`, require('./routes/shopify/collections'));
 app.use(`${BASE}/shop/blogs`, require('./routes/shopify/blogs'));
 
