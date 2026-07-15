@@ -20,9 +20,11 @@ export function NewCollection() {
     "effortless abstract",
     "denim look",
     "all occasion",
-    "satin shirt",
-    "all star black",
-    "night anthem"
+    "satin shirt"
+  ];
+  const MENS_LAST = [
+    "occasion black star",
+    "night anthem semi-sheer"
   ];
   const WOMENS_SEQ = [
     "victoria tie",
@@ -39,7 +41,7 @@ export function NewCollection() {
 
   return (
     <div className="flex flex-col gap-0">
-      <CollectionSection gender="men" title="MEN'S NEW COLLECTION" sequence={MENS_SEQ} lastItems={[]} />
+      <CollectionSection gender="men" title="MEN'S NEW COLLECTION" sequence={MENS_SEQ} lastItems={MENS_LAST} />
       <CollectionSection gender="women" title="WOMEN'S NEW COLLECTION" sequence={WOMENS_SEQ} lastItems={WOMENS_LAST} hideTopPadding={true} />
     </div>
   );
@@ -181,7 +183,7 @@ function CollectionSection({ gender, title, sequence, lastItems, hideTopPadding 
   };
 
   return (
-    <section className={cn("bg-white pb-12 md:pb-24 overflow-hidden", hideTopPadding ? "pt-0" : "pt-12 md:pt-20")}>
+    <section className={cn("bg-white pb-6 md:pb-12 overflow-hidden", hideTopPadding ? "pt-0" : "pt-6 md:pt-10")}>
       <div className="container-page px-4 md:px-6">
 
         {/* Header Section */}
