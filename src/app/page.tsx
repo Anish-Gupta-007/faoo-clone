@@ -3,7 +3,7 @@ import { Metadata } from 'next';
 import { HeroBanner } from '@/components/homepage/HeroBanner';
 import { NewCollection } from '@/components/homepage/NewCollection';
 import { LimitedEdition } from '@/components/homepage/LimitedEdition';
-
+import { HomepageVideo } from '@/components/homepage/HomepageVideo';
 import { StyleItWithFaoo } from '@/components/homepage/StyleItWithFaoo';
 import { YouInFaoo } from '@/components/homepage/YouInFaoo';
 import { WeCustomise } from '@/components/homepage/WeCustomise';
@@ -22,9 +22,10 @@ export default function HomePage() {
     <>
       <HeroBanner />
       <NewCollection />
+      <HomepageVideo />
       {/* <LimitedEdition /> */}
 
-      <StyleItWithFaoo />
+      {/* <StyleItWithFaoo /> */}
       <YouInFaoo />
       <WeCustomise />
       {/* <LayeringTips /> */}

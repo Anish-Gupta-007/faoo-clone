@@ -136,6 +136,12 @@ export const shopifyService = {
     return res.data;
   },
 
+  // --- HOMEPAGE VIDEOS ---
+  getHomepageVideos: async () => {
+    const res = await api.get('/shop/homepage-videos');
+    return res.data;
+  },
+
   // --- DISCOUNTS ---
   applyDiscountCode: async (cartId: string, discountCode: string) => {
     const res = await api.post(`/shop/cart/${encodeURIComponent(cartId)}/discount`, { discountCode });
