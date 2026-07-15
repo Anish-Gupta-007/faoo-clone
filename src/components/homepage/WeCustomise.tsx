@@ -86,8 +86,7 @@ export function WeCustomise() {
   return (
     <section
       ref={ref}
-      className="relative w-full bg-[#FAF9F5] border-y border-[#EAE6DF]"
-      style={{ padding: '80px 0' }}
+      className="relative w-full bg-[#FAF9F5] border-y border-[#EAE6DF] py-10 md:py-16"
     >
       {/* Background grid line accents */}
       <div className="absolute inset-0 pointer-events-none opacity-40" aria-hidden>

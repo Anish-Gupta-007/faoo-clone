@@ -23,7 +23,7 @@ const TESTIMONIALS = [
 
 export function YouInFaoo() {
   return (
-    <section className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
+    <section className="bg-white pt-2 pb-10 md:pt-4 md:pb-16 overflow-hidden border-b border-gray-100">
       <div className="container-page px-4 md:px-6">
         
         {/* Header */}
