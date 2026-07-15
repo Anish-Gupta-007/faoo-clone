@@ -33,6 +33,13 @@ const STATIC_REVIEWS: Record<string, StaticReview> = {
     text: 'I got this Aura Blue Top and Pants for my vacation and now I have been wearing it everywhere I go. From vacation, to office, to brunch plans—it’s my favourite. Love the fabric and fit.',
     date: 'July 2026'
   },
+  'aura-blue-striaght-leg-pants': {
+    name: 'Aastha',
+    image: '/youndfaoo/Aastha.jpg',
+    rating: 5,
+    text: 'I got this Aura Blue Top and Pants for my vacation and now I have been wearing it everywhere I go. From vacation, to office, to brunch plans—it’s my favourite. Love the fabric and fit.',
+    date: 'July 2026'
+  },
   'summer-icon-satin-shirt': {
     name: 'Sarthak',
     image: '/youndfaoo/Sarthak.jpg',
