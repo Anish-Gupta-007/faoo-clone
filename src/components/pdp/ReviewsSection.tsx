@@ -46,6 +46,20 @@ const STATIC_REVIEWS: Record<string, StaticReview> = {
     rating: 5,
     text: 'The Summer Icon Satin Shirt fits and looks so good. I like the quality and look. Worth the money.',
     date: 'July 2026'
+  },
+  'chocolate-brown-super-soft-shirt': {
+    name: 'Priya',
+    image: '/youndfaoo/Priya.jpg',
+    rating: 5,
+    text: 'I got this shirt for everyday wear but love the style and fit so much that I styled it even on my vacation. Very good quality and love the style of the sleeves a lot!',
+    date: 'July 2026'
+  },
+  'effortless-abstract-textured-shirt': {
+    name: 'Himanshu',
+    image: '/youndfaoo/himanshu.jpg',
+    rating: 5,
+    text: "Super soft fabric, love the feel and fit of the shirt. I got 2 shirts from Faoo and i really like both, can't wait to style the 2nd one now.",
+    date: 'July 2026'
   }
 };
 
