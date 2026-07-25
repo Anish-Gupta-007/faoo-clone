@@ -22,7 +22,7 @@ function GaTrackerInner() {
     }
 
     const pagePath =
-      pathname + (searchParams.toString() ? `?${searchParams.toString()}` : '');
+      pathname + (searchParams?.toString() ? `?${searchParams.toString()}` : '');
 
     if (typeof window !== 'undefined' && typeof window.gtag === 'function') {
       window.gtag('event', 'page_view', { page_path: pagePath });
