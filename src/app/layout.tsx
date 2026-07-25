@@ -59,6 +59,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <head>
+        <meta name="facebook-domain-verification" content="vpnogxfkeldix78wu83am56ec8vaol" />
         <CanonicalLink />
         <Script
           strategy="afterInteractive"
