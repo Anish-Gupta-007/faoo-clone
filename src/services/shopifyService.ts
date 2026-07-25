@@ -146,5 +146,10 @@ export const shopifyService = {
   applyDiscountCode: async (cartId: string, discountCode: string) => {
     const res = await api.post(`/shop/cart/${encodeURIComponent(cartId)}/discount`, { discountCode });
     return res.data;
-  }
+  },
+
+  updateCartAttributes: async (cartId: string, attributes: { key: string; value: string }[]) => {
+    const res = await api.patch(`/shop/cart/${encodeURIComponent(cartId)}/attributes`, { attributes });
+    return res.data;
+  },
 };

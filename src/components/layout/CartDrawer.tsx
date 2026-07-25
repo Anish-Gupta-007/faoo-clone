@@ -11,6 +11,7 @@ import { useCartStore } from '@/store/cartStore';
 import { CartItem } from '@/types/cart.types';
 import { formatPrice } from '@/utils/formatPrice';
 import { useDebounce } from '@/hooks/useDebounce';
+import { checkoutWithTracking } from '@/utils/checkoutWithTracking';
 import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
@@ -70,9 +71,23 @@ export function CartDrawer() {
               </div>
             )}
             {cart.checkoutUrl ? (
-              <a href={cart.checkoutUrl} onClick={closeCart} className="w-full">
-                <Button variant="primary" fullWidth size="lg">Checkout</Button>
-              </a>
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                onClick={() => {
+                  closeCart();
+                  const gaItems = cart.items.map((i) => ({
+                    item_id: i.variantId,
+                    item_name: i.product.name,
+                    price: i.price,
+                    quantity: i.quantity,
+                  }));
+                  checkoutWithTracking(cart._id, cart.checkoutUrl!, gaItems, cart.totalAmount);
+                }}
+              >
+                Checkout
+              </Button>
             ) : (
               <Button variant="primary" fullWidth size="lg" disabled>Checkout</Button>
             )}

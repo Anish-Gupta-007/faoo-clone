@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/Input';
 import { Spinner } from '@/components/ui/Spinner';
 import { formatPrice } from '@/utils/formatPrice';
 import { useDebounce } from '@/hooks/useDebounce';
+import { checkoutWithTracking } from '@/utils/checkoutWithTracking';
 import toast from 'react-hot-toast';
 
 
@@ -116,9 +117,22 @@ export default function CartPage() {
               </div>
             </div>
             {cart.checkoutUrl ? (
-              <a href={cart.checkoutUrl} className="w-full">
-                <Button variant="primary" fullWidth size="lg">Secure Checkout via Shopify</Button>
-              </a>
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                onClick={() => {
+                  const gaItems = cart.items.map((i) => ({
+                    item_id: i.variantId,
+                    item_name: i.product.name,
+                    price: i.price,
+                    quantity: i.quantity,
+                  }));
+                  checkoutWithTracking(cart._id, cart.checkoutUrl!, gaItems, cart.totalAmount);
+                }}
+              >
+                Secure Checkout via Shopify
+              </Button>
             ) : (
               <Button variant="primary" fullWidth size="lg" disabled>Secure Checkout via Shopify</Button>
             )}
