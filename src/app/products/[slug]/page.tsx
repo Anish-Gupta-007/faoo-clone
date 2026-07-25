@@ -31,6 +31,7 @@ import { Truck, CreditCard, Package, ChevronDown, ChevronUp } from 'lucide-react
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { checkoutWithTracking } from '@/utils/checkoutWithTracking';
 
 
 function PDPContent() {
@@ -108,6 +109,39 @@ function PDPContent() {
       }
     }
   }, [variants, selectedColor]);
+
+  // --- GA4: view_item  |  Meta Pixel: ViewContent ---
+  useEffect(() => {
+    if (!data?.product) return;
+    const p = data.product;
+    const itemPrice = currentVariant?.price ?? p.price;
+    if (typeof window !== 'undefined') {
+      if (typeof window.gtag === 'function') {
+        window.gtag('event', 'view_item', {
+          currency: 'INR',
+          value: itemPrice,
+          items: [{
+            item_id: p._id,
+            item_name: p.name,
+            item_category: p.category?.name ?? '',
+            price: itemPrice,
+            quantity: 1,
+          }],
+        });
+      }
+      if (typeof window.fbq === 'function') {
+        window.fbq('track', 'ViewContent', {
+          content_ids: [p._id],
+          content_type: 'product',
+          content_name: p.name,
+          content_category: p.category?.name ?? '',
+          value: itemPrice,
+          currency: 'INR',
+        });
+      }
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [data?.product?._id]);
 
   if (isLoading) return (
     <div className="flex items-center justify-center min-h-screen">
@@ -192,6 +226,31 @@ function PDPContent() {
     setAddingToCart(true);
     try {
       await addItem(targetVariant._id, product._id, 1, product, targetVariant, targetSize as string);
+      // --- GA4: add_to_cart  |  Meta Pixel: AddToCart ---
+      if (typeof window !== 'undefined') {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'add_to_cart', {
+            currency: 'INR',
+            value: targetVariant.price,
+            items: [{
+              item_id: product._id,
+              item_name: product.name,
+              item_variant: `${targetVariant.color ?? ''} / ${targetSize ?? targetVariant.size ?? ''}`.replace(/^\s*\/\s*/, ''),
+              price: targetVariant.price,
+              quantity: 1,
+            }],
+          });
+        }
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'AddToCart', {
+            content_ids: [product._id],
+            content_type: 'product',
+            content_name: product.name,
+            value: targetVariant.price,
+            currency: 'INR',
+          });
+        }
+      }
       toast.success('Added to cart!');
       openCart();
     } catch (err: any) {
@@ -220,9 +279,40 @@ function PDPContent() {
     setAddingToCart(true);
     try {
       await addItem(targetVariant._id, product._id, 1, product, targetVariant, targetSize as string);
+      // --- GA4: add_to_cart  |  Meta Pixel: AddToCart ---
+      if (typeof window !== 'undefined') {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'add_to_cart', {
+            currency: 'INR',
+            value: targetVariant.price,
+            items: [{
+              item_id: product._id,
+              item_name: product.name,
+              item_variant: `${targetVariant.color ?? ''} / ${targetSize ?? targetVariant.size ?? ''}`.replace(/^\s*\/\s*/, ''),
+              price: targetVariant.price,
+              quantity: 1,
+            }],
+          });
+        }
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'AddToCart', {
+            content_ids: [product._id],
+            content_type: 'product',
+            content_name: product.name,
+            value: targetVariant.price,
+            currency: 'INR',
+          });
+        }
+      }
       const { cart } = useCartStore.getState();
       if (cart?.checkoutUrl) {
-        window.location.href = cart.checkoutUrl;
+        const gaItems = cart.items.map((i) => ({
+          item_id: i.variantId,
+          item_name: i.product.name,
+          price: i.price,
+          quantity: i.quantity,
+        }));
+        await checkoutWithTracking(cart._id, cart.checkoutUrl, gaItems, cart.totalAmount);
       } else {
         toast.error('Unable to proceed to checkout');
       }
