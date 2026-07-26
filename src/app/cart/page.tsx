@@ -14,9 +14,11 @@ import { Spinner } from '@/components/ui/Spinner';
 import { formatPrice } from '@/utils/formatPrice';
 import { useDebounce } from '@/hooks/useDebounce';
 import toast from 'react-hot-toast';
+import { trackBeginCheckout } from '@/lib/analytics/gtagEvents';
+import { isGokwikEnabled, useGokwikSdk, triggerGokwikCheckout } from '@/lib/gokwik/gokwikClient';
 
 
-function CartItemRow({ item }: { item: CartItem }) {
+function CartItemRow({ item, isCartBusy }: { item: CartItem; isCartBusy: boolean }) {
   const { updateItem, removeItem } = useCartStore();
   const [qty, setQty] = useState(item.quantity);
   const debounced = useDebounce(qty, 400);
@@ -42,8 +44,12 @@ function CartItemRow({ item }: { item: CartItem }) {
         )}
         <p className="text-sm md:text-base font-medium font-sans">{formatPrice(item.price)}</p>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 sm:gap-1 mt-2 sm:mt-1">
-          <QuantityCounter value={qty} onChange={setQty} max={item.variant.stockQuantity} />
-          <button onClick={() => removeItem(item.variantId)} className="text-xs text-[#A3A3A3] hover:text-[#C0392B] flex items-center gap-1 transition-colors w-fit">
+          <QuantityCounter value={qty} onChange={setQty} max={item.variant.stockQuantity} disabled={isCartBusy} />
+          <button 
+            disabled={isCartBusy}
+            onClick={() => removeItem(item.variantId)} 
+            className="text-xs text-[#A3A3A3] hover:text-[#C0392B] flex items-center gap-1 transition-colors w-fit disabled:opacity-40 disabled:cursor-not-allowed"
+          >
             <Trash2 size={12} /> Remove
           </button>
         </div>
@@ -56,8 +62,11 @@ function CartItemRow({ item }: { item: CartItem }) {
 }
 
 export default function CartPage() {
-  const { cart, isLoading, fetchCart } = useCartStore();
+  const { cart, isLoading, fetchCart, isCartBusy } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+
+  const isGokwik = isGokwikEnabled();
+  const isSdkReady = useGokwikSdk();
 
   useEffect(() => { fetchCart(); }, []);
 
@@ -81,7 +90,7 @@ export default function CartPage() {
       <div className="flex flex-col lg:flex-row gap-6 md:gap-10">
         {/* Items */}
         <div className="flex-1 min-w-0">
-          {cart.items.map((item) => <CartItemRow key={item._id} item={item} />)}
+          {cart.items.map((item) => <CartItemRow key={item._id} item={item} isCartBusy={isCartBusy || false} />)}
           <Link href="/men" className="inline-block mt-4 md:mt-6 text-xs md:text-sm font-sans text-[#525252] hover:text-[#0A0A0A] transition-colors">
             ← Continue Shopping
           </Link>
@@ -116,11 +125,34 @@ export default function CartPage() {
               </div>
             </div>
             {cart.checkoutUrl ? (
-              <a href={cart.checkoutUrl} className="w-full">
-                <Button variant="primary" fullWidth size="lg">Secure Checkout via Shopify</Button>
-              </a>
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                loading={isGokwik && !isSdkReady}
+                onClick={() => {
+                  try {
+                    trackBeginCheckout(cart);
+                  } catch (err) {
+                    console.error('[Analytics] Failed to track begin_checkout:', err);
+                  }
+
+                  if (isGokwik) {
+                    const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
+                    if (!wentToGokwik) {
+                      toast.error('Something went wrong. Please try again.');
+                    }
+                  } else {
+                    window.location.href = cart.checkoutUrl || '';
+                  }
+                }}
+              >
+                {isGokwik ? 'Secure Checkout' : 'Secure Checkout via Shopify'}
+              </Button>
             ) : (
-              <Button variant="primary" fullWidth size="lg" disabled>Secure Checkout via Shopify</Button>
+              <Button variant="primary" fullWidth size="lg" disabled>
+                Secure Checkout via Shopify
+              </Button>
             )}
           </div>
         </div>

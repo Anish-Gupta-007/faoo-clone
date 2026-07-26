@@ -23,6 +23,7 @@ interface AddToCartSectionProps {
   productId: string;
   isOutOfStock?: boolean;
   supportsAllSizes?: boolean;
+  isBuyNowLoading?: boolean;
 }
 
 export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
@@ -40,6 +41,7 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
   productId,
   isOutOfStock = false,
   supportsAllSizes = false,
+  isBuyNowLoading = false,
 }) => {
   // Maps fitType to a percentage along the bar: 0% = Fitted, 50% = Regular, 100% = Oversized
   const fitPosition: Record<string, number> = {
@@ -212,15 +214,19 @@ export const AddToCartSection: React.FC<AddToCartSectionProps> = ({
 
         <button
           onClick={onBuyNow}
-          disabled={isSoldOut || (!selectedSize && !isFreeSize && !supportsAllSizes)}
+          disabled={isSoldOut || (!selectedSize && !isFreeSize && !supportsAllSizes) || isBuyNowLoading}
           className={cn(
             'w-full h-12 md:h-[54px] flex items-center justify-center transition-all duration-300 text-[10px] md:text-[11px] font-sans font-bold tracking-[0.25em] uppercase border border-[#151515]',
-            !isSoldOut && (selectedSize || isFreeSize || supportsAllSizes)
+            !isSoldOut && (selectedSize || isFreeSize || supportsAllSizes) && !isBuyNowLoading
               ? 'bg-[#151515] text-white hover:bg-white hover:text-[#151515]'
               : 'bg-[#151515] text-white opacity-40 cursor-not-allowed'
           )}
         >
-          BUY IT NOW
+          {isBuyNowLoading ? (
+            <div className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+          ) : (
+            'BUY IT NOW'
+          )}
         </button>
       </div>
     </div>

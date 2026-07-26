@@ -223,6 +223,15 @@ async function addToCart(cartId, lines) {
   if (cart && cart.lines) {
     cart.lines = cart.lines.edges.map(edge => edge.node);
   }
+
+  try {
+    if (typeof window !== 'undefined' && typeof window.trackAddToCart === 'function') {
+      window.trackAddToCart({ cart });
+    }
+  } catch (trackingErr) {
+    console.error('[Shopify Tracking Error] Failed to track backend cart add:', trackingErr);
+  }
+
   return cart;
 }
 

@@ -14,11 +14,17 @@ import { useDebounce } from '@/hooks/useDebounce';
 import { useAuthStore } from '@/store/authStore';
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { trackBeginCheckout } from '@/lib/analytics/gtagEvents';
+import toast from 'react-hot-toast';
+import { isGokwikEnabled, useGokwikSdk, triggerGokwikCheckout } from '@/lib/gokwik/gokwikClient';
 
 export function CartDrawer() {
   const { isCartOpen, closeCart } = useUIStore();
-  const { cart, itemCount, removeItem, updateItem } = useCartStore();
+  const { cart, itemCount, removeItem, updateItem, isCartBusy } = useCartStore();
   const { isAuthenticated } = useAuthStore();
+
+  const isGokwik = isGokwikEnabled();
+  const isSdkReady = useGokwikSdk();
 
   return (
     <Drawer isOpen={isCartOpen} onClose={closeCart} title={`Your Cart (${itemCount})`} side="right" width="min(90vw, 420px)">
@@ -54,7 +60,7 @@ export function CartDrawer() {
           {/* Items */}
           <div className="flex-1 overflow-y-auto px-6 py-4 flex flex-col gap-5">
             {cart.items.map((item) => (
-              <CartDrawerItem key={item._id} item={item} onRemove={removeItem} onUpdate={updateItem} />
+              <CartDrawerItem key={item._id} item={item} onRemove={removeItem} onUpdate={updateItem} isCartBusy={isCartBusy || false} />
             ))}
           </div>
           {/* Footer */}
@@ -70,9 +76,32 @@ export function CartDrawer() {
               </div>
             )}
             {cart.checkoutUrl ? (
-              <a href={cart.checkoutUrl} onClick={closeCart} className="w-full">
-                <Button variant="primary" fullWidth size="lg">Checkout</Button>
-              </a>
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                loading={isGokwik && !isSdkReady}
+                onClick={() => {
+                  try {
+                    trackBeginCheckout(cart);
+                  } catch (err) {
+                    console.error('[Analytics] Failed to track begin_checkout:', err);
+                  }
+
+                  if (isGokwik) {
+                    const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
+                    if (!wentToGokwik) {
+                      toast.error('Something went wrong. Please try again.');
+                    } else {
+                      closeCart();
+                    }
+                  } else {
+                    window.location.href = cart.checkoutUrl || '';
+                  }
+                }}
+              >
+                Checkout
+              </Button>
             ) : (
               <Button variant="primary" fullWidth size="lg" disabled>Checkout</Button>
             )}
@@ -90,10 +119,12 @@ function CartDrawerItem({
   item,
   onRemove,
   onUpdate,
+  isCartBusy,
 }: {
   item: CartItem;
   onRemove: (variantId: string) => Promise<void>;
   onUpdate: (variantId: string, qty: number) => Promise<void>;
+  isCartBusy: boolean;
 }) {
   const [qty, setQty] = useState(item.quantity);
   const debouncedQty = useDebounce(qty, 300);
@@ -118,8 +149,12 @@ function CartDrawerItem({
         </p>
         <p className="text-sm font-medium font-sans text-[#0A0A0A] mt-1">{formatPrice(item.price)}</p>
         <div className="flex items-center justify-between mt-2">
-          <QuantityCounter value={qty} onChange={setQty} min={1} max={item.variant.stockQuantity} />
-          <button onClick={() => onRemove(item.variantId)} className="text-xs text-[#A3A3A3] hover:text-[#C0392B] transition-colors flex items-center gap-1">
+          <QuantityCounter value={qty} onChange={setQty} min={1} max={item.variant.stockQuantity} disabled={isCartBusy} />
+          <button 
+            disabled={isCartBusy}
+            onClick={() => onRemove(item.variantId)} 
+            className="text-xs text-[#A3A3A3] hover:text-[#C0392B] transition-colors flex items-center gap-1 disabled:opacity-40 disabled:cursor-not-allowed"
+          >
             <Trash2 size={12} /> Remove
           </button>
         </div>

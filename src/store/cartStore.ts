@@ -3,10 +3,13 @@ import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { Cart, CartItem } from '@/types/cart.types';
 import { shopifyService } from '@/services/shopifyService';
+import { trackAddToCart } from '@/lib/analytics/gtagEvents';
+import toast from 'react-hot-toast';
 
 interface CartStore {
   cart: Cart | null;
   isLoading: boolean;
+  isCartBusy: boolean;
   itemCount: number;
   fetchCart: () => Promise<void>;
   migrateCart: () => Promise<void>;
@@ -61,6 +64,7 @@ export const useCartStore = create<CartStore>()(
     (set, get) => ({
       cart: null,
       isLoading: false,
+      isCartBusy: false,
       itemCount: 0,
 
       fetchCart: async () => {
@@ -82,6 +86,8 @@ export const useCartStore = create<CartStore>()(
       },
 
       addItem: async (variantId, productId, quantity = 1, productObj?: any, variantObj?: any, size?: string) => {
+        if (get().isCartBusy) return;
+        set({ isCartBusy: true });
         try {
           let cart = get().cart;
           let res;
@@ -99,12 +105,26 @@ export const useCartStore = create<CartStore>()(
           }
           const mappedCart = mapShopifyCart(res.data);
           set({ cart: mappedCart, itemCount: computeItemCount(mappedCart) });
+          
+          try {
+            trackAddToCart({
+              product: productObj,
+              variant: variantObj,
+              quantity,
+            });
+          } catch (trackingErr) {
+            console.error('[Analytics] Failed to track add_to_cart:', trackingErr);
+          }
         } catch (err: any) {
           throw new Error(err.message || 'Failed to add item');
+        } finally {
+          set({ isCartBusy: false });
         }
       },
 
       updateItem: async (variantId, quantity) => {
+        if (get().isCartBusy) return;
+        set({ isCartBusy: true });
         try {
           let cart = get().cart;
           if (!cart || !cart._id || cart._id.startsWith('local')) return;
@@ -118,11 +138,16 @@ export const useCartStore = create<CartStore>()(
           set({ cart: mappedCart, itemCount: computeItemCount(mappedCart) });
         } catch (err: any) {
           throw new Error(err.message || 'Failed to update item');
+        } finally {
+          set({ isCartBusy: false });
         }
       },
 
       removeItem: async (variantId) => {
-        try {
+        if (get().isCartBusy) return;
+        set({ isCartBusy: true });
+
+        const performRemove = async (isRetry = false) => {
           let cart = get().cart;
           if (!cart || !cart._id || cart._id.startsWith('local')) return;
 
@@ -130,11 +155,46 @@ export const useCartStore = create<CartStore>()(
           const lineItem = cart.items.find((i: CartItem) => i.variantId === variantId);
           if (!lineItem) return;
 
-          const res = await shopifyService.removeFromCart(cart._id, [lineItem._id]);
-          const mappedCart = mapShopifyCart(res.data);
-          set({ cart: mappedCart, itemCount: computeItemCount(mappedCart) });
-        } catch (err: any) {
-          // silent
+          try {
+            const res = await shopifyService.removeFromCart(cart._id, [lineItem._id]);
+            const mappedCart = mapShopifyCart(res.data);
+            set({ cart: mappedCart, itemCount: computeItemCount(mappedCart) });
+          } catch (err: any) {
+            const errorMessage = err.response?.data?.error || err.message || '';
+            const isConflict = errorMessage.toLowerCase().includes('conflicted with another request');
+
+            if (isConflict && !isRetry) {
+              console.warn('[CartStore] Conflict detected. Re-fetching cart and retrying removal...');
+              try {
+                // Re-fetch current cart state first
+                const getRes = await shopifyService.getCart(cart._id);
+                const fetchedCart = mapShopifyCart(getRes.data);
+                set({ cart: fetchedCart, itemCount: computeItemCount(fetchedCart) });
+                
+                // Retry removal
+                let updatedCart = get().cart;
+                if (!updatedCart) return;
+                const updatedLineItem = updatedCart.items.find((i: CartItem) => i.variantId === variantId);
+                if (!updatedLineItem) return;
+
+                const retryRes = await shopifyService.removeFromCart(updatedCart._id, [updatedLineItem._id]);
+                const finalCart = mapShopifyCart(retryRes.data);
+                set({ cart: finalCart, itemCount: computeItemCount(finalCart) });
+              } catch (retryErr) {
+                console.error('[CartStore] Retry removal failed:', retryErr);
+                toast.error("Couldn't update your cart, please try again");
+              }
+            } else {
+              console.error('[CartStore] Removal failed:', err);
+              toast.error("Couldn't update your cart, please try again");
+            }
+          }
+        };
+
+        try {
+          await performRemove(false);
+        } finally {
+          set({ isCartBusy: false });
         }
       },
 
@@ -143,6 +203,8 @@ export const useCartStore = create<CartStore>()(
       },
 
       applyCoupon: async (code) => {
+        if (get().isCartBusy) return;
+        set({ isCartBusy: true });
         try {
           let cart = get().cart;
           if (!cart || !cart._id || cart._id.startsWith('local')) return;
@@ -151,10 +213,14 @@ export const useCartStore = create<CartStore>()(
           set({ cart: mappedCart, itemCount: computeItemCount(mappedCart) });
         } catch (err: any) {
           throw new Error(err.message || 'Failed to apply coupon');
+        } finally {
+          set({ isCartBusy: false });
         }
       },
 
       removeCoupon: async () => {
+        if (get().isCartBusy) return;
+        set({ isCartBusy: true });
         try {
           let cart = get().cart;
           if (!cart || !cart._id || cart._id.startsWith('local')) return;
@@ -163,10 +229,12 @@ export const useCartStore = create<CartStore>()(
           set({ cart: mappedCart, itemCount: computeItemCount(mappedCart) });
         } catch (err: any) {
           throw new Error(err.message || 'Failed to remove coupon');
+        } finally {
+          set({ isCartBusy: false });
         }
       },
 
-      reset: () => set({ cart: null, itemCount: 0, isLoading: false }),
+      reset: () => set({ cart: null, itemCount: 0, isLoading: false, isCartBusy: false }),
     }),
     {
       name: 'faoo-cart-storage',

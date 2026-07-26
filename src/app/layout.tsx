@@ -11,6 +11,7 @@ import { MobileMenu } from '@/components/layout/MobileMenu';
 import { SearchDrawer } from '@/components/layout/SearchDrawer';
 import { FirstUserPopup } from '@/components/popup/FirstUserPopup';
 import CanonicalLink from '@/components/CanonicalLink';
+import GA4PageViewTracker from '@/components/analytics/GA4PageViewTracker';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -62,7 +63,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <CanonicalLink />
         <Script
           strategy="afterInteractive"
-          src="https://www.googletagmanager.com/gtag/js?id=G-0DTWGFPYQB"
+          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA4_ID || 'G-0DTWGFPYQB'}`}
         />
         <Script
           id="google-analytics"
@@ -72,10 +73,30 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', 'G-0DTWGFPYQB');
+              gtag('config', '${process.env.NEXT_PUBLIC_GA4_ID || "G-0DTWGFPYQB"}');
             `,
           }}
         />
+        {process.env.NEXT_PUBLIC_GOKWIK_ENABLED === 'true' && (
+          <>
+            <Script
+              src="https://pdp.gokwik.co/merchant-integration/build/merchant.integration.js?v4"
+              strategy="afterInteractive"
+            />
+            <Script id="gokwik-merchant-info" strategy="afterInteractive">
+              {`
+                window.merchantInfo = {
+                  mid: "${process.env.NEXT_PUBLIC_GOKWIK_MID}",
+                  environment: "${process.env.NEXT_PUBLIC_GOKWIK_ENVIRONMENT}",
+                  type: "merchantInfo",
+                  storeId: "${process.env.NEXT_PUBLIC_GOKWIK_STORE_ID}",
+                  fbPixel: []
+                };
+              `}
+            </Script>
+          </>
+        )}
+        <GA4PageViewTracker />
       </head>
       <body className="font-sans bg-white text-[#0A0A0A] antialiased">
         <Providers>
