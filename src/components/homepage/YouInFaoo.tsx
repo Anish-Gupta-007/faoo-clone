@@ -18,12 +18,22 @@ const TESTIMONIALS = [
     name: 'Kunaal',
     image: '/youndfaoo/Kunaal.jpg',
     review: "I'm a tall guy, 6'4\" and it's very difficult for me to find clothes that fit me but Faoo customised them so well that I literally wear Faoo throughout the week now. They got me sorted. 100% recommend their product, fit and price point."
+  },
+  {
+    name: 'Priya',
+    image: '/youndfaoo/Priya.jpg',
+    review: 'I got this shirt for everyday wear but love the style and fit so much that I styled it even on my vacation. Very good quality and love the style of the sleeves a lot!'
+  },
+  {
+    name: 'Himanshu',
+    image: '/youndfaoo/himanshu.jpg',
+    review: "Super soft fabric, love the feel and fit of the shirt. I got 2 shirts from Faoo and i really like both, can't wait to style the 2nd one now."
   }
 ];
 
 export function YouInFaoo() {
   return (
-    <section className="bg-white py-20 md:py-32 overflow-hidden border-b border-gray-100">
+    <section className="bg-white pt-2 pb-10 md:pt-4 md:pb-16 overflow-hidden border-b border-gray-100">
       <div className="container-page px-4 md:px-6">
         
         {/* Header */}
@@ -55,7 +65,7 @@ export function YouInFaoo() {
         {/* Carousel / Grid Container */}
         <div className="relative mt-8">
           <div
-            className="flex gap-6 lg:gap-8 overflow-x-auto lg:overflow-x-visible scroll-smooth pb-6 px-4 -mx-4 lg:px-0 lg:mx-0 snap-x snap-mandatory lg:grid lg:grid-cols-3 [&::-webkit-scrollbar]:hidden"
+            className="flex gap-6 lg:gap-8 overflow-x-auto scroll-smooth pb-6 px-4 -mx-4 snap-x snap-mandatory [&::-webkit-scrollbar]:hidden"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {TESTIMONIALS.map((item, idx) => (
@@ -65,7 +75,7 @@ export function YouInFaoo() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.15, duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-                className="w-[280px] sm:w-[350px] md:w-[calc(50%-12px)] lg:w-full flex-shrink-0 snap-start bg-[#FAF9F5] p-5 md:p-6 rounded-[24px] border border-[#EAE6DF]/60 shadow-[0_4px_24px_rgba(0,0,0,0.02)] flex flex-col h-auto"
+                className="w-[280px] sm:w-[350px] lg:w-[400px] flex-shrink-0 snap-start bg-[#FAF9F5] p-5 md:p-6 rounded-[24px] border border-[#EAE6DF]/60 shadow-[0_4px_24px_rgba(0,0,0,0.02)] flex flex-col h-auto"
               >
                 {/* Image first */}
                 <div className="relative aspect-[4/5] w-full rounded-[18px] overflow-hidden mb-5 bg-[#F5F4F1] border border-[#151515]/5">

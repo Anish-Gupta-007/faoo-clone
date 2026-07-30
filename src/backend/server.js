@@ -14,6 +14,9 @@ const errorHandler = require('./middleware/errorHandler');
 // ── App init ──────────────────────────────────────────────────────────────────
 const app = express();
 
+// ── API base path ─────────────────────────────────────────────────────────────
+const BASE = '/api/v1';
+
 // Trust proxy in production (behind Vercel / reverse proxy)
 app.set('trust proxy', 1);
 
@@ -55,6 +58,10 @@ app.use(cors({
   credentials: true,
 }));
 
+// ── Webhook routes (must be before express.json() to get raw body for HMAC) ──
+// express.raw() is applied per-route inside webhooks.js — not globally.
+app.use(`${BASE}/webhooks`, require('./routes/webhooks'));
+
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -68,8 +75,7 @@ app.use('/api', rateLimit({
   message: { success: false, message: 'Too many requests — please slow down' },
 }));
 
-// ── Routes (lazy imports to avoid module-load-time crashes) ───────────────────
-const BASE = '/api/v1';
+// ── Routes (lazy imports to avoid module-load-time crashes) ─────────────────
 
 app.use(`${BASE}/auth`, require('./routes/authRoutes'));
 // Shopify OAuth removed - using Admin API only for customer data sync
@@ -88,6 +94,7 @@ app.use(`${BASE}/shop/cart`, require('./routes/shopify/cart'));
 app.use(`${BASE}/shop/orders`, require('./routes/shopify/orders'));
 app.use(`${BASE}/shop/returns`, require('./routes/shopify/returns'));
 app.use(`${BASE}/shop/announcements`, require('./routes/shopify/announcements'));
+app.use(`${BASE}/shop/homepage-videos`, require('./routes/shopify/homepageVideos'));
 app.use(`${BASE}/shop/collections`, require('./routes/shopify/collections'));
 app.use(`${BASE}/shop/blogs`, require('./routes/shopify/blogs'));
 

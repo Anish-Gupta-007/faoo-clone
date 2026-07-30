@@ -13,6 +13,7 @@ import { Input } from '@/components/ui/Input';
 import { Spinner } from '@/components/ui/Spinner';
 import { formatPrice } from '@/utils/formatPrice';
 import { useDebounce } from '@/hooks/useDebounce';
+import { checkoutWithTracking } from '@/utils/checkoutWithTracking';
 import toast from 'react-hot-toast';
 import { trackBeginCheckout } from '@/lib/analytics/gtagEvents';
 import { isGokwikEnabled, useGokwikSdk, triggerGokwikCheckout } from '@/lib/gokwik/gokwikClient';
@@ -125,30 +126,9 @@ export default function CartPage() {
               </div>
             </div>
             {cart.checkoutUrl ? (
-              <Button
-                variant="primary"
-                fullWidth
-                size="lg"
-                loading={isGokwik && !isSdkReady}
-                onClick={() => {
-                  try {
-                    trackBeginCheckout(cart);
-                  } catch (err) {
-                    console.error('[Analytics] Failed to track begin_checkout:', err);
-                  }
-
-                  if (isGokwik) {
-                    const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
-                    if (!wentToGokwik) {
-                      toast.error('Something went wrong. Please try again.');
-                    }
-                  } else {
-                    window.location.href = cart.checkoutUrl || '';
-                  }
-                }}
-              >
-                {isGokwik ? 'Secure Checkout' : 'Secure Checkout via Shopify'}
-              </Button>
+              <a href={cart.checkoutUrl} className="w-full">
+                <Button variant="primary" fullWidth size="lg">Secure Checkout via Shopify</Button>
+              </a>
             ) : (
               <Button variant="primary" fullWidth size="lg" disabled>
                 Secure Checkout via Shopify

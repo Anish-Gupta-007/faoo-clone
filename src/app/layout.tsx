@@ -11,7 +11,6 @@ import { MobileMenu } from '@/components/layout/MobileMenu';
 import { SearchDrawer } from '@/components/layout/SearchDrawer';
 import { FirstUserPopup } from '@/components/popup/FirstUserPopup';
 import CanonicalLink from '@/components/CanonicalLink';
-import GA4PageViewTracker from '@/components/analytics/GA4PageViewTracker';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
@@ -60,10 +59,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${cormorant.variable} ${dmSans.variable}`}>
       <head>
+        <meta name="facebook-domain-verification" content="vpnogxfkeldix78wu83am56ec8vaol" />
         <CanonicalLink />
         <Script
           strategy="afterInteractive"
-          src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA4_ID || 'G-0DTWGFPYQB'}`}
+          src="https://www.googletagmanager.com/gtag/js?id=G-0DTWGFPYQB"
         />
         <Script
           id="google-analytics"
@@ -73,7 +73,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               window.dataLayer = window.dataLayer || [];
               function gtag(){dataLayer.push(arguments);}
               gtag('js', new Date());
-              gtag('config', '${process.env.NEXT_PUBLIC_GA4_ID || "G-0DTWGFPYQB"}');
+              gtag('config', 'G-0DTWGFPYQB');
             `,
           }}
         />
@@ -100,6 +100,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="font-sans bg-white text-[#0A0A0A] antialiased">
         <Providers>
+          <GaPageTracker />
           <Navbar />
           <main style={{ paddingTop: 'var(--navbar-height)' }}>{children}</main>
           <Footer />

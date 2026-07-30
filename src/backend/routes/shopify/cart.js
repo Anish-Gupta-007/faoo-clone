@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { createCart, getCart, addToCart, removeFromCart, updateCartLine } = require('../../services/shopify/cart');
+const { createCart, getCart, addToCart, removeFromCart, updateCartLine, updateCartAttributes } = require('../../services/shopify/cart');
 
 router.post('/create', async (req, res) => {
   try {
@@ -57,6 +57,16 @@ router.post('/:cartId/discount', async (req, res) => {
     // We import applyDiscountCode directly here to avoid requiring a full file rewrite above
     const { applyDiscountCode } = require('../../services/shopify/cart');
     const cart = await applyDiscountCode(req.params.cartId, discountCode);
+    res.json({ success: true, data: cart });
+  } catch (err) {
+    res.status(500).json({ success: false, error: err.message });
+  }
+});
+
+router.patch('/:cartId/attributes', async (req, res) => {
+  try {
+    const { attributes } = req.body;
+    const cart = await updateCartAttributes(req.params.cartId, attributes);
     res.json({ success: true, data: cart });
   } catch (err) {
     res.status(500).json({ success: false, error: err.message });

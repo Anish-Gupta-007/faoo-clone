@@ -55,7 +55,7 @@ export function InstagramSection() {
   };
 
   return (
-    <section className="container-page py-20 md:py-32">
+    <section className="container-page py-10 md:py-16">
       {/* Aesthetic Header */}
       <div className="flex flex-col items-center text-center mb-6 max-w-2xl mx-auto">
         <div className="flex items-center gap-4 mb-2">

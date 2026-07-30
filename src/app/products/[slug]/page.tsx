@@ -31,8 +31,6 @@ import { Truck, CreditCard, Package, ChevronDown, ChevronUp, Maximize, X } from 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { trackViewItem, trackBeginCheckout } from '@/lib/analytics/gtagEvents';
-import { isGokwikEnabled, useGokwikSdk, triggerGokwikCheckout } from '@/lib/gokwik/gokwikClient';
 
 
 function PDPContent() {
@@ -127,16 +125,6 @@ function PDPContent() {
     }
   }, [variants, selectedColor]);
 
-  useEffect(() => {
-    if (data?.product) {
-      try {
-        trackViewItem(data.product);
-      } catch (err) {
-        console.error('[Analytics] Failed to track view_item:', err);
-      }
-    }
-  }, [data?.product]);
-
   if (isLoading) return (
     <div className="flex items-center justify-center min-h-screen">
       <Spinner size="lg" />
@@ -220,6 +208,31 @@ function PDPContent() {
     setAddingToCart(true);
     try {
       await addItem(targetVariant._id, product._id, 1, product, targetVariant, targetSize as string);
+      // --- GA4: add_to_cart  |  Meta Pixel: AddToCart ---
+      if (typeof window !== 'undefined') {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'add_to_cart', {
+            currency: 'INR',
+            value: targetVariant.price,
+            items: [{
+              item_id: product._id,
+              item_name: product.name,
+              item_variant: `${targetVariant.color ?? ''} / ${targetSize ?? targetVariant.size ?? ''}`.replace(/^\s*\/\s*/, ''),
+              price: targetVariant.price,
+              quantity: 1,
+            }],
+          });
+        }
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'AddToCart', {
+            content_ids: [product._id],
+            content_type: 'product',
+            content_name: product.name,
+            value: targetVariant.price,
+            currency: 'INR',
+          });
+        }
+      }
       toast.success('Added to cart!');
       openCart();
     } catch (err: any) {
@@ -248,22 +261,34 @@ function PDPContent() {
     setAddingToCart(true);
     try {
       await addItem(targetVariant._id, product._id, 1, product, targetVariant, targetSize as string);
+      // --- GA4: add_to_cart  |  Meta Pixel: AddToCart ---
+      if (typeof window !== 'undefined') {
+        if (typeof window.gtag === 'function') {
+          window.gtag('event', 'add_to_cart', {
+            currency: 'INR',
+            value: targetVariant.price,
+            items: [{
+              item_id: product._id,
+              item_name: product.name,
+              item_variant: `${targetVariant.color ?? ''} / ${targetSize ?? targetVariant.size ?? ''}`.replace(/^\s*\/\s*/, ''),
+              price: targetVariant.price,
+              quantity: 1,
+            }],
+          });
+        }
+        if (typeof window.fbq === 'function') {
+          window.fbq('track', 'AddToCart', {
+            content_ids: [product._id],
+            content_type: 'product',
+            content_name: product.name,
+            value: targetVariant.price,
+            currency: 'INR',
+          });
+        }
+      }
       const { cart } = useCartStore.getState();
       if (cart?.checkoutUrl) {
-        try {
-          trackBeginCheckout(cart);
-        } catch (err) {
-          console.error('[Analytics] Failed to track begin_checkout:', err);
-        }
-
-        if (isGokwik) {
-          const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
-          if (!wentToGokwik) {
-            toast.error('Something went wrong. Please try again.');
-          }
-        } else {
-          window.location.href = cart.checkoutUrl;
-        }
+        window.location.href = cart.checkoutUrl;
       } else {
         toast.error('Unable to proceed to checkout');
       }

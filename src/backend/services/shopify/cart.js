@@ -423,4 +423,40 @@ async function applyDiscountCode(cartId, discountCode) {
   return data.cartDiscountCodesUpdate.cart;
 }
 
-module.exports = { createCart, getCart, addToCart, removeFromCart, updateCartLine, applyDiscountCode };
+async function updateCartAttributes(cartId, attributes) {
+  const mutation = `
+    mutation cartAttributesUpdate($cartId: ID!, $attributes: [AttributeInput!]!) {
+      cartAttributesUpdate(cartId: $cartId, attributes: $attributes) {
+        cart {
+          id
+          checkoutUrl
+        }
+        userErrors {
+          field
+          message
+        }
+      }
+    }
+  `;
+
+  const { data, errors } = await getStorefrontClient().request(mutation, {
+    variables: { cartId, attributes }
+  });
+
+  if (errors) {
+    console.error("[Shopify] cartAttributesUpdate GraphQL errors:", errors);
+    throw new Error(errors.message || "Failed to update cart attributes");
+  }
+
+  if (!data || !data.cartAttributesUpdate) {
+    throw new Error("Failed to update cart attributes: Invalid response from Shopify");
+  }
+
+  if (data.cartAttributesUpdate.userErrors && data.cartAttributesUpdate.userErrors.length) {
+    throw new Error(data.cartAttributesUpdate.userErrors[0].message);
+  }
+
+  return data.cartAttributesUpdate.cart;
+}
+
+module.exports = { createCart, getCart, addToCart, removeFromCart, updateCartLine, applyDiscountCode, updateCartAttributes };
