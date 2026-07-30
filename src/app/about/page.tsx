@@ -191,6 +191,14 @@ export default function AboutPage() {
           <p className="mt-3 text-sm font-sans font-bold tracking-[0.35em] uppercase text-[#c9a84c]">
             #faooforall
           </p>
+          <div className="my-10 h-[2px] w-16 mx-auto bg-white shadow-sm" />
+
+          <p className="font-sans text-sm text-[#525252] font-medium tracking-wide mb-1">
+            OMMORA GLOBAL
+          </p>
+          <p className="font-sans text-sm text-[#525252] font-medium tracking-wide">
+            Address-2350, 3rd Floor, Kingsway Camp, Hudson lane. Delhi - 110009
+          </p>
         </motion.div>
       </section>
 
