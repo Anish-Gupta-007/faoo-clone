@@ -191,6 +191,10 @@ export default function AboutPage() {
           <p className="mt-3 text-sm font-sans font-bold tracking-[0.35em] uppercase text-[#c9a84c]">
             #faooforall
           </p>
+          <div className="w-20 h-[1px] bg-black/10 mx-auto my-6" />
+          <p className="text-xs font-sans text-[#3a3a3a] tracking-normal">
+            Address-2350, 3rd Floor, Kingsway Camp, Hudson lane. Delhi - 110009
+          </p>
         </motion.div>
       </section>
 
