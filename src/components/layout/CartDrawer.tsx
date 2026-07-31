@@ -77,9 +77,32 @@ export function CartDrawer() {
               </div>
             )}
             {cart.checkoutUrl ? (
-              <a href={cart.checkoutUrl} onClick={closeCart} className="w-full">
-                <Button variant="primary" fullWidth size="lg">Checkout</Button>
-              </a>
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                loading={isGokwik && !isSdkReady}
+                onClick={() => {
+                  try {
+                    trackBeginCheckout(cart);
+                  } catch (err) {
+                    console.error('[Analytics] Failed to track begin_checkout:', err);
+                  }
+
+                  if (isGokwik) {
+                    const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
+                    if (!wentToGokwik) {
+                      toast.error('Something went wrong. Please try again.');
+                    } else {
+                      closeCart();
+                    }
+                  } else {
+                    window.location.href = cart.checkoutUrl || '';
+                  }
+                }}
+              >
+                Checkout
+              </Button>
             ) : (
               <Button variant="primary" fullWidth size="lg" disabled>Checkout</Button>
             )}

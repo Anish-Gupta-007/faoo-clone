@@ -126,9 +126,29 @@ export default function CartPage() {
               </div>
             </div>
             {cart.checkoutUrl ? (
-              <a href={cart.checkoutUrl} className="w-full">
-                <Button variant="primary" fullWidth size="lg">Secure Checkout via Shopify</Button>
-              </a>
+              <Button
+                variant="primary"
+                fullWidth
+                size="lg"
+                loading={isGokwik && !isSdkReady}
+                onClick={() => {
+                  try {
+                    trackBeginCheckout(cart);
+                  } catch (err) {
+                    console.error('[Analytics] Failed to track begin_checkout:', err);
+                  }
+                  if (isGokwik) {
+                    const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
+                    if (!wentToGokwik) {
+                      toast.error('Something went wrong. Please try again.');
+                    }
+                  } else {
+                    window.location.href = cart.checkoutUrl || '';
+                  }
+                }}
+              >
+                {isGokwik ? 'Secure Checkout' : 'Secure Checkout via Shopify'}
+              </Button>
             ) : (
               <Button variant="primary" fullWidth size="lg" disabled>
                 Secure Checkout via Shopify

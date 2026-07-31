@@ -31,6 +31,8 @@ import { Truck, CreditCard, Package, ChevronDown, ChevronUp, Maximize, X } from 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
+import { isGokwikEnabled, useGokwikSdk, triggerGokwikCheckout } from '@/lib/gokwik/gokwikClient';
+import { trackViewItem, trackBeginCheckout } from '@/lib/analytics/gtagEvents';
 
 
 function PDPContent() {
@@ -124,6 +126,16 @@ function PDPContent() {
       }
     }
   }, [variants, selectedColor]);
+
+  useEffect(() => {
+    if (data?.product) {
+      try {
+        trackViewItem(data.product);
+      } catch (err) {
+        console.error('[Analytics] Failed to track view_item:', err);
+      }
+    }
+  }, [data?.product]);
 
   if (isLoading) return (
     <div className="flex items-center justify-center min-h-screen">
@@ -288,7 +300,20 @@ function PDPContent() {
       }
       const { cart } = useCartStore.getState();
       if (cart?.checkoutUrl) {
-        window.location.href = cart.checkoutUrl;
+        try {
+          trackBeginCheckout(cart);
+        } catch (err) {
+          console.error('[Analytics] Failed to track begin_checkout:', err);
+        }
+
+        if (isGokwik) {
+          const wentToGokwik = triggerGokwikCheckout(cart?._id || '');
+          if (!wentToGokwik) {
+            toast.error('Something went wrong. Please try again.');
+          }
+        } else {
+          window.location.href = cart.checkoutUrl;
+        }
       } else {
         toast.error('Unable to proceed to checkout');
       }
