@@ -34,7 +34,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { isGokwikEnabled, useGokwikSdk, triggerGokwikCheckout } from '@/lib/gokwik/gokwikClient';
 import { trackViewItem, trackBeginCheckout } from '@/lib/analytics/gtagEvents';
 
-
 function PDPContent() {
   const params = useParams();
   const slug = (params?.slug as string) || '';
