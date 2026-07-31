@@ -31,8 +31,6 @@ import { Truck, CreditCard, Package, ChevronDown, ChevronUp, Maximize, X } from 
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { isGokwikEnabled, useGokwikSdk } from '@/lib/gokwik/gokwikClient';
-
 
 function PDPContent() {
   const params = useParams();
