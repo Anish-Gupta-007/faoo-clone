@@ -11,8 +11,6 @@ import { MobileMenu } from '@/components/layout/MobileMenu';
 import { SearchDrawer } from '@/components/layout/SearchDrawer';
 import { FirstUserPopup } from '@/components/popup/FirstUserPopup';
 import CanonicalLink from '@/components/CanonicalLink';
-import GA4PageViewTracker from '@/components/analytics/GA4PageViewTracker';
-import { GaPageTracker } from '@/components/GaPageTracker';
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],
